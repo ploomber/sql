@@ -1,4 +1,4 @@
-# From zero to hero: end to end data applications with SQL and Python
+# From zero to hero: end to end data applications with SQL and Jupyter
 
 ## Course structure
 
