@@ -161,3 +161,7 @@ cython_debug/
 
 *.doctrees
 *jupyter_execute
+
+*.DS_Store
+
+course-material/_build
