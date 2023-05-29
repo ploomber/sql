@@ -64,7 +64,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 
 <!-- #endregion -->
 
-#### Install - execute this once. Can be commented out afterwards if running from Syzygy or locally. 
+#### Install - execute this once. 
 
 ```python
 try:
