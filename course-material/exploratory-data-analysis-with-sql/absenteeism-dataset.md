@@ -132,10 +132,6 @@ LIMIT 5
 #### Question 1.1 (Easy):
 How many records are there in the 'absenteeism' table? 
 
-Enter your answer in the cell below.
-
-```sql
-```
 
 <!-- #region -->
 <details>
@@ -155,9 +151,7 @@ FROM absenteeism
 #### Question 1.2 (Easy):
 How many unique employees are listed in the dataset?
 
-```sql
 
-```
 
 <!-- #region -->
 <details>
@@ -177,9 +171,6 @@ FROM absenteeism;
 #### Question 1.3 (Easy):
 What is the average distance from residence to work? 
 
-```sql
-
-```
 
 <!-- #region -->
 <details>
@@ -199,10 +190,6 @@ FROM absenteeism;
 #### Question 2.1 (Medium):
 On which days of the week does the average absenteeism time exceed 4 hours? 
 
-Enter your answer in the cell below.
-
-```sql
-```
 
 <!-- #region -->
 <details>
@@ -229,9 +216,6 @@ HAVING AVG(Absenteeism_time_in_hours) > 4;
 What is the average transportation expense for each season?
 
 
-```sql
-```
-
 <!-- #region -->
 <details>
 
@@ -256,8 +240,6 @@ GROUP BY Seasons;
 What is the average absenteeism time for employees with BMI higher than the average BMI
 <!-- #endregion -->
 
-```sql
-```
 
 <!-- #region -->
 <details>
@@ -285,10 +267,7 @@ WHERE Body_mass_index > (
 #### Question 3.1 (Hard):
 Find the top 3 ages with the highest total absenteeism hours, excluding disciplinary failures.
 
-Enter your answer in the cell below.
 
-```sql
-```
 
 <!-- #region -->
 
@@ -323,8 +302,6 @@ Find the age of employees who have been absent for more than 5 hours with an unj
 
 Hint: investigate encoding on the data source.
 
-```sql
-```
 
 <!-- #region -->
 <details>
@@ -347,8 +324,6 @@ WHERE Reason_for_absence = 26 AND Absenteeism_time_in_hours > 5;
 
 Which reasons for absence are more frequent for social drinkers than social non-drinkers?
 
-```sql
-```
 
 <!-- #region -->
 <details>
@@ -396,17 +371,6 @@ Plotting with ggplot: https://jupysql.ploomber.io/en/latest/user-guide/ggplot.ht
 Turning your notebook into a Voila dashboard: https://ploomber.io/blog/voila-tutorial/
 
 
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
 
 <h2 align='center'>Congratulations! You can share this notebook with your network, or add it as part of your portfolio.</h2>
 
