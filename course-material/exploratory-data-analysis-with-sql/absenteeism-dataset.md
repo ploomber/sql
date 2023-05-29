@@ -371,10 +371,6 @@ Plotting with ggplot: https://jupysql.ploomber.io/en/latest/user-guide/ggplot.ht
 Turning your notebook into a Voila dashboard: https://ploomber.io/blog/voila-tutorial/
 
 
-
-<h2 align='center'>Congratulations! You can share this notebook with your network, or add it as part of your portfolio.</h2>
-
-
 ### References   
 
 Martiniano, A., Ferreira, R. P., Sassi, R. J., & Affonso, C. (2012). Application of a neuro fuzzy network in prediction of absenteeism at work. In Information Systems and Technologies (CISTI), 7th Iberian Conference on (pp. 1-4). IEEE.
