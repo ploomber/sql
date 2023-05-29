@@ -161,7 +161,24 @@ cython_debug/
 
 *.doctrees
 *jupyter_execute
-
 *.DS_Store
-
 course-material/_build
+
+# Data files
+*.csv
+*.tsv
+*.json
+*.pkl
+*.pickle
+*.h5
+*.xlsx
+*.xls
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.arff
+*.db*
+*.docx

@@ -4,6 +4,7 @@
 format: jb-book
 root: intro
 chapters:
+- file: exploratory-data-analysis-with-sql/absenteeism-dataset
 - file: intro-to-sql/connecting-to-databases #
 - file: intro-to-sql/making-your-first-query #
 - file: intro-to-sql/aggregate-functions-in-sql # 
@@ -21,7 +22,6 @@ chapters:
 - file: visualizing-your-sql-queries/plotting-with-seaborn #
 - file: visualizing-your-sql-queries/plotting-with-plotly #
 - file: visualizing-your-sql-queries/plotting-with-ggplot #
-- file: exploratory-data-analysis-with-sql/introduction-to-the-dataset #
 - file: packaging-your-sql-project/how-to-structure-your-sql-project #
 - file: packaging-your-sql-project/storing-credentials-securely #
 - file: packaging-your-sql-project/introduction-to-sqlalchemy #
