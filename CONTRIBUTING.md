@@ -1,8 +1,10 @@
-# Pre-requisites: setup
+# Pre-requisites: 
+
+## Setup
 
 Ensure you complete setup following [this guide](https://ploomber-contributing.readthedocs.io/en/latest/contributing/setup.html) 
 
-# Pre-requisites: review how to edit the content in this repository
+## Review how to edit the content in this repository
 
 To get familiar with additional dependencies and the format in this repository, follow [this guide](https://ploomber-contributing.readthedocs.io/en/latest/documentation/notebooks.html).
 
