@@ -11,4 +11,14 @@ jupyter:
 # Connecting to a database
 
 
+In is tutorial we will learn to connect to a database
 
+```bash
+pip install jupysql duckdb-engine
+```
+
+More text ..
+
+```
+import pandas as pd
+```
