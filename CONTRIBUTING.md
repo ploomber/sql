@@ -15,9 +15,10 @@ Once you have completed the pre-requisites, you can pick one topic of the topics
 **Note** A place holder markdown (.md) file has already been created for each topic -> you can find them under the directory `course-material/`.
 
 0. Fork this repository
-1. Create a branch under your fork
-2. Make and save changes on the selected .md file on your local computer
-3. You can build the files locally via the command `jupyter-book build course-material/` (run from the repository root directory)
-4. Take a look at the built webpage by navigating on your file browser under `sql/course-material/_build/html`
-5. Create a pull request (base `ploomber/sql:main` from `<your_github_id>/sql:your-branch-name`)
-6. Request to initialize the review process
+1. Clone your fork into your local computer
+2. Create a branch under your fork
+3. Make and save changes on the selected .md file on your local computer
+4. You can build the files locally via the command `jupyter-book build course-material/` (run from the repository root directory)
+5. Take a look at the built webpage by navigating on your file browser under `sql/course-material/_build/html`
+6. Create a pull request (base `ploomber/sql:main` from `<your_github_id>/sql:your-branch-name`)
+7. Request to initialize the review process
