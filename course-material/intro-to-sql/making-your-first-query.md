@@ -1,11 +1,14 @@
 ---
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.5
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.4
+kernelspec:
+  display_name: jupyblog
+  language: python
+  name: python3
 ---
 
 # Making your first SQL query
@@ -67,7 +70,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
-```python
+```{code-cell} ipython3
 try:
     %pip install jupysql --upgrade duckdb-engine pandas --quiet
     print("Success")
@@ -106,16 +109,15 @@ extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
   ```
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
-#### Load Engine
+### Load Engine
 We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
 
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
 
-```python
+```{code-cell} ipython3
 #Loading in SQL extension
 %reload_ext sql
 #Initiating a DuckDB database named 'bank.duck.db' to run our SQL queries on
-#Maybe give a hyperlink about DuckDB
 %sql duckdb:///bank.duck.db
 ```
 
@@ -123,9 +125,9 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 
 #### Creating Table
 
-Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we create a table in DuckDB called 'bank' from our `bank_cleaned.csv` file. The read_csv_auto function helps SQL understand our local .csv file for creation into our database.
+Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we `CREATE OR REPLACE TABLE` in DuckDB called 'bank' `FROM` our `bank_cleaned.csv` file. The `read_csv_auto` is a function that helps SQL understand our local .csv file for creation into our database.
 
-```sql
+```{code-cell} ipython3
 %%sql
 CREATE OR REPLACE TABLE bank AS
 FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
@@ -135,7 +137,7 @@ FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 
 Now that we have our `bank` table in our DuckDB database, we can run our first query on the table. Let's start off with a simple query that looks at the first five rows from our table.
 
-```sql 
+```{code-cell} sql
 %%sql
 SELECT *
 FROM bank
@@ -147,7 +149,7 @@ LIMIT 5
 #### Filtering
 The `WHERE` clause allows users to filter the query on specific conditions. Below, we query the table `WHERE` the "job" variable equals 'unemployed'.
 
-```sql
+```{code-cell} sql
 %%sql 
 SELECT *
 FROM bank 
@@ -157,7 +159,7 @@ The 'unemployed' is in quotes because the "job" variable has values which are st
 
 We can extend filtering even further by filtering on two or more conditions. This introduces the `AND` and `OR` clauses. 
 
-```sql
+```{code-cell} sql
 %%sql 
 SELECT *
 FROM bank 
@@ -166,7 +168,7 @@ WHERE job = 'unemployed' AND education = 'primary'
 
 This query filters the data `WHERE` "job" equals 'unemployed' `AND` where "education" equals 'primary'. The `OR` clause behaves identically to its verbal counterpart. 
 
-```sql
+```{code-cell} sql
 %%sql 
 SELECT *
 FROM bank 
@@ -177,7 +179,7 @@ WHERE job = 'unemployed' OR job = 'blue-collar'
 
 We can sort the outputs of our query based on certain conditions. Below, we sort our query by "balance" using the `ORDER BY` clause in `DESC` (descending) order.
 
-```sql
+```{code-cell} sql
 %%sql 
 SELECT *
 FROM bank 
@@ -187,13 +189,12 @@ To order the query by ascending order, you can omit the `DESC` or add `ASC` in t
 
 <!-- #endregion -->
 
-<!-- #region -->
 
 ### You try: Use JupySQL to perform the queries and answer the questions.
 
 Example: show the first 5 rows of the "job" variable.
 
-```sql
+```{code-cell} sql
 %%sql
 SELECT job
 FROM bank 
@@ -209,7 +210,7 @@ Query records where the month is in April ("apr")
 
 You can use the `WHERE` clause to specify where month equals 'apr'.
 
-```sql
+```{code-cell} sql
 %%sql
 SELECT *
 FROM bank
@@ -229,7 +230,7 @@ Query the first 5 records where "balance" is greater than or equal to 1000. Sort
 
 You can use the `WHERE` clause and with the greater than operator ">=" to declare records with a balance greater than or equal to 1000. The query is then sorted by balance in descending order in the last line with `ORDER BY` and `DESC`.
 
-```sql
+```{code-cell} sql
 %%sql
 SELECT *
 FROM bank
@@ -246,12 +247,11 @@ Show the count of records where 'housing' is 'no' and where 'loan' is yes.
 
 <!-- #region -->
 <details>
-
 <summary>Answers</summary>
 
 You can use `COUNT(*)` to get the count of total records after filtering `WHERE` 'housing' is 'no' and 'loan' is yes.
 
-```sql
+```{code-cell} sql
 %%sql
 SELECT COUNT(*)
 FROM bank
@@ -259,8 +259,30 @@ WHERE housing = 'no' AND loan = 'yes'
 ```
 </details>
 <!-- #endregion -->
-<!-- #endregion -->
 
 <!-- #region -->
-As you may have noticed, SQL code is straight forward. It's clauses translate well to what you want SQL to do in natural verbal terms. These clauses make it so easy it's like you are "declaring" SQL to do what you would like it to do. This nature is what defines SQL to be a "declaritive programming language".
+
+### Wrapping Up
+
+To summarize this section, we first introduced our primary dataset we will be using for the next few sections. Then, we ran our first query by first installing `JupySQL` and other packages into our notebook, properly loaded our data with some `Python`, and established a connection to a DuckDB database. 
+
+We learned the basics of `SQL` by going over some of its most necessary clauses:
+
+- `SELECT` : "Selects" what to extract from the query. This clause can be followed by a specific variable name or by using "*" to select the whole table.
+
+- `FROM` : Tells SQL what table in the database to run our query on. We used this clause primarily on 'bank' which we first created when setting up our DuckDB database.
+
+- `LIMIT` : Limits the number of rows from our query
+
+- `WHERE` : Filters the query on specific conditions. This clause can be combined with `AND` and `OR` clauses for more complex filters.
+
+- `ORDER BY` : Sorts the output on variables in our query. This clause can include `DESC` to sort by descending order.
+
+These clauses lay the foundation of `SQL`. They will be necessary for our next section, which will introduce aggregation functions. We showed a sneak peek of an aggregation function `COUNT()` in [Question 3](#question-3-bonus). More on that in the next section!
+
+#### A Little Extra
+
+As you may have noticed, SQL code is straight forward. It's clauses translate well to what you want SQL to do in natural verbal terms. These clauses make it so easy it's like you are "declaring" SQL to do what you would like it to do. This nature is what defines SQL to be a "declarative programming language". 
+
+<a href="https://365datascience.com/tutorials/sql-tutorials/sql-declarative-language/" target="_blank">This article</a> is a great resource if you're curious on this topic.
 <!-- #endregion -->
