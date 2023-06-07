@@ -285,4 +285,5 @@ These clauses lay the foundation of `SQL`. They will be necessary for our next s
 As you may have noticed, SQL code is straight forward. It's clauses translate well to what you want SQL to do in natural verbal terms. These clauses make it so easy it's like you are "declaring" SQL to do what you would like it to do. This nature is what defines SQL to be a "declarative programming language". 
 
 <a href="https://365datascience.com/tutorials/sql-tutorials/sql-declarative-language/" target="_blank">This article</a> is a great resource if you're curious on this topic.
+
 <!-- #endregion -->
