@@ -1,17 +1,11 @@
 ---
 jupyter:
   jupytext:
-    formats: md:myst
-    notebook_metadata_filter: myst
     text_representation:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.6
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+      jupytext_version: 1.14.5
 ---
 
 # Connecting to Database Engines
@@ -266,7 +260,7 @@ df.to_sql("numbers", engine)
 SELECT * FROM numbers
 ```
 
-## Custom Connection
+## Custom Connection 
 
 If you are using a database that is not supported by SQLAlchemy but follows the [DB API 2.0 specification](https://peps.python.org/pep-0249/), you can still use JupySQL.
 
@@ -276,7 +270,7 @@ We currently support `%sql`, `%sqlplot`, and the `ggplot` API when using custom 
 
 For this example we'll generate a `DuckDB` connection, using its native `connect` method.
 
-First, let's import the library and initiazlie a new connection
+First, let's import the library and initialize a new connection
 
 ```{code-cell} ipython3
 import duckdb
@@ -290,7 +284,7 @@ Now, load `%sql` and initialize it with our DuckDB connection.
 %sql conn
 ```
 
-Download some data
+Download some data.
 
 ```{code-cell} ipython3
 import urllib
@@ -301,61 +295,16 @@ urllib.request.urlretrieve(
 )
 ```
 
-You're all set
+You're all set!
 
 ```{code-cell} ipython3
 %sql select * from penguins.csv limit 3
 ```
 
-Example: show the first 5 rows.
+## Use JupySQL to perform the queries and answer the questions.
 
-```sql
-SELECT *
-FROM absenteeism 
-LIMIT 5
-```
-
-#### Question 1.1 (Easy):
-How many records are there in the 'absenteeism' table? 
-
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic and the `COUNT(*)` function to count the total number of records. 
-
-```python
-%%sql
-SELECT COUNT(*) 
-FROM absenteeism
-```
-</details>
-<!-- #endregion -->
-
-#### Question 1.2 (Easy):
-How many unique employees are listed in the dataset?
-
-
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic and the `COUNT(DISTINCT ID)` function to count the total number of unique instances of the `Age` column. 
-
-```python
-%%sql
-SELECT COUNT(DISTINCT ID) 
-FROM absenteeism;
-```
-</details>
-<!-- #endregion -->
-
-#### Question 1.3 (Easy):
-What is the average distance from residence to work? 
+### Question 1 (Easy):
+Load a CSV file into a DuckDB instance. The Bonus section can help you with this.
 
 
 <!-- #region -->
@@ -363,68 +312,40 @@ What is the average distance from residence to work?
 
 <summary>Show Answers</summary>
 
-You can use the `%%sql` magic and the `AVG(Distance_from_Residence_to_Work)` function to calculate the average distance from residence to work.. 
+Recall that a connection string has the following format:
+
+```
+dialect+driver://username:password@host:port/database
+```
+
+To connect to a DuckDB database, you can use the `%sql` magic command the appropriate `duckdb://` URL string:
 
 ```python
-%%sql
-SELECT AVG(Distance_from_Residence_to_Work) 
-FROM absenteeism;
+%sql "duckdb://"
 ```
+
+Download CSV data from GitHub:
+
+```{code-cell} ipython3
+import urllib
+
+urllib.request.urlretrieve(
+    "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv",
+    "penguins.csv",
+)
+```
+
+You're all set!
+
+```{code-cell} ipython3
+%sql select * from penguins.csv limit 3
+```
+
 </details>
 <!-- #endregion -->
 
-#### Question 2.1 (Medium):
-On which days of the week does the average absenteeism time exceed 4 hours? 
-
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic and break down the query as follows:
-
-1. Select the column with name `Day_of_the_week`
-2. From the table called `absenteeism`
-3. Then group the values by day of the week that have an average value (use `AVG`) of more than 4 hours in absenteeism. 
-
-```python
-%%sql
-SELECT Day_of_the_week 
-FROM absenteeism 
-GROUP BY Day_of_the_week 
-HAVING AVG(Absenteeism_time_in_hours) > 4;
-```
-</details>
-<!-- #endregion -->
-
-#### Question 2.2 (Medium):
-What is the average transportation expense for each season?
-
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic and. Use the `AVG(Transportation_expense)` with the alias `AVG_Transportation_Expense` function to count the average transporation expense, then group by seasons.
-
-```python
-%%sql
-SELECT Seasons, AVG(Transportation_expense) AS AVG_Transportation_Expense
-FROM absenteeism 
-GROUP BY Seasons;
-
-```
-</details>
-<!-- #endregion -->
-
-<!-- #region -->
-#### Question 2.3 (Medium):
-
-
-What is the average absenteeism time for employees with BMI higher than the average BMI
-<!-- #endregion -->
+### Question 2 (Medium):
+Write a code snippet to establish a **secure** connection for a PostgreSQL database by using a connection string, the `get_pass()` function, and by creating an engine.
 
 
 <!-- #region -->
@@ -432,83 +353,33 @@ What is the average absenteeism time for employees with BMI higher than the aver
 
 <summary>Show Answers</summary>
 
-You can use the `%%sql` magic and. Use the `AVG(Absenteeism_time_in_hours)` with the alias `AVG_Absenteeism_time_in_hours` function to count the average absenteeism (time units hours). 
-
-`WHERE Body_mass_index > (`: This part begins a condition that the data must meet to be included in our average calculation. Here, we're only interested in rows where the `Body_mass_index` is greater than a certain value.
-
-`SELECT AVG(Body_mass_index) FROM absenteeism)`: This is a subquery, a query within a query. It's calculating the average `Body_mass_index` for the entire absenteeism table.
+To securely connect to a PostgreSQL database, you can use the `getpass` function from the `getpass` module to prompt the user for a password. This way, the password is not hardcoded in the notebook.
 
 ```python
-%%sql
-SELECT AVG(Absenteeism_time_in_hours) as AVG_Absenteeism_time_in_hours
-FROM absenteeism 
-WHERE Body_mass_index > (
-    SELECT AVG(Body_mass_index) 
-    FROM absenteeism);
+from getpass import getpass
 
+password = getpass()
 ```
+
+Then, you can build your connection string:
+
+```python
+db_url = f"postgresql://user:{password}@localhost/database"
+```
+
+Create an engine and connect:
+
+```python
+from sqlalchemy import create_engine
+
+engine = create_engine(db_url)
+```
+
 </details>
 <!-- #endregion -->
 
-#### Question 3.1 (Hard):
-Find the top 3 ages with the highest total absenteeism hours, excluding disciplinary failures.
-
-
-
-<!-- #region -->
-
-
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic and break down the query as follows:
-
-1. Select the column with name `Age`, compute the Sum of `Absenteeism_time_in_hours`. Give this sum an alias `Sum_Absenteeism`.
-2. From the table called `absenteeism`
-3. The keywork WHERE is used to filter the data that meets a specific condition, in this case `Disciplinary_failure` is equal to zero.
-4. Group values by the `Age` column.
-5. Sort the values by the sum and show the first 3 values.
-
-```python
-%%sql
-SELECT Age, SUM(Absenteeism_time_in_hours) AS Sum_Absenteeism
-FROM absenteeism 
-WHERE Disciplinary_failure = 0 
-GROUP BY Age 
-ORDER BY Sum_Absenteeism
-DESC LIMIT 3;
-```
-</details>
-<!-- #endregion -->
-
-#### Question 3.2 (Hard):
-
-Find the age of employees who have been absent for more than 5 hours with an unjustified absence.
-
-Hint: investigate encoding on the data source.
-
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-You can use the `%%sql` magic. 'Unjustified absence' is coded with 26. From there all that is required is selecting the age, and using `WHERE` to set up the appropriate conditions. 
-
-```python
-%%sql
-SELECT Age 
-FROM absenteeism 
-WHERE Reason_for_absence = 26 AND Absenteeism_time_in_hours > 5;
-
-```
-</details>
-<!-- #endregion -->
-
-#### Question 3.3 (Hard):
-
-Which reasons for absence are more frequent for social drinkers than social non-drinkers?
+### Question 3 (Hard):
+If you have a database that is not supported by SQLAlchemy but follows the DB API 2.0 specification, how can you still use JupySQL? 
 
 
 <!-- #region -->
@@ -516,35 +387,41 @@ Which reasons for absence are more frequent for social drinkers than social non-
 
 <summary>Show Answers</summary>
 
-You can use the `%%sql` magic. We use `SELECT` to extract the `Reason_for_absence` from the `absenteeism` table. 
+The answer is using a Custom Connection. For this example, we'll generate a `SQLite` connection, using its native `connect` method, and a custom table to query from.
 
-The column `Social_drinker` is encoded using binary notation, 0=is not a social drinker, 1=is a social drinker. 
+First, let's import the library and create a new database connection to our custom table, `my_numbers`.
 
-We next group by their reason for absence. 
+```{code-cell} ipython3
+import sqlite3
 
-`HAVING COUNT() > (`  begins the condition that the groups must meet to be included in the results. Only groups where the count of rows (representing the number of instances of each `Reason_for_absence` among social drinkers) is greater than a certain value will be included.
-
-`SELECT COUNT() FROM absenteeism WHERE Social_drinker = 0 GROUP BY Reason_for_absence)`  is a subquery that calculates the count of rows for each `Reason_for_absence` where `Social_drinker` is 0 (indicating the employee is not a social drinker), effectively giving us the number of instances of each `Reason_for_absence` among non-social drinkers.
-
-```python
-%%sql
-SELECT Reason_for_absence 
-FROM absenteeism 
-WHERE Social_drinker = 1 
-GROUP BY Reason_for_absence 
-HAVING COUNT() > (
-    SELECT COUNT() 
-    FROM absenteeism 
-    WHERE Social_drinker = 0 
-    GROUP BY Reason_for_absence);
-
+with sqlite3.connect("a.db") as conn:
+    conn.execute("CREATE TABLE my_numbers (number FLOAT)")
+    conn.execute("INSERT INTO my_numbers VALUES (1)")
+    conn.execute("INSERT INTO my_numbers VALUES (2)")
+    conn.execute("INSERT INTO my_numbers VALUES (3)")
 ```
+
+Next, load `%sql` and create a schema, `a_schema`, for the table.
+
+```{code-cell} ipython3
+:tags: [hide-output]
+
+%%sql
+ATTACH DATABASE 'a.db' AS a_schema
+```
+
+You're all set!
+
+```{code-cell} ipython3
+%sql select * from a_schema.my_numbers limit 3
+```
+
 </details>
 <!-- #endregion -->
 
 ## Bonus
 
-### In-memory Database with DuckDB
+### In-memory Database with DuckDB 
 
 Although URL-based connections are more secure, can handle various types of workloads, and offer more functionality, in-memory databases are a great option for quick querying and testing. In this tutorial, we'll use [DuckDB](https://jupysql.ploomber.io/en/latest/integrations/duckdb.html) to create an in-memory database with JupySQL.
 
@@ -598,9 +475,3 @@ Check out our guides for connecting to supported databases:
 - [QuestDB](https://jupysql.ploomber.io/en/latest/integrations/questdb.html)
 - [Oracle](https://jupysql.ploomber.io/en/latest/integrations/oracle.html)
 - [Trino](https://jupysql.ploomber.io/en/latest/integrations/trinodb.html)
-
-+++
-
-
- 
-
