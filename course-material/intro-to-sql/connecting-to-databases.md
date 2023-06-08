@@ -1,7 +1,5 @@
 ---
 jupytext:
-  formats: md:myst
-  notebook_metadata_filter: myst
   text_representation:
     extension: .md
     format_name: myst
@@ -38,10 +36,10 @@ If you're using a database that requires a password, keep reading for more secur
 
 To connect in a more secure way, you can dynamically build your URL string so your password isn't hardcoded:
 
-```{code-cell} ipython3
-from getpass import getpass
+```python
+import getpass
 
-password = getpass()
+password = getpass.getpass()
 ```
 
 When you execute the cell above in a notebook, a text box will appear and whatever you type will be stored in the `password` variable.
@@ -209,11 +207,11 @@ tags: [remove-output]
 
 Set the `DATABASE_URL` environment variable, and `%sql` will automatically load it. You can do this either by setting the environment variable from your terminal or in your notebook:
 
-```{code-cell} ipython3
-from getpass import getpass
+```python
+import getpass
 from os import environ
 
-password = getpass()
+password = getpass.getpass()
 environ["DATABASE_URL"] = f"postgresql://user:{password}@localhost/database"
 ```
 
@@ -334,7 +332,7 @@ dialect+driver://username:password@host:port/database
 To connect to a DuckDB database, you can use the `%sql` magic command the appropriate `duckdb://` URL string:
 
 ```{code-cell} ipython3
-%sql "duckdb://"
+%sql duckdb://
 ```
 
 Download CSV data from GitHub:
