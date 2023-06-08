@@ -211,6 +211,7 @@ dependencies:
     - jedi==0.18.2
     - jmespath==1.0.1
     - jsonschema==4.17.3
+    - jupytext
     - jupyter-book==0.15.1
     - jupyter-cache==0.5.0
     - jupyter-client==8.1.0
