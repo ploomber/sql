@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.4
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: jupyblog
   language: python
@@ -71,11 +71,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-try:
-    %pip install jupysql --upgrade duckdb-engine pandas --quiet
-    print("Success")
-except:
-    print("retry installing")
+%pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
 ### Load the data
@@ -115,9 +111,9 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
 
 ```{code-cell} ipython3
-#Loading in SQL extension
+# Loading in SQL extension
 %reload_ext sql
-#Initiating a DuckDB database named 'bank.duck.db' to run our SQL queries on
+# Initiating a DuckDB database named 'bank.duck.db' to run our SQL queries on
 %sql duckdb:///bank.duck.db
 ```
 
@@ -137,7 +133,7 @@ FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 
 Now that we have our `bank` table in our DuckDB database, we can run our first query on the table. Let's start off with a simple query that looks at the first five rows from our table.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql
 SELECT *
 FROM bank
@@ -149,26 +145,27 @@ LIMIT 5
 #### Filtering
 The `WHERE` clause allows users to filter the query on specific conditions. Below, we query the table `WHERE` the "job" variable equals 'unemployed'.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql 
 SELECT *
 FROM bank 
 WHERE job = 'unemployed'
 ```
+
 The 'unemployed' is in quotes because the "job" variable has values which are strings. If you unfamiliar with strings, you can find a quick introduction here.
 
-We can extend filtering even further by filtering on two or more conditions. This introduces the `AND` and `OR` clauses. 
+We can extend filtering even further by filtering on two or more conditions. This introduces the `AND` and `OR` clauses.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql 
 SELECT *
 FROM bank 
 WHERE job = 'unemployed' AND education = 'primary'
 ```
 
-This query filters the data `WHERE` "job" equals 'unemployed' `AND` where "education" equals 'primary'. The `OR` clause behaves identically to its verbal counterpart. 
+This query filters the data `WHERE` "job" equals 'unemployed' `AND` where "education" equals 'primary'. The `OR` clause behaves identically to its verbal counterpart.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql 
 SELECT *
 FROM bank 
@@ -179,12 +176,13 @@ WHERE job = 'unemployed' OR job = 'blue-collar'
 
 We can sort the outputs of our query based on certain conditions. Below, we sort our query by "balance" using the `ORDER BY` clause in `DESC` (descending) order.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql 
 SELECT *
 FROM bank 
 ORDER BY balance DESC
 ```
+
 To order the query by ascending order, you can omit the `DESC` or add `ASC` in the above SQL statement.
 
 <!-- #endregion -->
@@ -194,12 +192,13 @@ To order the query by ascending order, you can omit the `DESC` or add `ASC` in t
 
 Example: show the first 5 rows of the "job" variable.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql
 SELECT job
 FROM bank 
 LIMIT 5
 ```
+
 #### Question 1 (Easy):
 Query records where the month is in April ("apr")
 
@@ -210,12 +209,13 @@ Query records where the month is in April ("apr")
 
 You can use the `WHERE` clause to specify where month equals 'apr'.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql
 SELECT *
 FROM bank
 WHERE month = 'apr'
 ```
+
 </details>
 <!-- #endregion -->
 
@@ -230,13 +230,14 @@ Query the first 5 records where "balance" is greater than or equal to 1000. Sort
 
 You can use the `WHERE` clause and with the greater than operator ">=" to declare records with a balance greater than or equal to 1000. The query is then sorted by balance in descending order in the last line with `ORDER BY` and `DESC`.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql
 SELECT *
 FROM bank
 WHERE balance >= 1000
 ORDER BY balance DESC
 ```
+
 </details>
 <!-- #endregion -->
 
@@ -251,12 +252,13 @@ Show the count of records where 'housing' is 'no' and where 'loan' is yes.
 
 You can use `COUNT(*)` to get the count of total records after filtering `WHERE` 'housing' is 'no' and 'loan' is yes.
 
-```{code-cell} sql
+```{code-cell} ipython3
 %%sql
 SELECT COUNT(*)
 FROM bank
 WHERE housing = 'no' AND loan = 'yes'
 ```
+
 </details>
 <!-- #endregion -->
 
