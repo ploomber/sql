@@ -1,11 +1,17 @@
 ---
 jupyter:
   jupytext:
+    formats: md:myst
+    notebook_metadata_filter: myst
     text_representation:
       extension: .md
       format_name: markdown
       format_version: '1.3'
       jupytext_version: 1.14.5
+  kernelspec:
+    display_name: jupyblog
+    language: python
+    name: python3
 ---
 
 # Connecting to Database Engines
