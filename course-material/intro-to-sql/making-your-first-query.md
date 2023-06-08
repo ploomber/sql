@@ -71,11 +71,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-try:
-    %pip install jupysql --upgrade duckdb-engine pandas --quiet
-    print("Success")
-except:
-    print("retry installing")
+%pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
 ### Load the data
