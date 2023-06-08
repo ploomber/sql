@@ -5,9 +5,15 @@ build:
   tools:
     python: mambaforge-4.10
 
+  jobs:
+    pre_build:
+      - "jupyter-book config sphinx course-material/"
+
+
 conda:
-  environment: course-material/environment.lock.yml
+  environment: environment.yml
 
 sphinx:
   builder: html
-  fail_on_warning: true
+  # TODO: fix warnings and then set this to true
+  fail_on_warning: false

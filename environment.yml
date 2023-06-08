@@ -1,0 +1,8 @@
+name: sql-course
+channels:
+  - conda-forge
+dependencies:
+  - matplotlib
+  - numpy
+  - pip:
+    - jupyter-book
