@@ -77,7 +77,7 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 
-url = "https://tinyurl.com/uci-absenteeism"
+url = "https://archive.ics.uci.edu/static/public/445/absenteeism+at+work.zip"
 
 # download the file
 urlretrieve(url, "./raw-data/Absenteeism_at_work_AAA.zip")
