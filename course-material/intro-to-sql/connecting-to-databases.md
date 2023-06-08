@@ -42,8 +42,9 @@ password = getpass()
 When you execute the cell above in a notebook, a text box will appear and whatever you type will be stored in the `password` variable.
 
 ```{code-cell} ipython3
-:tags: [remove-cell]
-
+---
+tags: [remove-cell]
+---
 # this cell is hidden in the docs, only used to simulate
 # the getpass() call
 password = "mysupersecretpassword"
@@ -58,8 +59,9 @@ db_url = f"postgresql://user:{password}@localhost/database"
 Create an engine and connect:
 
 ```{code-cell} ipython3
-:tags: [remove-cell]
-
+---
+tags: [remove-cell]
+---
 # this cell is hidden in the docs, only used to fake
 # the db_url
 db_url = "duckdb://"
@@ -77,8 +79,9 @@ engine = create_engine(db_url)
 **It is highly recommended** that you do not pass plain credentials.
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
@@ -105,8 +108,6 @@ db_url = "dialect+driver://username:password@host:port/database"
 If you want to store your password securely (and don't get prompted whenever you start a connection), you can use [keyring](https://github.com/jaraco/keyring):
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
 %pip install keyring --quiet
 ```
 
@@ -132,8 +133,9 @@ password = keyring.get_password("my_database", "my_username")
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-cell]
-
+---
+tags: [remove-cell]
+---
 # this cell is hidden in the docs, only used to fake
 # the password variable
 password = "password"
@@ -144,8 +146,9 @@ db_url = f"postgresql://user:{password}@localhost/database"
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-cell]
-
+---
+tags: [remove-cell]
+---
 # this cell is hidden in the docs, only used to fake
 # the db_url
 db_url = "duckdb://"
@@ -160,8 +163,9 @@ engine = create_engine(db_url)
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
@@ -184,8 +188,9 @@ Connection arguments not whitelisted by SQLALchemy can be provided with `--conne
 Here's an example using SQLite:
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
@@ -208,8 +213,9 @@ environ["DATABASE_URL"] = f"postgresql://user:{password}@localhost/database"
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-cell]
-
+---
+tags: [remove-cell]
+---
 # this cell is hidden in the docs, only used to fake
 # the environment variable
 from os import environ
@@ -218,8 +224,9 @@ environ["DATABASE_URL"] = "sqlite://"
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
@@ -246,8 +253,9 @@ df.to_sql("numbers", engine)
 ```
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
@@ -320,7 +328,7 @@ dialect+driver://username:password@host:port/database
 
 To connect to a DuckDB database, you can use the `%sql` magic command the appropriate `duckdb://` URL string:
 
-```python
+```{code-cell} ipython3
 %sql "duckdb://"
 ```
 
@@ -404,8 +412,6 @@ with sqlite3.connect("a.db") as conn:
 Next, load `%sql` and create a schema, `a_schema`, for the table.
 
 ```{code-cell} ipython3
-:tags: [hide-output]
-
 %%sql
 ATTACH DATABASE 'a.db' AS a_schema
 ```
@@ -434,8 +440,9 @@ The first step is to install the dependencies:
 Then, load the ipython-sql library using the `%load_ext` iPython extension syntax and connect to the database:
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
+---
+tags: [remove-output]
+---
 %load_ext sql
 ```
 
