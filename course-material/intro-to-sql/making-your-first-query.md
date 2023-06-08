@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.6
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: jupyblog
   language: python
@@ -71,11 +71,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-try:
-    %pip install jupysql --upgrade duckdb-engine pandas --quiet
-    print("Success")
-except:
-    print("retry installing")
+%pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
 ### Load the data

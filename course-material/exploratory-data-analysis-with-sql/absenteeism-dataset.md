@@ -67,11 +67,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 #### Install - execute this once. 
 
 ```python
-try:
-    %pip install jupysql --upgrade duckdb-engine pandas --quiet
-    print("Success")
-except:
-    print("retry installing")
+%pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
 #### Load the data
@@ -81,7 +77,7 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00445/Absenteeism_at_work_AAA.zip"
+url = "https://archive.ics.uci.edu/static/public/445/absenteeism+at+work.zip"
 
 # download the file
 urlretrieve(url, "./raw-data/Absenteeism_at_work_AAA.zip")
@@ -90,7 +86,8 @@ urlretrieve(url, "./raw-data/Absenteeism_at_work_AAA.zip")
 with ZipFile("./raw-data/Absenteeism_at_work_AAA.zip", "r") as zf:
     zf.extractall("./raw-data/")
 
-# Check the extracted CSV file name (in this case, it's "Absenteeism_at_work.csv")
+# Check the extracted CSV file name
+# (in this case, it's "Absenteeism_at_work.csv")
 csv_file_name = "./raw-data/Absenteeism_at_work.csv"
 
 # Data clean up
