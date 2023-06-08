@@ -1,17 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: md:myst
-    notebook_metadata_filter: myst
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.5
-  kernelspec:
-    display_name: jupyblog
-    language: python
-    name: python3
+jupytext:
+  formats: md:myst
+  notebook_metadata_filter: myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.5
+kernelspec:
+  display_name: jupyblog
+  language: python
+  name: python3
 ---
 
 # Connecting to Database Engines
@@ -39,7 +38,7 @@ If you're using a database that requires a password, keep reading for more secur
 
 To connect in a more secure way, you can dynamically build your URL string so your password isn't hardcoded:
 
-```python
+```{code-cell} ipython3
 from getpass import getpass
 
 password = getpass()
