@@ -6,7 +6,7 @@ build:
     python: mambaforge-4.10
 
 conda:
-  environment: course-material/environment.lock.yml
+  environment: course-material/environment.yml
 
 sphinx:
   builder: html
