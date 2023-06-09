@@ -43,7 +43,7 @@ from zipfile import ZipFile
 import pandas as pd
 import os
 
-def extract_to_csv(url):
+def extract_to_csv(url, data_name):
   #Retrieve the zip file from the url link
   file = os.path.basename(url)
   urlretrieve(url, file)
@@ -53,16 +53,16 @@ def extract_to_csv(url):
     zf.extractall()
 
   #The file containing our data
-  csv_file_name = 'bank.csv'
+  csv_file_name = f'{data_name}.csv'
 
   # Data clean up
   df = pd.read_csv(csv_file_name, sep = ";")
 
   # Save the cleaned up CSV file
-  df.to_csv('bank_cleaned.csv', index=False) 
+  df.to_csv(df.to_csv(f'{data_name}.csv', index=False))
 
 #Running the above function
-extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip')
+extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip', bank)
   ```
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
@@ -200,7 +200,7 @@ GROUP BY housing, marital
 
 There are six total groups from our query. "housing" has two groups and "marital" has three groups. Since "housing" has only two groups, 'yes' and 'no', let's think about these groups as two seperate blocks. The 'yes' and 'no' blocks will then each be `GROUP BY` the groups under the "marital" column, which are 'married', 'single', and 'divorced'. Thus, since each 'yes' and 'no' group has three groups each, there are a total of six groups.
 
-[![](https://mermaid.ink/img/pako:eNqVkjFvgzAQhf-KdV1JBAc44EodqnRMF7q0pYOF3cQK2Mg4bWiU_14H1EhJlrL5fe_5nWTfASojJDBYW95uyMtjqQl5fS-hl10JH4Mis9kDWUUeNtxaJcWFUZyMTul1LS_48sSF-jK2Ot949kibPzH24k3vaBR43TvyJd721kpvC9fXkoSkc9ZsJbur8ozzKBjl7FsJt2HY7u8v89HEPE7MxxPzycR8-o88BNBI23Al_D8fTvdLcBvZ-Hdl_ii43ZZQ6qPP8Z0zRa8rYM7uZAC7VnAnl4r79WiAffK6O9MnoZyxZygHuRq3aViqAFqugR1gDyxK8znGaRoj0miBOWIAvceYzGm2SDDNKGKKeAzgxxg_KpxnmGVJhGEe0gWlMR3q3gZzGHn8BXRf3tk?type=png)](https://mermaid.live/edit#pako:eNqVkjFvgzAQhf-KdV1JBAc44EodqnRMF7q0pYOF3cQK2Mg4bWiU_14H1EhJlrL5fe_5nWTfASojJDBYW95uyMtjqQl5fS-hl10JH4Mis9kDWUUeNtxaJcWFUZyMTul1LS_48sSF-jK2Ot949kibPzH24k3vaBR43TvyJd721kpvC9fXkoSkc9ZsJbur8ozzKBjl7FsJt2HY7u8v89HEPE7MxxPzycR8-o88BNBI23Al_D8fTvdLcBvZ-Hdl_ii43ZZQ6qPP8Z0zRa8rYM7uZAC7VnAnl4r79WiAffK6O9MnoZyxZygHuRq3aViqAFqugR1gDyxK8znGaRoj0miBOWIAvceYzGm2SDDNKGKKeAzgxxg_KpxnmGVJhGEe0gWlMR3q3gZzGHn8BXRf3tk)
+[!](aggregate-functions-diagram.png)
 
 <!-- #endregion -->
 
