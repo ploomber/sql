@@ -1,21 +1,21 @@
----
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.14.5
-kernelspec:
-  display_name: jupyblog
-  language: python
-  name: python3
+--- 
+jupytext: # noqa
+  text_representation: # noqa
+    extension: .md # noqa 
+    format_name: myst # noqa
+    format_version: 0.13 # noqa
+    jupytext_version: 1.14.5 # noqa
+kernelspec: # noqa
+  display_name: jupyblog # noqa
+  language: python # noqa
+  name: python3 # noqa
 ---
 
 # Connecting to Database Engines
 
 In this tutorial you will learn how to connect to various databases using JupySQL.
 
-## Connect with a URL string
+## Connect with a URL string 
 
 Connection strings follow the [SQLAlchemy URL format](http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls). This is the fastest way to connect to your database and the recommended way if you're using SQLite or DuckDB.
 
@@ -37,7 +37,7 @@ If you're using a database that requires a password, keep reading for more secur
 To connect in a more secure way, you can dynamically build your URL string so your password isn't hardcoded:
 
 ```python
-import getpass
+import getpass # noqa
 
 password = getpass.getpass()
 ```
@@ -406,6 +406,7 @@ First, let's import the library and create a new database connection to our cust
 import sqlite3
 
 with sqlite3.connect("a.db") as conn:
+    conn.execute("DROP TABLE IF EXISTS my_numbers")
     conn.execute("CREATE TABLE my_numbers (number FLOAT)")
     conn.execute("INSERT INTO my_numbers VALUES (1)")
     conn.execute("INSERT INTO my_numbers VALUES (2)")
