@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.14.6
 kernelspec:
   display_name: jupyblog
   language: python
@@ -75,34 +75,40 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ```
 
 ### Load the data
-We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.  
-```python
+We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
+
+```{code-cell} ipython3
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 import os
 
+
 def extract_to_csv(url):
-  #Retrieve the zip file from the url link
-  file = os.path.basename(url)
-  urlretrieve(url, file)
+    # Retrieve the zip file from the url link
+    file = os.path.basename(url)
+    urlretrieve(url, file)
 
-  #Extract the zip file's contents
-  with ZipFile(file, 'r') as zf:
-    zf.extractall()
+    # Extract the zip file's contents
+    with ZipFile(file, "r") as zf:
+        zf.extractall()
 
-  #The file containing our data
-  csv_file_name = 'bank.csv'
+    # The file containing our data
+    csv_file_name = "bank.csv"
 
-  # Data clean up
-  df = pd.read_csv(csv_file_name, sep = ";")
+    # Data clean up
+    df = pd.read_csv(csv_file_name, sep=";")
 
-  # Save the cleaned up CSV file
-  df.to_csv('bank_cleaned.csv', index=False) 
+    # Save the cleaned up CSV file
+    df.to_csv("bank_cleaned.csv", index=False)
 
-#Running the above function
-extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip')
-  ```
+
+# Running the above function
+extract_to_csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip"
+)
+```
+
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
 ### Load Engine
