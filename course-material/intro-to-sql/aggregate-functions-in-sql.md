@@ -200,7 +200,7 @@ GROUP BY housing, marital
 
 There are six total groups from our query. "housing" has two groups and "marital" has three groups. Since "housing" has only two groups, 'yes' and 'no', let's think about these groups as two seperate blocks. The 'yes' and 'no' blocks will then each be `GROUP BY` the groups under the "marital" column, which are 'married', 'single', and 'divorced'. Thus, since each 'yes' and 'no' group has three groups each, there are a total of six groups.
 
-[!](aggregate-functions-diagram.png)
+![diagram](aggregate-functions-diagram.png)
 
 <!-- #endregion -->
 
