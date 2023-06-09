@@ -1,5 +1,14 @@
 # From zero to hero: end to end data applications with SQL and Jupyter
 
+## Set up
+
+First set up by following this guide: https://ploomber-contributing.readthedocs.io/en/latest/contributing/setup.html
+
+After cloning this repository and activating your environment, follow these steps:
+
+1. cd into your cloned repository and install the required packages from the requirements.txt file. To install, run `pip install -r requirements.txt` in your command line.
+2. View the course by building the documents. To do so, run `jupyter-book build course-material/` in your command line. Make sure your working directory is at `/sql`, which is the top level of the cloned repository.
+
 ## Course structure
 
 ### Intro to SQL
