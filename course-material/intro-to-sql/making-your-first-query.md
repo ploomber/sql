@@ -11,16 +11,16 @@ kernelspec:
   name: python3
 ---
 
-## Making your first SQL query
+# Making your first SQL query
 <!-- #region -->
 
-### SQL Overview
+## SQL Overview
 
 SQL (Structured Query Language) is the widely adopted language used for managing and manipulating data. It's the language that inspired its other popular variants you may have heard of, such as PostgreSQL, MySQL, and more. 
 
 In this lesson, you will learn how to make your first SQL query.
 
-### Dataset
+## Dataset
 
 To perform your first SQL query, we will be working with one main dataset throughout this course:
 - Bank Marketing Data
@@ -29,7 +29,7 @@ Source: UCI Machine Learning Repository
 
 URL: https://archive-beta.ics.uci.edu/dataset/222/bank+marketing
 
-### Data Description
+## Data Description
 
 The data is related with direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be ('yes') or not ('no') subscribed. 
 
@@ -55,7 +55,7 @@ The data contains the following categories:
 <!-- #endregion -->
 
 <!-- #region -->
-### 5 minute crash course into JupySQL
+## 5 minute crash course into JupySQL
 
 Play the following video to get familiar with JupySQL to execute queries on Jupyter using DuckDB.
 
@@ -67,7 +67,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 <!-- #endregion -->
 
 <!-- #region -->
-### Install - execute this once. 
+## Install - execute this once. 
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
@@ -75,7 +75,7 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
-### Load the data
+## Load the data
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
 
 ```{code-cell} ipython3
@@ -112,7 +112,7 @@ extract_to_csv(
 
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
-### Load Engine
+## Load Engine
 We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
 
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
@@ -124,9 +124,9 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 %sql duckdb:///bank.duck.db
 ```
 
-### Queries
+## Queries
 
-#### Creating Table
+### Creating Table
 
 Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we `CREATE OR REPLACE TABLE` in DuckDB called 'bank' `FROM` our `bank_cleaned.csv` file. The `read_csv_auto` is a function that helps SQL understand our local .csv file for creation into our database.
 
@@ -136,7 +136,7 @@ CREATE OR REPLACE TABLE bank AS
 FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 ```
 
-#### Simple Query
+### Simple Query
 
 Now that we have our `bank` table in our DuckDB database, we can run our first query on the table. Let's start off with a simple query that looks at the first five rows from our table.
 

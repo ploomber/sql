@@ -13,6 +13,8 @@ jupyter:
 ---
 
 <!-- #region -->
+# Exploratory data analysis with JupySQL
+
 ## Dataset: Absenteeism at work
 
 Source: UCI Machine Learning Repository 
