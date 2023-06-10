@@ -62,7 +62,7 @@ def extract_to_csv(url, data_name):
   df.to_csv(df.to_csv(f'{data_name}.csv', index=False))
 
 #Running the above function
-extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip', bank)
+extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip', 'bank')
   ```
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
@@ -122,18 +122,18 @@ WHERE balance > 500 AND martial = 'married'
 
 ```{code-cell} ipython3
 %%sql 
-SELECT AVG(balance) AS 'Average Unemployed Balance'
+SELECT AVG(balance) AS average_unemployed_balance
 FROM bank 
 WHERE job = 'unemployed'
 ```
 
-We have quotes around 'Average Unempoyed Balanace' because we need to specify to SQL that `AVG(balance)` should be represented as that whole string of text. Without quotes, SQL misinterprets "Unemployed" and "Balance" as clauses that do not exist.
-
 The value of our `AVG(balance)` function can be rounded to better represent a monetary balance with `ROUND()`. `ROUND()` accepts two arguments. The first is the actual value to round and the second is the number of decimal places to round to. We apply `ROUND()` to the same query below.
+
+Note that aliasing query column outputs with the AS clause should not have any spaces. By convention, this makes it easier for SQL to later reference these aliases and avoid ambiguity for the parser.
 
 ```{code-cell} ipython3
 %%sql 
-SELECT ROUND(AVG(balance),2) AS 'Average Unemployed Balance'
+SELECT ROUND(AVG(balance),2) AS average_unemployed_balance
 FROM bank 
 WHERE job = 'unemployed'
 ```
@@ -144,7 +144,7 @@ WHERE job = 'unemployed'
 
 ```{code-cell} ipython3
 %%sql 
-SELECT SUM(balance) AS 'Sum Balance of Managers'
+SELECT SUM(balance) AS sum_balance_of_managers
 FROM bank 
 WHERE job = 'management' OR job = 'services'
 ```
@@ -155,13 +155,13 @@ The `MIN()` and `MAX()` functions do exactly what you would think. Below we find
 
 ```{code-cell} ipython3
 %%sql 
-SELECT MIN(balance) AS 'Minimum Balance'
+SELECT MIN(balance) AS minimum_balance
 FROM bank 
 ```
 
 ```{code-cell} ipython3
 %%sql 
-SELECT MAX(balance) AS 'Maximum Balance'
+SELECT MAX(balance) AS maximum_balance
 FROM bank 
 ```
 
@@ -218,7 +218,7 @@ You can use the `ROUND` clause to specify where 0 decimal places.
 
 ```{code-cell} ipython3
 %%sql 
-SELECT ROUND(AVG(duration),0) AS "Average Phone Call Length"
+SELECT ROUND(AVG(duration),0) AS average_phone_call_length
 FROM bank 
 ```
 

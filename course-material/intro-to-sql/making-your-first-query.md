@@ -84,7 +84,7 @@ import pandas as pd
 import os
 
 
-def extract_to_csv(url):
+def extract_to_csv(url, data_name):
     # Retrieve the zip file from the url link
     file = os.path.basename(url)
     urlretrieve(url, file)
@@ -105,7 +105,7 @@ def extract_to_csv(url):
 
 # Running the above function
 extract_to_csv(
-    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", bank
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", 'bank'
 )
 ```
 
