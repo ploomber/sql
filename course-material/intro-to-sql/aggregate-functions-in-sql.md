@@ -235,6 +235,7 @@ Show each education group's count of whether they have housing or not. Also, mak
 
 The `WHERE` clause must appear first before the `GROUP BY` clause. Then, grouping by first education and then housing gives the correct `COUNT()` of each group. Notice that 'primary' under the "education" column does not have a "housing" group of 'yes' If no records exist where an observation with an "education" of 'primary' has a "housing" value of 'yes', then it is omitted from `GROUP BY` queries. This is saying that this particular group does not exist.
 
+```{code-cell} ipython3
 %%sql
 SELECT education, housing, COUNT(*)
 FROM bank  
