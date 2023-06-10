@@ -241,6 +241,7 @@ SELECT education, housing, COUNT(*)
 FROM bank  
 WHERE marital = 'married'
 GROUP BY education, housing
+``` 
 
 </details>
 <!-- #endregion -->
