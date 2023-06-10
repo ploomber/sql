@@ -4,5 +4,7 @@ channels:
 dependencies:
   - matplotlib
   - numpy
+  - keyring
+  - duckdb
   - pip:
     - jupyter-book

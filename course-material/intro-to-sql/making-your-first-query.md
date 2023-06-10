@@ -11,8 +11,9 @@ kernelspec:
   name: python3
 ---
 
-# Making your first SQL query
+## Making your first SQL query
 <!-- #region -->
+
 ### SQL Overview
 
 SQL (Structured Query Language) is the widely adopted language used for managing and manipulating data. It's the language that inspired its other popular variants you may have heard of, such as PostgreSQL, MySQL, and more. 
