@@ -103,19 +103,17 @@ engine = create_engine(db_url)
 %sql engine
 ```
 
-+++ {"user_expressions": []}
 
 ```{important}
-Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the `$` character:
-```
+Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the `$` character, we use `{{}}` instead:
 
 ```python
 # this doesn't work in JupySQL!
 db_url = "dialect+driver://username:password@host:port/database"
-%sql $db_url
+%sql {{db_url}}
+```
 ```
 
-+++ {"user_expressions": []}
 
 ## Securely storing your password
 
