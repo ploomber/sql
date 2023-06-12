@@ -20,9 +20,6 @@ Because there are many datasets from the zip file, we will start off by focusing
 
 Brief description of both here.
 
-<!-- #endregion -->
-
-
 <!-- #region -->
 ## Install - execute this once. 
 <b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to reinstall these packages.
@@ -64,4 +61,4 @@ def extract_asc_to_csv(url, output_folder):
 # Running the above function
 extract_asc_to_csv('http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip', 'expanded_data')
 ```
-
+<!-- #endregion -->
