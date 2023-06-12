@@ -34,36 +34,44 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ```
 
 ## Load the data
-<b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to load the data again. 
+<b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to load the data again.
+
+The data is downloaded from https://archive-beta.ics.uci.edu/dataset/222/bank+marketing via the url https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip.
 
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.  
-```python
+
+Dataset citation:
+ 
+Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
+
+```{code-cell} ipython3
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 import os
 
 def extract_to_csv(url, data_name):
-  #Retrieve the zip file from the url link
-  file = os.path.basename(url)
-  urlretrieve(url, file)
+    """
+    This function extracts data from a URL with a .zip file,
+    cleans the data and saves the clean data
+    """
+    # Set path
+    file = os.path.basename(url)
+    urlretrieve(url, file)
+    # Extract data
+    with ZipFile(file, 'r') as zf:
+        zf.extractall()
+    # Clean data and save
+    csv_file_name = f'{data_name}.csv'
+    df = pd.read_csv(csv_file_name, sep=";")
+    df.to_csv(f'{data_name}_cleaned.csv', index=False)
+```
 
-  #Extract the zip file's contents
-  with ZipFile(file, 'r') as zf:
-    zf.extractall()
+```{code-cell} ipython3
+# Running the above function
+extract_to_csv('https://tinyurl.com/uci-marketing-data', 'bank')
+```
 
-  #The file containing our data
-  csv_file_name = f'{data_name}.csv'
-
-  # Data clean up
-  df = pd.read_csv(csv_file_name, sep = ";")
-
-  # Save the cleaned up CSV file
-  df.to_csv(f'{data_name}_cleaned.csv', index=False)
-
-#Running the above function
-extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip', 'bank')
-  ```
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
 ## Load Engine

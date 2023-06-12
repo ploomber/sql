@@ -18,9 +18,7 @@ In this tutorial you will learn how to connect to various databases using JupySQ
 We shall start by importing all required libraries:
 
 ```{code-cell} ipython3
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
-import keyring
 from os import environ
 import pandas as pd
 import duckdb
@@ -53,6 +51,7 @@ To connect in a more secure way, you can dynamically build your URL string so yo
 :tags: [remove-cell, remove-output]
 # this cell is hidden in the docs, only used to simulate
 # the getpass() call
+# import getpass
 # password = getpass.getpass()
 ```
 
@@ -104,25 +103,22 @@ engine = create_engine(db_url)
 %sql engine
 ```
 
-+++ {"user_expressions": []}
 
 ```{important}
-Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the `$` character:
+Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the `$` character, we use `{{}}` instead:
 ```
 
 ```python
-# this doesn't work in JupySQL!
 db_url = "dialect+driver://username:password@host:port/database"
-%sql $db_url
+%sql {{db_url}}
 ```
 
-+++ {"user_expressions": []}
 
 ## Securely storing your password
 
 If you want to store your password securely (and don't get prompted whenever you start a connection), you can use [keyring](https://github.com/jaraco/keyring):
 
-```{code-cell} ipython3
+```python
 %pip install keyring --quiet
 ```
 
@@ -130,7 +126,8 @@ If you want to store your password securely (and don't get prompted whenever you
 
 Execute the following in your notebook:
 
-```{code-cell} ipython3
+```python
+import keyring
 keyring.set_password("my_database", "my_username", "my_password")
 ```
 
@@ -138,7 +135,7 @@ keyring.set_password("my_database", "my_username", "my_password")
 
 Then, delete the cell above (so your password isn't hardcoded!). Now, you can retrieve your password with:
 
-```{code-cell} ipython3
+```python
 password = keyring.get_password("my_database", "my_username")
 ```
 
@@ -213,6 +210,7 @@ You can create a local `.env` file with a `db_password` variable and use `python
 Set the `DATABASE_URL` environment variable, and `%sql` will automatically load it. You can do this either by setting the environment variable from your terminal or in your notebook:
 
 ```python
+from dotenv import load_dotenv
 load_dotenv(".env")
 password = os.environ.get("db_password")
 environ["DATABASE_URL"] = f"postgresql://user:{password}@localhost/database"
@@ -357,7 +355,8 @@ Write a code snippet to establish a **secure** connection for a PostgreSQL datab
 To securely connect to a PostgreSQL database, you can use the `getpass` function from the `getpass` module to prompt the user for a password. This way, the password is not hardcoded in the notebook.
 
 ```python
-#password = getpass()
+import getpass
+password = getpass()
 ```
 
 Then, you can build your connection string:
