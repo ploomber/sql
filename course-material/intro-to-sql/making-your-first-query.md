@@ -101,7 +101,7 @@ def extract_to_csv(url, data_name):
     df = pd.read_csv(csv_file_name, sep=";")
 
     # Save the cleaned up CSV file
-    df.to_csv(df.to_csv(f'{data_name}.csv', index=False))
+    df.to_csv(f'{data_name}_cleaned.csv', index=False)
 
 
 # Running the above function

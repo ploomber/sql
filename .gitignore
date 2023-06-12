@@ -165,6 +165,7 @@ cython_debug/
 course-material/_build
 
 # Data files
+*.asc
 *.csv
 *.tsv
 *.json
