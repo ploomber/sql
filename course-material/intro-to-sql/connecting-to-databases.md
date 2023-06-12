@@ -18,7 +18,6 @@ In this tutorial you will learn how to connect to various databases using JupySQ
 We shall start by importing all required libraries:
 
 ```{code-cell} ipython3
-import getpass
 from sqlalchemy import create_engine
 import keyring
 from os import environ
@@ -53,6 +52,7 @@ To connect in a more secure way, you can dynamically build your URL string so yo
 :tags: [remove-cell, remove-output]
 # this cell is hidden in the docs, only used to simulate
 # the getpass() call
+# import getpass
 # password = getpass.getpass()
 ```
 
@@ -358,7 +358,8 @@ Write a code snippet to establish a **secure** connection for a PostgreSQL datab
 To securely connect to a PostgreSQL database, you can use the `getpass` function from the `getpass` module to prompt the user for a password. This way, the password is not hardcoded in the notebook.
 
 ```python
-#password = getpass()
+import getpass
+password = getpass()
 ```
 
 Then, you can build your connection string:
