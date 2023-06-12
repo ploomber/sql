@@ -24,7 +24,7 @@ Let's first run the installations and setup before running any queries, just lik
 
 <!-- region -->
 
-### Install - execute this once. 
+## Install - execute this once. 
 <b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to reinstall these packages.
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
@@ -33,7 +33,7 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
-### Load the data
+## Load the data
 <b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to load the data again. 
 
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.  
@@ -66,7 +66,7 @@ extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
   ```
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
-### Load Engine
+## Load Engine
 We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
 
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
@@ -80,9 +80,9 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 
 Let's now return to our initial dataset of bank marketing records. 
 
-### Queries
+## Queries
 
-#### Creating Table
+### Creating Table
 
 Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we `CREATE OR REPLACE TABLE` in DuckDB called 'bank' `FROM` our `bank_cleaned.csv` file. The `read_csv_auto` is a function that helps SQL understand our local .csv file for creation into our database.
 
@@ -92,7 +92,7 @@ CREATE OR REPLACE TABLE bank AS
 FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 ```
 
-#### Count and Distinct Count
+### Count and Distinct Count
 `COUNT()` allows users to query the count of records in a given query. A common argument to this function is `*`. `COUNT(*)` tells SQL to return the total number of rows from our query, including NULL values. This can be combined with queries that filter for certain conditions.
 
 A common function to be used with `COUNT()` is `DISTINCT()`. For example, selecting `COUNT(DISTINCT(job))` would return the count of distinct values under the "job" column.
@@ -116,7 +116,7 @@ WHERE balance > 500 AND martial = 'married'
 
 `COUNT()` can also have the arguments of a single row, such as `COUNT(job)`. `COUNT(job)` would count the number of rows of just the "job" column. If "job" were to have any NULL values in its query, those NULL values would be subtracted from the total row counts of the query. 
 
-#### Average
+### Average
 
 `AVG()` allows users to take the average of columns. This clause can also be used with filtering. An example of finding the average balance of unemployed observations is as follows:
 
@@ -138,7 +138,7 @@ FROM bank
 WHERE job = 'unemployed'
 ```
 
-#### Sum
+### Sum
 
 `SUM()` aggregates the sum of columns. Below, we find the `SUM()` of the balance column `WHERE` "job" equals 'management' `OR` `WHERE` "job" equals 'services'. 
 
@@ -149,7 +149,7 @@ FROM bank
 WHERE job = 'management' OR job = 'services'
 ```
 
-#### Minimum and Maximum
+### Minimum and Maximum
 
 The `MIN()` and `MAX()` functions do exactly what you would think. Below we find the `MIN()` and `MAX()` of "balance".
 
@@ -167,7 +167,7 @@ FROM bank
 
 Accumulating everything we have learned so far, can you think of another way of finding the minimum and maximum of balance without `MIN()` and `MAX()`? <b>Hint:</b> try recreating these queries with `ORDER BY`.
 
-#### Grouping
+### Grouping
 
 Grouping is an extremely useful clause. It allows users to examine the results of aggregate functions within each unique group. Note that grouping with `GROUP BY` comes after filtering with `WHERE`. Below, we find the `COUNT()` of all rows `GROUP BY` "housing". Since housing only has the unique values of 'yes' and 'no', there will be only two groups.  
 
@@ -204,9 +204,9 @@ There are six total groups from our query. "housing" has two groups and "marital
 
 <!-- #endregion -->
 
-### You try: Use JupySQL to perform the queries and answer the questions.
+## You try: Use JupySQL to perform the queries and answer the questions.
 
-#### Question 1 (Easy):
+### Question 1 (Easy):
 Find the average "duration" of phone calls. Name the column of your output as "Average Phone Call Length". Round to 0 decimal places.
 
 <!-- #region -->
@@ -225,7 +225,7 @@ FROM bank
 </details>
 <!-- #endregion -->
 
-#### Question 2 (Medium):
+### Question 2 (Medium):
 Show each education group's count of whether they have housing or not. Also, make it so that this query only include married individuals.
 
 <!-- #region -->
@@ -246,7 +246,7 @@ GROUP BY education, housing
 </details>
 <!-- #endregion -->
 
-#### Question 3 (Medium):
+### Question 3 (Medium):
 Find the average, minimum, and maximum of balance and the count of records where there has not been a default. Group this query by "job" and "married". Round the averages by 2 decimal places.
 
 <b>Hint</b> `COUNT()` is a aggregating function in SQL (more on aggregation later!). Try experimenting with `COUNT()` in your `SELECT` clause to see if you can find the correct count.
@@ -270,7 +270,7 @@ GROUP BY job, marital
 
 <!-- #region -->
 
-### Wrapping Up
+## Wrapping Up
 
 In this section, we introduced aggregate functions and the `GROUP BY` utility. To summarize:
 
