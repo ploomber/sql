@@ -287,7 +287,7 @@ We learned the basics of `SQL` by going over some of its most necessary clauses:
 
 - `ORDER BY` : Sorts the output on variables in our query. This clause can include `DESC` to sort by descending order.
 
-These clauses lay the foundation of `SQL`. They will be necessary for our next section, which will introduce aggregation functions. We showed a sneak peek of an aggregation function `COUNT()` in [Question 3](#question-3-bonus). More on that in the next section!
+These clauses lay the foundation of `SQL`. They will be necessary for our next section, which will introduce aggregation functions. We showed a sneak peek of an aggregation function `COUNT()` in Question 3. More on that in the next section!
 
 #### A Little Extra
 
