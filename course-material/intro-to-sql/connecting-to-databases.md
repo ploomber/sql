@@ -19,7 +19,6 @@ We shall start by importing all required libraries:
 
 ```{code-cell} ipython3
 from sqlalchemy import create_engine
-import keyring
 from os import environ
 import pandas as pd
 import duckdb
@@ -122,7 +121,7 @@ db_url = "dialect+driver://username:password@host:port/database"
 
 If you want to store your password securely (and don't get prompted whenever you start a connection), you can use [keyring](https://github.com/jaraco/keyring):
 
-```{code-cell} ipython3
+```python
 %pip install keyring --quiet
 ```
 
@@ -130,7 +129,8 @@ If you want to store your password securely (and don't get prompted whenever you
 
 Execute the following in your notebook:
 
-```{code-cell} ipython3
+```python
+import keyring
 keyring.set_password("my_database", "my_username", "my_password")
 ```
 
@@ -138,7 +138,7 @@ keyring.set_password("my_database", "my_username", "my_password")
 
 Then, delete the cell above (so your password isn't hardcoded!). Now, you can retrieve your password with:
 
-```{code-cell} ipython3
+```python
 password = keyring.get_password("my_database", "my_username")
 ```
 
