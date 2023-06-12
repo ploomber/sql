@@ -78,14 +78,14 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ## Load the data
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
 
-```{code-cell} ipython3
+``` python
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 import os
 
 
-def extract_to_csv(url):
+def extract_to_csv(url, data_name):
     # Retrieve the zip file from the url link
     file = os.path.basename(url)
     urlretrieve(url, file)
@@ -95,18 +95,18 @@ def extract_to_csv(url):
         zf.extractall()
 
     # The file containing our data
-    csv_file_name = "bank.csv"
+    csv_file_name = f'{data_name}.csv'
 
     # Data clean up
     df = pd.read_csv(csv_file_name, sep=";")
 
     # Save the cleaned up CSV file
-    df.to_csv("bank_cleaned.csv", index=False)
+    df.to_csv(df.to_csv(f'{data_name}.csv', index=False))
 
 
 # Running the above function
 extract_to_csv(
-    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip"
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", 'bank'
 )
 ```
 
