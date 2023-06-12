@@ -18,7 +18,7 @@ In this tutorial you will learn how to connect to various databases using JupySQ
 We shall start by importing all required libraries:
 
 ```{code-cell} ipython3
-from dotenv import load_dotenv
+import getpass
 from sqlalchemy import create_engine
 import keyring
 from os import environ
@@ -213,6 +213,7 @@ You can create a local `.env` file with a `db_password` variable and use `python
 Set the `DATABASE_URL` environment variable, and `%sql` will automatically load it. You can do this either by setting the environment variable from your terminal or in your notebook:
 
 ```python
+from dotenv import load_dotenv
 load_dotenv(".env")
 password = os.environ.get("db_password")
 environ["DATABASE_URL"] = f"postgresql://user:{password}@localhost/database"
