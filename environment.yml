@@ -6,5 +6,6 @@ dependencies:
   - numpy
   - keyring
   - duckdb
+  - pip
   - pip:
     - jupyter-book
