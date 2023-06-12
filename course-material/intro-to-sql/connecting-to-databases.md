@@ -208,10 +208,15 @@ Here's an example using SQLite:
 
 +++
 
+You can create a local `.env` file with a `db_password` variable and use `python-dotenv` to load it to your environment. 
+
 Set the `DATABASE_URL` environment variable, and `%sql` will automatically load it. You can do this either by setting the environment variable from your terminal or in your notebook:
 
 ```python
-password = getpass.getpass()
+from dotenv import load_dotenv
+
+load_dotenv(".env")
+password = os.environ.get("db_password")
 environ["DATABASE_URL"] = f"postgresql://user:{password}@localhost/database"
 ```
 
