@@ -106,11 +106,11 @@ engine = create_engine(db_url)
 
 ```{important}
 Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the `$` character, we use `{{}}` instead:
+```
 
 ```python
 db_url = "dialect+driver://username:password@host:port/database"
 %sql {{db_url}}
-```
 ```
 
 
