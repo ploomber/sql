@@ -33,7 +33,7 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ## Load the data
 We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and conver the .asc files to .csv files. Finally, we save converted data into a folder.
 
-``` python
+``` {code-cell} ipython3
 import csv
 import urllib.request
 import zipfile
@@ -56,7 +56,6 @@ def extract_asc_to_csv(url, output_folder):
                     csv_writer.writerow(row)
             print(f'Converted {asc_file_path} to CSV.')
     print('All ASC files converted to CSV.')
-
 
 # Running the above function
 extract_asc_to_csv('http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip', 'expanded_data')

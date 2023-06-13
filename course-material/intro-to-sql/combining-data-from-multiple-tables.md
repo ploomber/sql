@@ -1,11 +1,14 @@
 ---
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.5
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.6
+kernelspec:
+  display_name: jupyblog
+  language: python
+  name: python3
 ---
 
 # Combining data from multiple tables
@@ -23,7 +26,7 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ## Load the data
 We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and conver the .asc files to .csv files. Finally, we save converted data into a folder.
 
-``` python
+``` {code-cell} ipython3
 import csv
 import urllib.request
 import zipfile
@@ -46,7 +49,6 @@ def extract_asc_to_csv(url, output_folder):
                     csv_writer.writerow(row)
             print(f'Converted {asc_file_path} to CSV.')
     print('All ASC files converted to CSV.')
-
 
 # Running the above function
 extract_asc_to_csv('http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip', 'expanded_data')
