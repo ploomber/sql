@@ -29,6 +29,10 @@ Source: UCI Machine Learning Repository
 
 URL: https://archive-beta.ics.uci.edu/dataset/222/bank+marketing
 
+Data Citation
+
+Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
+
 ## Data Description
 
 The data is related with direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be ('yes') or not ('no') subscribed. 
