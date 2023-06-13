@@ -12,13 +12,25 @@ kernelspec:
 ---
 # Joining data in SQL
 
+This section demonstrates an important part of SQL: <b>joining</b>. Joining is useful when given two or more datasets that relate to each other. In other words, in a given dataset, additional information can be supplemented from another dataset.
+
+To show the capabilites of joining, we move away from the single bank dataset we initially used in this course. We introduce several new datasets to help introduce this topic.
+
 ## Datasets
 
-Describe we will be using here
+The datasets we will be using originates from a new bank's financial data. These datasets are public and can be found here: https://web.archive.org/web/20180506061559/http://lisp.vse.cz/pkdd99/Challenge/chall.htm
 
-Because there are many datasets from the zip file, we will start off by focusing on two first. 
+We first focus on just two datasets, the `account` and `district` dataset. We skip over defining each datasets variables to clearly demonstrate joining. To learn more about the data, please reference the datasets documentations: https://web.archive.org/web/20180506035658/http://lisp.vse.cz/pkdd99/Challenge/berka.htm
 
-Brief description of both here.
+Below is a display of `account` and `district` in an Entity-Relationship Diagram (ERD). 
+
+# Insert ERD of account and district
+
+ERDs are useful visuals to help understand the relationship between two or more datasets. Each table in the diagram represents a dataset. The variables of each dataset a represented as rows. The first column is the variable name while the second column is the variable's value type alongside if the variable is a primary key or foreign key. 
+
+What is a primary key and a foreign key? Explain here:
+
+In our case, the "account_id" variable is the primary key for the account table and the "district_id" is the primary key for the district table. "district_id" is a foreign key in the account table. 
 
 <!-- #region -->
 ## Install - execute this once. 
