@@ -10,6 +10,7 @@ kernelspec:
   language: python
   name: python3
 ---
+
 # Joining data in SQL
 
 This section introduces a fundamental concept in SQL: <b>joining</b>. Joining is a powerful technique used to combine data from multiple tables based on their relationships. It allows you to supplement a dataset with additional information from another related dataset.
