@@ -16,4 +16,4 @@ conda:
 sphinx:
   builder: html
   # TODO: fix warnings and then set this to true
-  fail_on_warning: false
+  fail_on_warning: true

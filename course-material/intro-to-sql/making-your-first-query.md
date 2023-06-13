@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.14.6
 kernelspec:
   display_name: jupyblog
   language: python
@@ -13,13 +13,14 @@ kernelspec:
 
 # Making your first SQL query
 <!-- #region -->
-### SQL Overview
+
+## SQL Overview
 
 SQL (Structured Query Language) is the widely adopted language used for managing and manipulating data. It's the language that inspired its other popular variants you may have heard of, such as PostgreSQL, MySQL, and more. 
 
 In this lesson, you will learn how to make your first SQL query.
 
-### Dataset
+## Dataset
 
 To perform your first SQL query, we will be working with one main dataset throughout this course:
 - Bank Marketing Data
@@ -28,7 +29,11 @@ Source: UCI Machine Learning Repository
 
 URL: https://archive-beta.ics.uci.edu/dataset/222/bank+marketing
 
-### Data Description
+Data Citation
+
+Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
+
+## Data Description
 
 The data is related with direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be ('yes') or not ('no') subscribed. 
 
@@ -54,7 +59,7 @@ The data contains the following categories:
 <!-- #endregion -->
 
 <!-- #region -->
-### 5 minute crash course into JupySQL
+## 5 minute crash course into JupySQL
 
 Play the following video to get familiar with JupySQL to execute queries on Jupyter using DuckDB.
 
@@ -66,7 +71,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 <!-- #endregion -->
 
 <!-- #region -->
-### Install - execute this once. 
+## Install - execute this once. 
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
@@ -74,38 +79,44 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 
-### Load the data
-We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.  
-```python
+## Load the data
+We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
+
+``` python
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 import os
 
-def extract_to_csv(url):
-  #Retrieve the zip file from the url link
-  file = os.path.basename(url)
-  urlretrieve(url, file)
 
-  #Extract the zip file's contents
-  with ZipFile(file, 'r') as zf:
-    zf.extractall()
+def extract_to_csv(url, data_name):
+    # Retrieve the zip file from the url link
+    file = os.path.basename(url)
+    urlretrieve(url, file)
 
-  #The file containing our data
-  csv_file_name = 'bank.csv'
+    # Extract the zip file's contents
+    with ZipFile(file, "r") as zf:
+        zf.extractall()
 
-  # Data clean up
-  df = pd.read_csv(csv_file_name, sep = ";")
+    # The file containing our data
+    csv_file_name = f'{data_name}.csv'
 
-  # Save the cleaned up CSV file
-  df.to_csv('bank_cleaned.csv', index=False) 
+    # Data clean up
+    df = pd.read_csv(csv_file_name, sep=";")
 
-#Running the above function
-extract_to_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip')
-  ```
+    # Save the cleaned up CSV file
+    df.to_csv(df.to_csv(f'{data_name}.csv', index=False))
+
+
+# Running the above function
+extract_to_csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", 'bank'
+)
+```
+
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
 
-### Load Engine
+## Load Engine
 We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
 
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
@@ -117,9 +128,9 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 %sql duckdb:///bank.duck.db
 ```
 
-### Queries
+## Queries
 
-#### Creating Table
+### Creating Table
 
 Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we `CREATE OR REPLACE TABLE` in DuckDB called 'bank' `FROM` our `bank_cleaned.csv` file. The `read_csv_auto` is a function that helps SQL understand our local .csv file for creation into our database.
 
@@ -129,7 +140,7 @@ CREATE OR REPLACE TABLE bank AS
 FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 ```
 
-#### Simple Query
+### Simple Query
 
 Now that we have our `bank` table in our DuckDB database, we can run our first query on the table. Let's start off with a simple query that looks at the first five rows from our table.
 
@@ -280,7 +291,7 @@ We learned the basics of `SQL` by going over some of its most necessary clauses:
 
 - `ORDER BY` : Sorts the output on variables in our query. This clause can include `DESC` to sort by descending order.
 
-These clauses lay the foundation of `SQL`. They will be necessary for our next section, which will introduce aggregation functions. We showed a sneak peek of an aggregation function `COUNT()` in [Question 3](#question-3-bonus). More on that in the next section!
+These clauses lay the foundation of `SQL`. They will be necessary for our next section, which will introduce aggregation functions. We showed a sneak peek of an aggregation function `COUNT()` in Question 3. More on that in the next section!
 
 #### A Little Extra
 

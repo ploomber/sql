@@ -183,3 +183,4 @@ course-material/_build
 *.db*
 *.docx
 *.txt
+*data
