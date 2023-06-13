@@ -13,7 +13,9 @@ jupyter:
 ---
 
 <!-- #region -->
-# Dataset: Absenteeism at work
+# Exploratory data analysis with JupySQL
+
+## Dataset: Absenteeism at work
 
 Source: UCI Machine Learning Repository 
 
@@ -53,7 +55,7 @@ The data contains the following categories without (CID) patient follow-up (22),
 <!-- #endregion -->
 
 <!-- #region -->
-## 5 minute crash course into JupySQL
+### 5 minute crash course into JupySQL
 
 Play the following video to get familiar with JupySQL to execute queries on Jupyter using DuckDB.
 
