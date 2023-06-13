@@ -49,33 +49,39 @@ import urllib.request
 import zipfile
 import os
 
+
 def extract_asc_to_csv(url, output_folder):
     # Download the ZIP file
     zip_file_path, _ = urllib.request.urlretrieve(url)
 
     # Extract the ZIP file
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
         zip_ref.extractall(output_folder)
 
     # Process ASC files and convert them to CSV
     for file_name in zip_ref.namelist():
-        if file_name.endswith('.asc'):
-            asc_file_path = os.path.join(output_folder, file_name)
-            csv_file_path = os.path.join(output_folder, file_name[:-4] + '.csv')
+        if file_name.endswith(".asc"):
+            asc_path = os.path.join(output_folder, file_name)
+            csv_path = os.path.join(output_folder, file_name[:-4] + ".csv")
 
-            with open(asc_file_path, 'r') as asc_file, open(csv_file_path, 'w', newline='') as csv_file:
-                asc_reader = csv.reader(asc_file, delimiter=';')  # Specify the delimiter used in the .asc file
-                csv_writer = csv.writer(csv_file, delimiter=',')
+            with open(asc_path, "r") as asc_file, open(
+                csv_path, "w", newline=""
+            ) as csv_file:
+                asc_reader = csv.reader(asc_file, delimiter=";")
+                csv_writer = csv.writer(csv_file, delimiter=",")
 
                 for row in asc_reader:
                     csv_writer.writerow(row)
 
-            print(f'Converted {asc_file_path} to CSV.')
+            print(f"Converted {asc_path} to CSV.")
 
-    print('All ASC files converted to CSV.')
+    print("All ASC files converted to CSV.")
+
 
 # Example usage
-extract_asc_to_csv('http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip', 'expanded_data')
+link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
+output = "expanded_data"
+extract_asc_to_csv(link, output)
 ```
 
 After running this code, you should have the folder `expanded_data` in the current directory. Within this folder, shall be present the eight converted `.csv` files for our analysis. However, we shall focus on a subset of these eight files.
@@ -97,7 +103,7 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 
 ## Schema Diagram
 
-A schema diagram is useful to help understand the relationship between two or more tables in a schema. Each table in the diagram represents a dataset. The variables of each dataset are represented as rows. The first column is the variable name while the second column is the variable's value type alongside if the variable is a primary key (PK) or foreign key (FK). 
+A schema diagram is useful to help understand the relationship between two or more tables in a schema. Each table in the diagram represents a dataset. The variables of each dataset are represented as rows. The first column is the variable name while the second column is the variable's value type alongside if the variable is a primary key (PK) or foreign key (FK).
 
 In this section, we shall be focusing on joining the following 4 tables: `account`, `card`, `district`, and `disp`. The schema diagram for these tables is shown below.
 
@@ -122,10 +128,10 @@ FROM read_csv_auto('expanded_data/disp.csv', header=True, sep=',');
 
 ## Renaming Columns
 
-Before we start joining the above ingested tables, we need to rename the columns of the `district` table for better readability. We can do this by using the `ALTER TABLE` syntax in DuckDB. The `RENAME COLUMN` syntax allows us to rename a column in a table. 
+Before we start joining the above ingested tables, we need to rename the columns of the `district` table for better readability. We can do this by using the `ALTER TABLE` syntax in DuckDB. The `RENAME COLUMN` syntax allows us to rename a column in a table.
 
-```{important}
-We can also rename multiple columns in a table by separating the column names with a comma. However, this method is not supported by DuckDB. Be sure to look at the documentation of the database you are using to see if it supports this feature.
+```{tip}
+We can also rename multiple columns in a table by separating the column names with a comma, which is more efficient. However, this method is not supported by DuckDB. Be sure to look at the documentation of the database you are using to see if it supports this feature.
 ```
 
 ```{code-cell} ipython3
@@ -166,7 +172,24 @@ RENAME COLUMN A16 TO no_of_committed_crimes_96;
 
 ## Combining All Tables
 
-Insert tutorial
+<!-- Now that we have renamed the columns of the `district` table, we can now combine the `account`, `card`, `district`, and `link` tables. We can do this by using the `CREATE VIEW` syntax in DuckDB. The `CREATE VIEW` syntax allows us to create a virtual table that is a result of a query. 
+
+```{important}
+The `CREATE VIEW` syntax is not supported by all databases. Be sure to look at the documentation of the database you are using to see if it supports this feature.
+```
+
+```{code-cell} ipython3
+%%sql   
+CREATE VIEW s1.combined_tables AS
+SELECT *
+FROM s1.account AS a
+INNER JOIN s1.link AS l
+ON a.account_id = l.account_id
+INNER JOIN s1.card AS c
+ON l.disp_id = c.disp_id
+INNER JOIN s1.district AS d
+ON a.district_id = d.district_id;
+``` -->
 
 <!-- #endregion -->
 
@@ -188,9 +211,12 @@ To combine the `account`, `card`, `district`, and `link` tables, we can use the 
 %%sql 
 SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.account AS a
-INNER JOIN s1.district AS d ON a.district_id = d.district_id
-INNER JOIN s1.link AS l ON l.account_id = a.account_id
-INNER JOIN s1.card AS c ON c.disp_id = l.disp_id; 
+INNER JOIN s1.district AS d 
+ON a.district_id = d.district_id
+INNER JOIN s1.link AS l 
+ON l.account_id = a.account_id
+INNER JOIN s1.card AS c 
+ON c.disp_id = l.disp_id; 
 ```
 
 In this query, we are performing a series of `INNER JOIN` operations to merge the tables based on the specified join conditions. The `ON` clause defines the relationship between the columns that are used for joining.
@@ -232,9 +258,12 @@ Code to implement the `FULL OUTER JOIN` is shown below:
 %%sql
 SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.link AS l
-FULL OUTER JOIN s1.card AS c ON l.disp_id = c.disp_id 
-INNER JOIN s1.account AS a ON a.account_id = l.account_id 
-INNER JOIN s1.district AS d ON d.district_id = a.district_id;
+FULL OUTER JOIN s1.card AS c 
+ON l.disp_id = c.disp_id 
+INNER JOIN s1.account AS a 
+ON a.account_id = l.account_id 
+INNER JOIN s1.district AS d 
+ON d.district_id = a.district_id;
 ```
 
 Therefore, the final output will include all rows from the `links` and `cards` tables, as well as the rows from the `account` and `district` tables that have matching values in the `links` and `cards` tables. Because the `links` table has the highest number of rows, 5369, all of them will be included in the final output. The rows from the `account` and `district` tables that do not have matching values in the `links` and `cards` tables will not be included in the final output. Since a `FULL OUTER JOIN` is used first, the final output will include all rows from the `links` and `cards` tables, even if there are no matching values in the `account` and `district` tables.
@@ -250,8 +279,6 @@ Create a junction table, `account_district`.
 <!-- #region -->
 <details>
 <summary>Answers</summary>
-
-
 
 ```{code-cell} ipython3
 %%sql
