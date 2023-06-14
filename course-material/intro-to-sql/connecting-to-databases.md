@@ -15,15 +15,15 @@ kernelspec:
 
 In this tutorial you will learn how to connect to various databases using JupySQL.
 
+```{code-cell} ipython3
+!pip install jupysql duckdb-engine -q
+```
+
 We shall start by importing all required libraries:
 
 ```{code-cell} ipython3
-from sqlalchemy import create_engine
 from os import environ
-import pandas as pd
-import duckdb
 import urllib
-import sqlite3
 ```
 
 ## Connect with a URL string 
@@ -47,16 +47,9 @@ If you're using a database that requires a password, keep reading for more secur
 
 To connect in a more secure way, you can dynamically build your URL string so your password isn't hardcoded:
 
-```{code-cell} ipython3
-:tags: [remove-cell, remove-output]
-# this cell is hidden in the docs, only used to simulate
-# the getpass() call
-# import getpass
-# password = getpass.getpass()
-```
 
 ```python
-# password = getpass.getpass()
+password = getpass.getpass()
 ```
 
 When you execute the cell above in a notebook, a text box will appear and whatever you type will be stored in the `password` variable.
@@ -75,33 +68,9 @@ Then, you can build your connection string:
 db_url = f"postgresql://user:{password}@localhost/database"
 ```
 
-Create an engine and connect:
-
-```{code-cell} ipython3
-:tags: [remove-cell]
-
-# this cell is hidden in the docs, only used to fake
-# the db_url
-db_url = "duckdb://"
-```
-
-```{code-cell} ipython3
-engine = create_engine(db_url)
-```
-
 ## Secure Connections
 
 **It is highly recommended** that you do not pass plain credentials.
-
-```{code-cell} ipython3
-:tags: [remove-output]
-
-%load_ext sql
-```
-
-```{code-cell} ipython3
-%sql engine
-```
 
 
 ```{important}
@@ -109,7 +78,7 @@ Unlike `ipython-sql`, JupySQL doesn't allow expanding your database URL with the
 ```
 
 ```python
-db_url = "dialect+driver://username:password@host:port/database"
+db_url = f"dialect+driver://username:{password}@host:port/database"
 %sql {{db_url}}
 ```
 
@@ -139,43 +108,13 @@ Then, delete the cell above (so your password isn't hardcoded!). Now, you can re
 password = keyring.get_password("my_database", "my_username")
 ```
 
-```{code-cell} ipython3
-:tags: [remove-cell]
+You can then connect to the database using JupySQL
 
-# this cell is hidden in the docs, only used to fake
-# the password variable
-password = "password"
-```
-
-```{code-cell} ipython3
+```python
 db_url = f"postgresql://user:{password}@localhost/database"
+%sql {{db_url}}
 ```
 
-```{code-cell} ipython3
-:tags: [remove-cell]
-
-# this cell is hidden in the docs, only used to fake
-# the db_url
-db_url = "duckdb://"
-```
-
-+++ {"user_expressions": []}
-
-Create an engine and connect:
-
-```{code-cell} ipython3
-engine = create_engine(db_url)
-```
-
-```{code-cell} ipython3
-:tags: [remove-output]
-
-%load_ext sql
-```
-
-```{code-cell} ipython3
-%sql engine
-```
 
 ```{tip}
 If you have issues using `keyring`, send us a message on [Slack.](https://ploomber.io/community)
@@ -194,7 +133,7 @@ Here's an example using SQLite:
 ```{code-cell} ipython3
 :tags: [remove-output]
 
-%load_ext sql
+%reload_ext sql
 ```
 
 ```{code-cell} ipython3
@@ -227,40 +166,13 @@ environ["DATABASE_URL"] = "sqlite://"
 ```{code-cell} ipython3
 :tags: [remove-output]
 
-%load_ext sql
+%reload_ext sql
 ```
 
 ```{code-cell} ipython3
 %sql
 ```
 
-## Using an existing `sqlalchemy.engine.Engine`
-
-You can use an existing `Engine` by passing the variable name to `%sql`.
-
-```{code-cell} ipython3
-engine = create_engine("sqlite://")
-```
-
-```{code-cell} ipython3
-df = pd.DataFrame({"x": range(5)})
-df.to_sql("numbers", engine)
-```
-
-```{code-cell} ipython3
-:tags: [remove-output]
-
-%load_ext sql
-```
-
-```{code-cell} ipython3
-%sql engine
-```
-
-```{code-cell} ipython3
-%%sql
-SELECT * FROM numbers
-```
 
 ## Custom Connection 
 
@@ -275,16 +187,11 @@ features/functionalities that won't be fully compatible with JupySQL.
 
 For this example we'll generate a `DuckDB` connection, using its native `connect` method.
 
-First, let's import the library and initialize a new connection
-
-```{code-cell} ipython3
-conn = duckdb.connect()
-```
-
 Now, load `%sql` and initialize it with our DuckDB connection.
 
 ```{code-cell} ipython3
-%sql conn
+%reload_ext sql
+%sql duckdb://
 ```
 
 Download some data.
@@ -371,6 +278,7 @@ Create an engine and connect:
 engine = create_engine(db_url)
 ```
 
+
 </details>
 <!-- #endregion -->
 
@@ -386,7 +294,7 @@ The answer is using a Custom Connection. For this example, we'll generate a `SQL
 
 First, let's import the library and create a new database connection to our custom table, `my_numbers`.
 
-```{code-cell} ipython3
+```python
 with sqlite3.connect("a.db") as conn:  # noqa
     conn.execute("DROP TABLE IF EXISTS my_numbers")  # noqa
     conn.execute("CREATE TABLE my_numbers (number FLOAT)")  # noqa
@@ -397,14 +305,14 @@ with sqlite3.connect("a.db") as conn:  # noqa
 
 Next, load `%sql` and create a schema, `a_schema`, for the table.
 
-```{code-cell} ipython3
+```python
 %%sql
 ATTACH DATABASE 'a.db' AS a_schema
 ```
 
 You're all set!
 
-```{code-cell} ipython3
+```python
 %sql select * from a_schema.my_numbers limit 3
 ```
 

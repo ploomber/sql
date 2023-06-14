@@ -59,30 +59,18 @@ The data contains the following categories:
 <!-- #endregion -->
 
 <!-- #region -->
-## 5 minute crash course into JupySQL
-
-Play the following video to get familiar with JupySQL to execute queries on Jupyter using DuckDB.
-
-<b>If you get stuck, join our Slack community!</b> https://ploomber.io/community
-
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/CsWEUYLaYU0/0.jpg)](https://www.youtube.com/watch?v=CsWEUYLaYU0)
-
-<!-- #endregion -->
-
-<!-- #region -->
 ## Install - execute this once. 
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
+%pip install jupysql --upgrade duckdb-engine --quiet
 ```
 
 ## Load the data
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
 
-``` python
+```{code-cell} ipython3
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
@@ -99,19 +87,17 @@ def extract_to_csv(url, data_name):
         zf.extractall()
 
     # The file containing our data
-    csv_file_name = f'{data_name}.csv'
+    csv_file_name = f"{data_name}.csv"
 
     # Data clean up
     df = pd.read_csv(csv_file_name, sep=";")
 
     # Save the cleaned up CSV file
-    df.to_csv(f'{data_name}_cleaned.csv', index=False)
+    df.to_csv(df.to_csv(f"{data_name}_cleaned.csv", index=False))
 
 
 # Running the above function
-extract_to_csv(
-    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", 'bank'
-)
+extract_to_csv("https://tinyurl.com/uci-marketing-data", "bank")
 ```
 
 After running this code, you should have `bank_cleaned.csv` in the current directory. 
