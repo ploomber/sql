@@ -278,6 +278,7 @@ Create an engine and connect:
 engine = create_engine(db_url)
 ```
 
+
 </details>
 <!-- #endregion -->
 
@@ -293,7 +294,7 @@ The answer is using a Custom Connection. For this example, we'll generate a `SQL
 
 First, let's import the library and create a new database connection to our custom table, `my_numbers`.
 
-```{code-cell} ipython3
+```python
 with sqlite3.connect("a.db") as conn:  # noqa
     conn.execute("DROP TABLE IF EXISTS my_numbers")  # noqa
     conn.execute("CREATE TABLE my_numbers (number FLOAT)")  # noqa
@@ -304,14 +305,14 @@ with sqlite3.connect("a.db") as conn:  # noqa
 
 Next, load `%sql` and create a schema, `a_schema`, for the table.
 
-```{code-cell} ipython3
+```python
 %%sql
 ATTACH DATABASE 'a.db' AS a_schema
 ```
 
 You're all set!
 
-```{code-cell} ipython3
+```python
 %sql select * from a_schema.my_numbers limit 3
 ```
 
