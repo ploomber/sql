@@ -31,13 +31,13 @@ Documentation: https://web.archive.org/web/20180506035658/http://lisp.vse.cz/pkd
 
 Below is a display of `account` and `district` in an Entity-Relationship Diagram (ERD). 
 
-![diagram](Ploomber.png)
+![diagram](joining-data-ERD.png)
 
 ERDs are visual representations that help understand the relationship between two or more datasets. In an ERD, each table in the diagram represents a dataset. The variables of each dataset are represented as rows under each respective table. In our case, the first column of our table is the variable's name while the second column is the variable's value type. The notations of the line connecting our two tables indicate their relationship type and is defined as "Crow's Foot Notation". To learn more about this notation, we recommend visiting this article: https://vertabelo.com/blog/crow-s-foot-notation/
 
 There exists only two value types in the `accounts` and `district` table: "INT" and "VARCHAR". The "INT" value type indicates that the corresponding value is an integer, while "VARCHAR" represents a variable-length string that can contain various characters. These value types help SQL understand the appropriate operations that can be performed on each value. Alongside this, the second column of our tables also show if a variable is a primary key (PK) or foreign key (FK). We introduce these concepts below.
 
-#### What is a primary key and a foreign key?
+### What is a primary key and a foreign key?
 
 In a database, a <b>primary key</b> is a unique identifier for each record in a table. For instance, our `accounts` table has the primary key of "account_id". This makes sense because every single row in the `accounts` table corresponds to "account_id" which represents one single account. The `district` table has the primary key of "District ID". This means that each row under the `district` table represents one single district (or district id). So under the `accounts` table, there should not be any rows with the same "account_id" value. Similarly, the `district` table should not have any rows with the same "district_id" value. 
 
@@ -56,38 +56,20 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ```
 
 ## Load the data
-We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and conver the .asc files to .csv files. Finally, we save converted data into a folder.
+We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and convert the .asc files to .csv files. Finally, we save converted data into a folder.
+
+The script we call can be found under `sql/course-material/intro-to-sql/banking_data_script.py`. This script downloads and stores the necessary data into a folder within the current directory. Please reference the script for more information.
 
 ```{code-cell} ipython3
-import csv
-import urllib.request
-import zipfile
-import os
-def extract_asc_to_csv(url, output_folder):
-    # Download the ZIP file
-    zip_file_path, _ = urllib.request.urlretrieve(url)
-    # Extract the ZIP file
-    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
-        zip_ref.extractall(output_folder)
-    # Process ASC files and convert them to CSV
-    for file_name in zip_ref.namelist():
-        if file_name.endswith(".asc"):
-            asc_path = os.path.join(output_folder, file_name)
-            csv_path = os.path.join(output_folder, file_name[:-4] + ".csv")
-            with open(asc_path, "r") as asc_file, open(
-                csv_path, "w", newline=""
-            ) as csv_file:
-                asc_reader = csv.reader(asc_file, delimiter=";")
-                csv_writer = csv.writer(csv_file, delimiter=",")
-                for row in asc_reader:
-                    csv_writer.writerow(row)
-            print(f"Converted {asc_path} to CSV.")
-    print("All ASC files converted to CSV.")
-# Example usage
+import banking_data_script
+
+# ZIP file download link
 link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
+# Naming our folder that will hold our .csv files
 output = "expanded_data"
-extract_asc_to_csv(link, output)
+banking_data_script.extract_asc_to_csv(link, output)
 ```
+
 <!-- #endregion -->
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using.
@@ -100,7 +82,7 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 ```{code-cell} ipython3
 # Loading in SQL extension
 %reload_ext sql
-# Initiating a DuckDB database named 'bank_data.duck.db' to run our SQL queries on
+# Initiating a DuckDB database named 'bank_data.duck.db'
 %sql duckdb:///bank_data.duck.db
 ```
 
@@ -196,15 +178,16 @@ Before we jump into joins, I highly recommend following along with <a href="http
 
 The most basic join is the inner join. Inner joins result in a query that returns rows where both tables have the specified key. For example, the query below inner joins our `s1.account` and `s1.district` table `ON` the "accounts_id" variable.
 
-```
+```{code-cell} ipython3
 %%sql
 SELECT *,
 FROM s1.account
 INNER JOIN s1.district 
     ON s1.account.district_id = s1.district.district_id
+LIMIT 5
 ```
 
-This query results in joining our `s1.account` and `s1.district` tables wherever the "district_id" exists in both tables. In this inner join, the "district_id" value must exist in both tables. For demonstration purposes, let's hypothetically assume that there is a row in the `s1.account` table that has a "district_id" value of 99999. We `INSERT` this value `INTO` our `s1.account` table below. 
+This query results in joining our `s1.account` and `s1.district` tables wherever the "district_id" exists in both tables. In this inner join, the "district_id" value must exist in both tables. For demonstration purposes, let's hypothetically assume that there is a row in the `s1.account` table that has a "district_id" value of 99999. We `INSERT` this value `INTO` our `s1.account` table below.
 
 ```{code-cell} ipython3
 %%sql 
@@ -212,7 +195,7 @@ INSERT INTO s1.account
 VALUES (9999, 99999, 'POPLATEK MESICNE', 930101)
 ```
 
-Because the value 99999 does not exist under the "district_id" column in the `s1.district` table, this row from the `s1.account` will not appear in our join. 
+Because the value 99999 does not exist under the "district_id" column in the `s1.district` table, this row from the `s1.account` will not appear in our join.
 
 ```{code-cell} ipython3
 %%sql 
@@ -224,16 +207,42 @@ FROM s1.account
 %%sql 
 SELECT COUNT(*)
 FROM s1.account
-JOIN s1.district 
+INNER JOIN s1.district 
     ON s1.account.district_id = s1.district.district_id
 ```
+
 We see that the `COUNT(*)` of `s1.account` is 4501 and the `COUNT(*)` of our join is 4500. This is because our inner join excludes the row with an "district_id" value of 99999 from our `s1.account` table since it does not appear anywhere under the "district_id" column of our `s1.district` table.
 
 Also notice that the "district_id_1" column in our original inner join query. This column does not inherit the "district_id" column name from our `s1.district` table because we would then have two columns with both "district_id" due to the inclusion of `s1.account`. To avoid this ambiguity, SQL automatically adds "_1" to the end of identical columns resulting from a join. If we are joining more than two tables (seen in the next section), then SQL will automatically increment the number to distinguish each identical column. 
 
+#### Question 1 (Medium):
+How many counts of each "district_id" appear in `s1.account`? Query the district_id, the respective count, and the district name. Filter the results to only have district id's with a count greater than 40.
+
+<b>Hint:</b> Try breaking the problem down step by step. First, take a look at the results of an inner join. What can you do from there to achieve the correct results?
+
+<!-- #region -->
+<details>
+
+<summary>Answers</summary>
+
+We first inner join `s1.account` and `s1.district` on "district_id" to have a query that has the information necessary in answering this question. Then, we group by "district_id" and "district_name" in order to aggregate and have them in our select statement. The last filter step is through the `HAVING` clause because we filter post-aggregation.
+
+```{code-cell} ipython3
+%%sql 
+SELECT s1.district.district_id, COUNT(*), s1.district.district_name
+FROM s1.account
+INNER JOIN s1.district 
+    ON s1.account.district_id = s1.district.district_id
+GROUP BY s1.district.district_id, s1.district.district_name
+HAVING COUNT(*) > 40
+```
+
+</details>
+<!-- #endregion -->
+
 ### Left Join
 
-A left join guarantees that every row in the table before the `ON` clause (the left table) appears in our query, regardless if the key from that row matches the "right" table being joined. 
+A left join guarantees that every row in the table before the `ON` clause (the left table) appears in our query, regardless if the key from that row matches the "right" table being joined.
 
 ```{code-cell} ipython3
 %%sql 
@@ -262,7 +271,7 @@ Also notice the particular syntax for our column in our `WHERE` clause. Since "d
 
 Right join is identical to the nature of the left join. A right join will guarantee the inclusion of every row from the "right table", regardless if the key being joined on appears in the "left table."
 
-Here we replace the `LEFT JOIN` in our last example with `RIGHT JOIN`. 
+Here we replace the `LEFT JOIN` in our last example with `RIGHT JOIN`.
 
 ```{code-cell} ipython3
 %%sql 
@@ -272,7 +281,7 @@ RIGHT JOIN s1.district
     ON s1.account.district_id = s1.district.district_id
 ```
 
-The resulting `COUNT(*)` of our join omits the one row we `INSERT` into `s1.account` previously. Let's double check and see if our inserted row exists after this join. 
+The resulting `COUNT(*)` of our join omits the one row we `INSERT` into `s1.account` previously. Let's double check and see if our inserted row exists after this join.
 
 ```{code-cell} ipython3
 %%sql 
@@ -306,8 +315,29 @@ WHERE s1.account.district_id = 99999
 
 We get near exact results from our previous `LEFT JOIN` demonstration. The only difference is the order of our columns in the query output. The `s1.account` table appears on the far right whil the `s1.district` table appears on the left. To ensure complete visibility of the output, please utilize the scroll bar.
 
+#### Question 2 (Easy):
+Show the maximum "account_id" value corresponding with that account's district information, regardless if there is any or not. Name the resulting query colum "max_acc_id". You must include a join.
+
+<!-- #region -->
+<details>
+
+<summary>Answers</summary>
+
+We first left join `s1.account` and `s1.district` on "district_id" to have a query that guarantees completed information from the `s1.account` table. Then, we find the max of "account_id" and rename it accordingly.
+
+```{code-cell} ipython3
+%%sql 
+SELECT MAX(s1.account.account_id) AS max_acc_id
+FROM s1.account
+LEFT JOIN s1.district
+    ON s1.account.district_id = s1.district.district_id
+```
+
+</details>
+<!-- #endregion -->
+
 ### Full Join
-Full join (also known as outer join) results in the inclusion of all rows from both tables. To showcase the full capability of full joins, we first `INSERT` another row into the `s1.district` table with a "district_id" value not present in the `s1.account` table. In other words, we are creating new value for `s1.district`'s primary key that does not appear in `s1.account`'s foreign key. 
+Full join (also known as outer join) results in the inclusion of all rows from both tables. To showcase the full capability of full joins, we first `INSERT` another row into the `s1.district` table with a "district_id" value not present in the `s1.account` table. In other words, we are creating new value for `s1.district`'s primary key that does not appear in `s1.account`'s foreign key.
 
 ```{code-cell} ipython3
 %%sql 
@@ -334,30 +364,7 @@ WHERE s1.account.district_id = 99999 OR s1.district.district_id = 3333
 
 The full join on `s1.district` and `s1.account` results in a query that includes all rows from both tables. The `OR` clause in the last SQL statement verifies this by querying the hypothetical rows we created in each table.
 
-## You try: Use JupySQL to perform the queries and answer the questions.
-
-### Question 1 (Easy):
-Show the maximum "account_id" value corresponding with that account's district information, regardless if there is any or not. Name the resulting query colum "max_acc_id". You must include a join.
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-We first left join `s1.account` and `s1.district` on "district_id" to have a query that guarantees completed information from the `s1.account` table. Then, we find the max of "account_id" and rename it accordingly. 
-
-```{code-cell} ipython3
-%%sql 
-SELECT MAX(s1.account.account_id) AS max_acc_id
-FROM s1.account
-LEFT JOIN s1.district
-    ON s1.account.district_id = s1.district.district_id
-```
-
-</details>
-<!-- #endregion -->
-
-### Question 2 (Medium):
+#### Question 3 (Medium):
 What is the average "account_id" value for accounts in the "Prague" region? Round the average by 3 decimal places.
 
 It doesn't really make sense to average by the "account_id" as it is an arbitrary number to uniquely identify each account. However, try to ignore that for the purpose of practice.
@@ -367,7 +374,7 @@ It doesn't really make sense to average by the "account_id" as it is an arbitrar
 
 <summary>Answers</summary>
 
-We first join `s1.account` and `s1.district` on "district_id" to have a query of completed information between the two tables. Then, we `GROUP BY` region and `SELECT` the region name and the average value of "account_id" within regions. Finally, we use `HAVING` to filter where region has the value 'Prague' post grouping with `GROUP BY`. 
+We first join `s1.account` and `s1.district` on "district_id" to have a query of completed information between the two tables. Then, we `GROUP BY` region and `SELECT` the region name and the average value of "account_id" within regions. Finally, we use `HAVING` to filter where region has the value 'Prague' post grouping with `GROUP BY`.
 
 ```{code-cell} ipython3
 %%sql
@@ -381,6 +388,8 @@ HAVING s1.district.region = 'Prague'
 
 </details>
 <!-- #endregion -->
+
+## Wrapping Up
 
 In this section, we learned the basic join types and how to use them when given two tables. We also learned the definiton of primary and foriegn keys along with an introduction to ERDs. To recap:
 

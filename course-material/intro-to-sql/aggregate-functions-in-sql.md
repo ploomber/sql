@@ -113,13 +113,13 @@ FROM bank
 
 The output of the above query can be an eyesore. Instead of getting SQL's default column name when running these aggregation function, users can utilize the `AS` clause. The text following `AS` changes the output of the `SELECT` clause to that text. Our next example with demonstrate this.
 
-Here's an example with `COUNT()` that counts the number of rows of our query `WHERE` we filter for "balance" greather than or equal to 500 `AND` where "martial" equals married. We also use the `AS` clause to change the column of our query to "Count".
+Here's an example with `COUNT()` that counts the number of rows of our query `WHERE` we filter for "balance" greather than or equal to 500 `AND` where "marital" equals married. We also use the `AS` clause to change the column of our query to "Count".
 
 ```{code-cell} ipython3
 %%sql 
 SELECT COUNT(*) AS Count
 FROM bank 
-WHERE balance > 500 AND martial = 'married'
+WHERE balance > 500 AND marital = 'married'
 ```
 
 `COUNT()` can also have the arguments of a single row, such as `COUNT(job)`. `COUNT(job)` would count the number of rows of just the "job" column. If "job" were to have any NULL values in its query, those NULL values would be subtracted from the total row counts of the query. 
@@ -209,6 +209,17 @@ GROUP BY housing, marital
 There are six total groups from our query. "housing" has two groups and "marital" has three groups. Since "housing" has only two groups, 'yes' and 'no', let's think about these groups as two seperate blocks. The 'yes' and 'no' blocks will then each be `GROUP BY` the groups under the "marital" column, which are 'married', 'single', and 'divorced'. Thus, since each 'yes' and 'no' group has three groups each, there are a total of six groups.
 
 ![diagram](aggregate-functions-diagram.png)
+
+### Having
+The `HAVING` clause filters for a query post-aggregation. Unlike the `WHERE` query, `HAVING` is exclusively used when a `GROUP BY` clause is present in the SQL query. We demonstrate its functionality below. 
+
+```{code-cell} ipython3
+%%sql 
+SELECT housing AS Housing, marital AS Marital, COUNT(*) AS Count
+FROM bank 
+GROUP BY housing, marital
+HAVING Count < 700
+```
 
 <!-- #endregion -->
 
