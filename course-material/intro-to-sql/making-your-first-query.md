@@ -59,18 +59,6 @@ The data contains the following categories:
 <!-- #endregion -->
 
 <!-- #region -->
-## 5 minute crash course into JupySQL
-
-Play the following video to get familiar with JupySQL to execute queries on Jupyter using DuckDB.
-
-<b>If you get stuck, join our Slack community!</b> https://ploomber.io/community
-
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/CsWEUYLaYU0/0.jpg)](https://www.youtube.com/watch?v=CsWEUYLaYU0)
-
-<!-- #endregion -->
-
-<!-- #region -->
 ## Install - execute this once. 
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
@@ -105,7 +93,7 @@ def extract_to_csv(url, data_name):
     df = pd.read_csv(csv_file_name, sep=";")
 
     # Save the cleaned up CSV file
-    df.to_csv(df.to_csv(f"{data_name}.csv", index=False))
+    df.to_csv(df.to_csv(f"{data_name}_cleaned.csv", index=False))
 
 
 # Running the above function
