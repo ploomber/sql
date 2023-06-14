@@ -10,12 +10,32 @@ def extract_asc_to_csv(url: str, output_folder: str):
     It downloads the ZIP file from the "url".
     Then, it converts the .asc files to the .csv format.
     The function outputs a folder with a name from output_folder.
-    This create folder will be in the current directory.
+    This created folder will be in the current directory.
 
     Args:
-        url (str): the url containing the public data
+        url (str): the URL containing the public data
         output_folder (str): the name of the folder where files will be stored
     """
+
+    # Columns to rename for district table
+    district_column_names = [
+        "district_id",
+        "district_name",
+        "region",
+        "no_of_inhabitants",
+        "no_of_municipalities_lt_499",
+        "no_of_municipalities_500_1999",
+        "no_of_municipalities_2000_9999",
+        "no_of_municipalities_gt_10000",
+        "no_of_cities",
+        "ratio_of_urban_inhabitants",
+        "average_salary",
+        "unemployment_rate_95",
+        "unemployment_rate_96",
+        "no_of_entrepreneurs_per_1000_inhabitants",
+        "no_of_committed_crimes_95",
+        "no_of_committed_crimes_96",
+    ]
 
     # Download the ZIP file
     zip_file_path, _ = urllib.request.urlretrieve(url)
@@ -32,8 +52,14 @@ def extract_asc_to_csv(url: str, output_folder: str):
             ) as csv_file:
                 asc_reader = csv.reader(asc_file, delimiter=";")
                 csv_writer = csv.writer(csv_file, delimiter=",")
-                for row in asc_reader:
-                    csv_writer.writerow(row)
+                if file_name == "district.asc":
+                    next(asc_reader)
+                    new_header = district_column_names
+                    csv_writer.writerow(new_header)
+                    csv_writer.writerows(asc_reader)
+                else:
+                    for row in asc_reader:
+                        csv_writer.writerow(row)
             print(f"Converted {asc_path} to CSV.")
     print("All ASC files converted to CSV.")
 

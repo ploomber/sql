@@ -118,59 +118,6 @@ FROM s1.district
 LIMIT 5
 ```
 
-The variable names under the `s1.district` table aren't descriptive to say the least. Good practice is to appropriately rename these columns based off of the data's documentation. We do so below.
-
-```{code-cell} ipython3
-%%sql
-ALTER TABLE s1.district
-RENAME COLUMN A1 TO district_id;
-
-ALTER TABLE s1.district
-RENAME COLUMN A2 TO district_name;
-
-ALTER TABLE s1.district
-RENAME COLUMN A3 TO region;
-
-ALTER TABLE s1.district
-RENAME COLUMN A4 TO no_of_inhabitants;
-
-ALTER TABLE s1.district
-RENAME COLUMN A5 TO no_of_municipalities_lt_499;
-
-ALTER TABLE s1.district
-RENAME COLUMN A6 TO no_of_municipalities_500_1999;
-
-ALTER TABLE s1.district
-RENAME COLUMN A7 TO no_of_municipalities_2000_9999;
-
-ALTER TABLE s1.district
-RENAME COLUMN A8 TO no_of_municipalities_gt_10000;
-
-ALTER TABLE s1.district
-RENAME COLUMN A9 TO no_of_cities;
-
-ALTER TABLE s1.district
-RENAME COLUMN A10 TO ratio_of_urban_inhabitants;
-
-ALTER TABLE s1.district
-RENAME COLUMN A11 TO average_salary;
-
-ALTER TABLE s1.district
-RENAME COLUMN A12 TO unemployment_rate_95;
-
-ALTER TABLE s1.district
-RENAME COLUMN A13 TO unemployment_rate_96;
-
-ALTER TABLE s1.district
-RENAME COLUMN A14 TO no_of_entrepreneurs_per_1000_inhabitants;
-
-ALTER TABLE s1.district
-RENAME COLUMN A15 TO no_of_committed_crimes_95;
-
-ALTER TABLE s1.district
-RENAME COLUMN A16 TO no_of_committed_crimes_96;
-```
-
 Before we jump into joins, I highly recommend following along with <a href="https://joins.spathon.com/">this resource</a>.
 
 
