@@ -27,33 +27,14 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and conver the .asc files to .csv files. Finally, we save converted data into a folder.
 
 ``` {code-cell} ipython3
-import csv
-import urllib.request
-import zipfile
-import os
-def extract_asc_to_csv(url, output_folder):
-    # Download the ZIP file
-    zip_file_path, _ = urllib.request.urlretrieve(url)
-    # Extract the ZIP file
-    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
-        zip_ref.extractall(output_folder)
-    # Process ASC files and convert them to CSV
-    for file_name in zip_ref.namelist():
-        if file_name.endswith(".asc"):
-            asc_path = os.path.join(output_folder, file_name)
-            csv_path = os.path.join(output_folder, file_name[:-4] + ".csv")
-            with open(asc_path, "r") as asc_file, open(
-                csv_path, "w", newline=""
-            ) as csv_file:
-                asc_reader = csv.reader(asc_file, delimiter=";")
-                csv_writer = csv.writer(csv_file, delimiter=",")
-                for row in asc_reader:
-                    csv_writer.writerow(row)
-            print(f"Converted {asc_path} to CSV.")
-    print("All ASC files converted to CSV.")
-# Example usage
+```{code-cell} ipython3
+import banking_data_script
+
+# ZIP file download link
 link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
+# Naming our folder that will hold our .csv files
 output = "expanded_data"
-extract_asc_to_csv(link, output)
+banking_data_script.extract_asc_to_csv(link, output)
+```
 ```
 <!-- #endregion -->
