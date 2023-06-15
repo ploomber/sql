@@ -5,6 +5,7 @@ dependencies:
   - matplotlib
   - numpy
   - keyring
+  - pandas
   - duckdb
   - python-dotenv
   - pip
