@@ -26,7 +26,6 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ## Load the data
 We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and conver the .asc files to .csv files. Finally, we save converted data into a folder.
 
-``` {code-cell} ipython3
 ```{code-cell} ipython3
 import banking_data_script
 
@@ -36,5 +35,5 @@ link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
 output = "expanded_data"
 banking_data_script.extract_asc_to_csv(link, output)
 ```
-```
+
 <!-- #endregion -->
