@@ -160,14 +160,15 @@ In this query, we are performing a series of `INNER JOIN` operations to merge th
 
 ```tip
 The above query can also be written without the `INNER JOIN` clause! Another way to write the query is as follows:
+```
 
-~~~python
+```{code-cell} ipython3
+%%sql
 SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.account as a, s1.card as c, s1.district as d, s1.link as l
 WHERE a.district_id = d.district_id AND
       l.account_id = a.account_id AND
       c.disp_id = l.disp_id;
-~~~
 ```
 
 </details>
@@ -220,7 +221,7 @@ SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.link AS l
 FULL OUTER JOIN s1.card AS c 
 ON l.disp_id = c.disp_id 
-INNER s1.account AS a 
+INNER JOIN s1.account AS a 
 ON a.account_id = l.account_id 
 INNER JOIN s1.district AS d 
 ON d.district_id = a.district_id;
