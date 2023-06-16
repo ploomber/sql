@@ -49,19 +49,19 @@ output = "expanded_data"
 banking_data_script.extract_asc_to_csv(link, output)
 ```
 
-If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. However, in this tutorial, we shall focus on four out of the eight `.csv` files.
+If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. However, in this tutorial, we will focus on four out of the eight `.csv` files.
 
 ## ER Diagram
 
-In the previous tutorial, we provided an [Entity-Relationship Diagram (ERD)](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#datasets) to help us understand the relationship between the `account` and `district` tables. In this section, we shall be augment that diagram to understand the relationship between multiple tables.
+In the previous tutorial, we provided an [Entity-Relationship Diagram (ERD)](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#datasets) to help us understand the relationship between the `account` and `district` tables. In this section, we will augment that diagram to understand the relationship between multiple tables.
 
 Each table in the diagram represents a dataset. The variables of each dataset are represented as rows. The first column is the variable name while the second column is the variable's value type alongside if the variable is a primary key (PK) or foreign key (FK).
 
-```{tip}
+```{important}
 If you are unfamiliar with the terms primary key and foreign key, please refer to the [previous tutorial](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#what-is-a-primary-key-and-a-foreign-key) for more information.
 ```
 
-In this section, we shall be focusing on joining the following 4 tables: `account`, `card`, `district`, and `disp`. The schema diagram for these tables is shown below.
+In this section, we will be focusing on joining the following 4 tables: `account`, `card`, `district`, and `disp`. The schema diagram for these tables is shown below.
 
 ![ERD-Combining](combining-data-ERD.png)
 
@@ -75,7 +75,7 @@ The notations of the line connecting our two tables indicate their relationship 
 
 We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks.
 
-```{tip}
+```{important}
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
 ```
 
@@ -88,7 +88,7 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 
 ## Creating Tables
 
-Let's start off with loading four of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we shall [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `s1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
+Let's start off with loading four of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we will [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `s1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
 
 ```{code-cell} ipython3
 %%sql
@@ -159,17 +159,17 @@ ON c.disp_id = l.disp_id;
 
 In this query, we are performing a series of `INNER JOIN` operations to merge the tables based on the specified join conditions. The `ON` clause defines the relationship between the columns that are used for joining. The `SELECT` statement retrieves only the primary keys from each of the joined tables in the result set.
 
-```{tip}
+```{important}
 The above query can also be written without the `INNER JOIN` clause! Another way to write the query is as follows:
+```
 
-~~~python
+```python
 %%sql
 SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.account as a, s1.card as c, s1.district as d, s1.link as l
 WHERE a.district_id = d.district_id AND
       l.account_id = a.account_id AND
       c.disp_id = l.disp_id;
-~~~
 ```
 
 </details>
