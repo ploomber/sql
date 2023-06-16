@@ -81,7 +81,7 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 ```{code-cell} ipython3
 # Loading in SQL extension
 %reload_ext sql
-# Initiating a DuckDB database named 'bank_data.duck.db' to run our SQL queries on
+# Initiating a DuckDB database named 'bank_data.duck.db' to run SQL queries 
 %sql duckdb:///bank_data.duck.db
 ```
 
