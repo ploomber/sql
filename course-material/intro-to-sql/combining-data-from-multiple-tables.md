@@ -41,6 +41,7 @@ This section was covered in detail in the previous tutorial: [Joining Data in SQ
 
 ```{code-cell} ipython3
 import banking_data_script
+
 # ZIP file download link
 link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
 # Naming our folder that will hold our .csv files
@@ -72,7 +73,7 @@ The notations of the line connecting our two tables indicate their relationship 
 
 ## Load Engine
 
-We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
+We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks.
 
 ```{tip}
 <b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
@@ -81,7 +82,7 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 ```{code-cell} ipython3
 # Loading in SQL extension
 %reload_ext sql
-# Initiating a DuckDB database named 'bank_data.duck.db' to run SQL queries 
+# Initiating a DuckDB database named 'bank_data.duck.db' to run SQL queries
 %sql duckdb:///bank_data.duck.db
 ```
 
@@ -158,17 +159,17 @@ ON c.disp_id = l.disp_id;
 
 In this query, we are performing a series of `INNER JOIN` operations to merge the tables based on the specified join conditions. The `ON` clause defines the relationship between the columns that are used for joining. The `SELECT` statement retrieves only the primary keys from each of the joined tables in the result set.
 
-```tip
+```{tip}
 The above query can also be written without the `INNER JOIN` clause! Another way to write the query is as follows:
-```
 
-```{code-cell} ipython3
+~~~python
 %%sql
 SELECT a.account_id, c.card_id, d.district_id, l.disp_id
 FROM s1.account as a, s1.card as c, s1.district as d, s1.link as l
 WHERE a.district_id = d.district_id AND
       l.account_id = a.account_id AND
       c.disp_id = l.disp_id;
+~~~
 ```
 
 </details>
