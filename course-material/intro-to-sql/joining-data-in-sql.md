@@ -344,10 +344,16 @@ In this section, we learned the basic join types and how to use them when given 
 
 - `LEFT JOIN` - Guarantees that every row from the left table is included in the resulting query, regardless of whether a matching key exists in the other table or not. 
 
-- `LEFT JOIN` - Guarantees that every row from the right table is included in the resulting query, regardless of whether a matching key exists in the other table or not. 
+- `RIGHT JOIN` - Guarantees that every row from the right table is included in the resulting query, regardless of whether a matching key exists in the other table or not. 
 
 - Primary key - The column in a table that uniquely identifies each row of the table.
 
 - Foreign key - A column in a table that establishes a link or relationship to the primary key of another table.
 
 In the next section, you will learn how to implement joins in more than two tables.
+
+## References
+
+Dataset citation:
+
+“PKDD’99 Discovery Challenge Guide to the Financial Data Set.” Home page of PKDD Discovery Challenge, 1999. https://sorry.vse.cz/~berka/challenge/PAST/.
