@@ -27,7 +27,7 @@ import os
 
 Welcome back! We hope you gained a solid introduction to SQL and JupySQL in the first module.
 
-Before we begin, did you know that you can use widgets, eventful python objects that have a representation in the browser, to build fully interactive GUIs for your SQL clause?
+Before we begin, did you know that you can use widgets, eventful python objects that have a representation in the browser, to build fully interactive GUIs for your SQL query?
 
 In this section of Interactive Queries and Parameterization, we introduce `ipywidgets` and demonstrate how to create widgets and dynamically query a dataset in your workflow! Moreover, you can use widgets to synchronize stateful and stateless information between Python and JavaScript.
 
@@ -195,9 +195,9 @@ LIMIT 5
 
 ### Complete Example
 
-Now, we can demonstrate a way to combine multiple `ipywidgets` to make a more complex interactive SQL Clause, inclusive of different data types and widgets.
+Now, we can demonstrate a way to combine multiple `ipywidgets` to make a more complex interactive SQL query, inclusive of different data types and widgets.
 
-The code chunk below initializes multiple `ipywidgets`: <b>radio buttons</b> and <b>multiple selection</b> for the categorical variables `poutcome` and `loan` respectively and a <b>basic unbounded slider</b> for the numeric variable `duration`. The `show_limit` variable is basic data type that creates a slider by default and is used to limit the number of rows, in this case between 0 to 10 with a step size of 1.
+The code chunk below initializes multiple `ipywidgets`: <b>radio buttons</b> and <b>multiple selection</b> for the categorical variables `poutcome` and `loan` respectively and a <b>basic unbounded slider</b> for the numeric variable `duration`. The `show_limit` variable is a basic data type that creates a slider by default and is used to limit the number of rows, in this case between 0 to 10 with a step size of 1.
 
 <b>Note</b>: For `poutcome`, multiple values can be selected with `shift` and/or `ctrl` (or `command`) pressed and mouse clicks or arrow keys.
 
