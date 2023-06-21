@@ -111,7 +111,7 @@ LIMIT 5
 
 ### Subquery in SELECT
 
-The query belows results in the average loan amount for each "account_id" by having a subquery in the `SELECT` clause.
+The query belows results in the average loan amount for each `account_id` by having a subquery in the `SELECT` clause.
 
 ```{code-cell} ipython3
 %%sql
@@ -140,7 +140,7 @@ WHERE average_loan_amount IS NOT NULL
 ORDER BY average_loan_amount
 ```
 
-Let's first focus on the "outer query" of this statement. The outer query is everything in the SQL statement besides the second argument in the `SELECT` clause. This outer query results in just the account_id from the `s1.account` table. The "inner query" is the second argument in the `SELECT` statement. This query is called for each row from the outer query, which finds the average loan amount for each account by relation in the inner query's `WHERE` clause.
+Let's first focus on the "outer query" of this statement. The outer query is everything in the SQL statement besides the second argument in the `SELECT` clause. This outer query results in just the `account_id` from the `s1.account` table. The "inner query" is the second argument in the `SELECT` statement. This query is called for each row from the outer query, which finds the average loan amount for each account by relation in the inner query's `WHERE` clause.
 
 In these datasets, each account actually only has one loan. We solely specify the `AVG()` function for demonstration purposes. We also specify `IS NOT NULL` because only 682 accounts actually have loans. The remaining accounts would have a `NULL` value. 
 
@@ -187,7 +187,7 @@ With this query, we are able to see all loans that are greater than the average 
 ## You try: Use JupySQL to perform the queries and answer the questions.
 
 ### Question 1 (Medium):
-Find all account_id's that have a loan alongside with their loan status, their loan amount, and the average loan amount for their loan's loan status. Order by account_id.
+Find all `account_id`'s that have a loan alongside with their loan status, their loan amount, and the average loan amount for their loan's loan status. Order by `account_id`.
 
 
 <!-- #region -->
@@ -195,7 +195,7 @@ Find all account_id's that have a loan alongside with their loan status, their l
 
 <summary>Answers</summary>
 
-The difficult part of this question lies in the second `INNER JOIN`. This second `INNER JOIN` uses a subquery to have the average amount of each 'status'. This information is used when calling an the last `INNER JOIN` on the outer query's 'status' variable.
+The difficult part of this question lies in the second `INNER JOIN`. This second `INNER JOIN` uses a subquery to have the average amount of each 'status'. This information is used when calling the last `INNER JOIN` on the outer query's 'status' variable.
 
 
 ```{code-cell} ipython3
@@ -220,7 +220,7 @@ ORDER BY a.account_id
 <!-- #endregion -->
 
 ### Question 2 (Hard):
-Query the district_id and district_name that have the highest amount of loans for each loan status type.
+Query the `district_id` and `district_name` that have the highest amount of loans for each loan status type.
 
 <b>Hint</b> `UNION ALL` is a clause that concatenates rows on top of each other. Use this clause to achieve the final result.
 
@@ -311,6 +311,6 @@ WHERE amount > (
 
 ## Wrapping Up
 
-In this section, we introduced subqueries and how they can be implemented with common clauses. This powerful, easy to understand technique spans from being a potential replacement for joins to allowing users to use results from another query as an inner query for an outer query.
+In this section, we introduced subqueries and how they can be implemented with common clauses. Subqueries are an incredibly powerful and intuitive technique that can serve as an alternative to joins, as well as enable users to utilize the results of one query within another query.
 
 In the next section, you will learn how to implement more advanced join techniques to your queries.
