@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# Parameterizing Queries and ipywidgets Integration
+# Parameterizing Queries 
 
 In the last module, you learned how to use SQL within Jupyter notebooks with JupySQL, and you learned how you can combine it with usage of widgets to create interactive graphical user interfaces (GUIs) for your SQL queries. This module will take you a step further. Here, we will discuss how to parameterize your SQL queries and effectively utilize ipywidgets to create more interactive data workflows. Let's dive in!
 
@@ -19,13 +19,13 @@ In the last module, you learned how to use SQL within Jupyter notebooks with Jup
 
 
 ```{important}
-<b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to reinstall these packages.
+<b>Note:</b> The --save and %sqlcmd features used require the latest JupySQL version. Ensure you run the code below.
 ```
 
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine --quiet
+%pip install jupysql --upgrade jupysql-plugin --upgrade duckdb-engine --quiet
 ```
 
 We continue to work with the Bank and Marketing data set. 
@@ -107,7 +107,7 @@ We can use [JupySQL's Table Explorer](https://jupysql.ploomber.io/en/latest/user
 
 ## Variable Expansion
 
-JupySQL supports variable expansion in the form of {{variable}}. This allows you to write a query with placeholders that can be replaced by variables dynamically. The benefits of using parameterized SQL queries are that they can be reused with different values, prepared ahead of time, and used with dynamic data.
+JupySQL supports variable expansion in the form of ``{{variable}}``. This allows you to write a query with placeholders that can be replaced by variables dynamically. The benefits of using parameterized SQL queries are that they can be reused with different values, prepared ahead of time, and used with dynamic data.
 
 Let's start with a simple query template with placeholders, and substitute the placeholders with a couple of variables using variable expansion.
 
@@ -121,10 +121,10 @@ dynamic_column = "age, job"
 
 ### Sample case
 
-The HR department would like to determine top five oldest and youngest employees in two different jobs:  services, management.
+The HR department would like to determine top five oldest and youngest employees in two different jobs: services, management.
 
 We can combine Python with SQL code using the `%sql` magic. With Python we can iterate over the jobs in the list `jobs`. With parameterization, we can
-then insert the job into the SQL query via the `{{}}` notation.
+then insert the job into the SQL query via the `{{variable}}` notation.
 
 ```{code-cell} ipython3
 jobs = ["services", "management"]
@@ -153,7 +153,10 @@ Your task: use a loop with variable expansion to accomplish this.
 <summary>Answers</summary>
 
 ```{code-cell} ipython3
-campaigns = [1, 2, 3, 4, 5]
+campaign = %sql SELECT DISTINCT campaign FROM bank
+campaign = campaign.DataFrame()
+
+campaigns = campaign["campaign"].tolist()
 
 for campaign in campaigns:
     print(f"Top 5 oldest in campaign {campaign}")
@@ -334,7 +337,7 @@ print(final)
 
 We'll finish off this section by showing you how you can generate multiple tables dynamically. 
 
-Your task now is to create separate tables for each department. This can easily be accomplished using a loop and variable expansion:
+Your task now is to create separate tables for each job. This can easily be accomplished using a loop and variable expansion:
 
 ```{code-cell} ipython3
 jobs = ["services", "management"]
@@ -351,7 +354,7 @@ Let's check the tables in our schema:
 ## Conclusion
 In this module, we have explored how to parameterize SQL queries and effectively integrate with Python for a more interactive data analysis workflow within Jupyter notebooks. This method is facilitated using JupySQL and DuckDB. We've also demonstrated how to dynamically create and use variables within SQL queries, further enhancing the flexibility and interactivity of the notebooks.
 
-We delved into the basics of variable expansion, using loops within SQL to iterate over arrays, and how to define and use macros to promote reusability and reduce redundancy. We further illustrated the potential of these techniques through several practical examples, including determining the top five oldest and youngest employees in various jobs, calculating average ages and balances by job and education level, handling `NUL`L values with `macros`, and dynamically creating multiple tables.
+We delved into the basics of variable expansion, using loops within SQL to iterate over arrays, and how to define and use macros to promote reusability and reduce redundancy. We further illustrated the potential of these techniques through several practical examples, including determining the top five oldest and youngest employees in various jobs, calculating average ages and balances by job and education level, handling `NULL` values with `macros`, and dynamically creating multiple tables.
 
 Through these exercises, it has been made evident that integrating SQL into Jupyter notebooks provides an intuitive and powerful approach to data exploration and analysis. The techniques demonstrated in this module can be widely applied across various datasets, making it a useful skillset for data scientists and analysts. By merging the strengths of Python's flexibility and SQL's data management capabilities, we can create more powerful and interactive data workflows.
 
