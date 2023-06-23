@@ -13,13 +13,6 @@ kernelspec:
 
 # Introduction to `ipywidgets`
 
-```{code-cell} ipython3
-:tags: [remove-cell]
-
-# this cell is hidden in the docs, only used to simulate
-# the getpass() call
-import ipywidgets as widgets
-```
 Welcome back! We hope you gained a solid introduction to SQL and JupySQL in the first module.
 
 Before we begin, did you know that you can use widgets, eventful Python objects that have a representation in the browser, to build fully interactive GUIs for your SQL query?
@@ -37,13 +30,7 @@ Let's start off with an easy introduction to the `ipywidgets` package.
 First, install `ipywidgets` in your environment by executing the following code:
 
 ```{code-cell} ipython3
-pip install ipywidgets --quiet
-```
-
-Next, import `ipywidgets` into your notebook:
-
-```{code-cell} ipython3
-import ipywidgets as widgets
+%pip install ipywidgets --quiet
 ```
 
 The `ipywidgets` package is necessary to provide an interface for widgets. We introduce these widgets moving forward.
@@ -58,9 +45,14 @@ Numeric widgets provide further flexibility over basic data types. For example, 
 
 There are several other arguments, which can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#IntSlider), that can be passed into these sliders.
 
+Let's start by importing `ipywidgets` into your notebook, along with the `display` module from `IPython.display`
+
 After creating a widget, you can display it using the `display()` function. An example for the `IntSlider` and its display is as follows:
 
 ```{code-cell} ipython3
+import ipywidgets as widgets
+from IPython.display import display
+
 duration_lower_bound = widgets.IntSlider(min=0, max=1000, step=200, value=500)
 display(duration_lower_bound)
 ```
@@ -215,7 +207,7 @@ output = widgets.Output()
 
 
 @widgets.interact(x=(0, 10), y=(0, 10))
-def multiply(x, y):
+def multiply_decorator(x, y):
     # Clear the Output widget every time the function is called
     output.clear_output()
     with output:
