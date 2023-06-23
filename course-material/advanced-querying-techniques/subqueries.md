@@ -22,7 +22,7 @@ Let's demonstrate how powerful subqueries are by continuing with our banking dat
 ## Install - execute this once.
 
 ```{important}
-<b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to reinstall these packages.
+<b>Note:</b> The `--save` and `%sqlcmd` features used require the latest JupySQL version. Ensure you run the code below to update JupySQL.
 ```
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
