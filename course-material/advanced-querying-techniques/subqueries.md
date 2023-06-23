@@ -13,7 +13,7 @@ kernelspec:
 
 # Using subqueries
 
-Subqueries, also known as nested queries or inner query, is a technique embedded within another query. It enables users to run a query that has some kind of relation to another query in the same SQL statement. In simpler terms, a subquery is a query within a query. 
+A subquery is a technique that essentially embeds a query within another query. It enables users to run a query that has some kind of relation to another query in the same SQL statement. 
 
 Let's demonstrate how powerful subqueries are by continuing with our banking data.
 
@@ -163,9 +163,35 @@ FROM
 INNER JOIN s1.district AS d
   ON inner_query.district_id = d.district_id
 GROUP BY d.district_name
-
 ```
 This query demonstrates how to have a subquery act as another table when performing an `INNER JOIN` in the outer query. There is also an `INNER JOIN` in the inner query that creates a joined table between the `s1.account` and `s1.loan` tables. This subquery then gives us the necessary information to join with our `s1.district` table.
+
+The query shown above can be easily implemented using JupySQL's `--save` feature. This feature essentially allows us to save a query and use it for future use. We implement the `--save` feature below by recreating the previous query.
+
+We first `--save` the subquery as `loan_amount_district_id`.
+
+```{code-cell} ipython3
+%%sql --save loan_amount_district_id
+SELECT l.loan_id, 
+        l.amount, 
+        a.district_id 
+FROM s1.loan AS l 
+INNER JOIN s1.account AS a 
+    ON l.account_id = a.account_id
+```
+
+Then call the saved subquery and use it to complete our overall query.
+
+```{code-cell} ipython3
+%%sql 
+SELECT d.district_name, 
+       ROUND(AVG(inner_query.amount),2) AS average_loan_amount
+FROM (SELECT *
+      FROM loan_amount_district_id) AS inner_query
+INNER JOIN s1.district AS d 
+    ON inner_query.district_id = d.district_id
+GROUP BY d.district_name
+```
 
 ### Subquery in WHERE
 
@@ -184,9 +210,92 @@ WHERE amount > (
 
 With this query, we are able to see all loans that are greater than the average loan amount for 'A' status loans.
 
+Let's again demonstrate how we can use `--save` to recreate this query.
+
+```{code-cell} ipython3
+%%sql --save avg_A_amount
+SELECT AVG(amount) 
+FROM s1.loan 
+WHERE status = 'A'
+```
+
+```{code-cell} ipython3
+%%sql
+SELECT *
+FROM s1.loan
+WHERE amount > (
+  SELECT *
+  FROM avg_A_amount) 
+```
+
+Note that we do not have to assign an alias to our saved query because none of its variables are in the outer query's `SELECT` clause.
+
+## Examining Our Snippets with JupySQL
+
+To examine all of our saved queries with `--save`, we can use `%sqlcmd snippets`.
+
+```{code-cell} ipython3
+%sqlcmd snippets
+```
+
+Our saved queries (also known as snippets) can be deleted with the `--delete` feature.
+For more information on snippets, please visit JupySQL's official documentation [here].(https://jupysql.ploomber.io/en/latest/api/magic-snippets.html)
+
+## Viewing Our Tables with JupySQL
+
+JupySQL also has features that allow for quick displays of tables and their columns. We can examine them with `%sqlcmd tables` and `%sqlcmd columns`.
+
+```{code-cell} ipython3
+%sqlcmd tables -s s1
+```
+
+The above code cell shows all tables under the `s1` schema. Recall that we assigned a schema to these tables at the beginning of this section.
+
+`%sqlcmd columns` allows us to examine each column in a table with added additional information.
+
+```{code-cell} ipython3
+%sqlcmd columns -s s1 -t account
+```
+
+In the above code-cell, we specify the schema and the table under the schema to examine.
+
+<b>Note:</b> for now, JupySQL does not support the use of these magic commands with queries saved with `--save`. 
+
+For more information on these magic commands, please visit JupySQL's official documentation [here].(https://jupysql.ploomber.io/en/latest/api/magic-tables-columns.html)
+
 ## You try: Use JupySQL to perform the queries and answer the questions.
 
-### Question 1 (Medium):
+### Question 1 (Easy):
+Query loans with an `amount` greater than or equal to the `AVG()` loan amount. Utilize the `--save` feature to help you solve this question.
+
+<!-- #region -->
+<details>
+
+<summary>Answers</summary>
+
+First, create a snippet with `--save` containing the `AVG()` loan amount.
+
+```{code-cell} ipython3
+%%sql --save average_loan_amount
+SELECT AVG(amount)
+FROM s1.loan
+```
+
+Then we reference `average_loan_amount` as a subquery to filter for loan id's that are greater than or equal to this average.
+
+```{code-cell} ipython3
+%%sql
+SELECT loan_id
+FROM s1.loan
+WHERE amount >= (SELECT * 
+                FROM average_loan_amount)
+```
+
+</details>
+<!-- #endregion -->
+
+
+### Question 2 (Medium):
 Find all `account_id`'s that have a loan alongside with their loan status, their loan amount, and the average loan amount for their loan's loan status. Order by `account_id`.
 
 
@@ -219,10 +328,12 @@ ORDER BY a.account_id
 </details>
 <!-- #endregion -->
 
-### Question 2 (Hard):
+### Question 3 (Hard):
 Query the `district_id` and `district_name` that have the highest amount of loans for each loan status type.
 
-<b>Hint</b> `UNION ALL` is a clause that concatenates rows on top of each other. Use this clause to achieve the final result.
+To answer this question, let's quickly learn about `UNION ALL`. `UNION ALL` is a clause that concatenates rows on top of each other. An example is shown below.
+
+Using `UNION ALL`, we can achieve the correct results. Try to incorporate the `--save` feature to make your query easier to read.
 
 <!-- #region -->
 <details>
@@ -276,10 +387,78 @@ FROM
     ORDER BY count DESC
     LIMIT 1) as D_max
 ```
+
+We can make the above query easier to understand by using JupySQL's `--save` feature.
+
+```{code-cell} ipython3
+%%sql --save A
+SELECT a.district_id, d.district_name, COUNT(*) as count
+FROM s1.account a
+JOIN s1.loan l ON a.account_id = l.account_id
+JOIN s1.district d ON a.district_id = d.district_id
+WHERE l.status = 'A'
+GROUP BY a.district_id, d.district_name
+ORDER BY count DESC
+LIMIT 1
+```
+
+```{code-cell} ipython3
+%%sql --save B
+SELECT a.district_id, d.district_name, COUNT(*) as count
+FROM s1.account a
+JOIN s1.loan l ON a.account_id = l.account_id
+JOIN s1.district d ON a.district_id = d.district_id
+WHERE l.status = 'B'
+GROUP BY a.district_id, d.district_name
+ORDER BY count DESC
+LIMIT 1
+```
+
+```{code-cell} ipython3
+%%sql --save C
+SELECT a.district_id, d.district_name, COUNT(*) as count
+FROM s1.account a
+JOIN s1.loan l ON a.account_id = l.account_id
+JOIN s1.district d ON a.district_id = d.district_id
+WHERE l.status = 'C'
+GROUP BY a.district_id, d.district_name
+ORDER BY count DESC
+LIMIT 1
+```
+
+```{code-cell} ipython3
+%%sql --save D
+SELECT a.district_id, d.district_name, COUNT(*) as count
+FROM s1.account a
+JOIN s1.loan l ON a.account_id = l.account_id
+JOIN s1.district d ON a.district_id = d.district_id
+WHERE l.status = 'D'
+GROUP BY a.district_id, d.district_name
+ORDER BY count DESC
+LIMIT 1
+```
+
+We can then use these saved snippets and concatenate their results using `UNION ALL`.
+
+```{code-cell} ipython3
+%%sql
+SELECT * 
+FROM A 
+UNION ALL 
+SELECT *
+FROM B
+UNION ALL
+SELECT *
+FROM C
+UNION ALL
+SELECT *
+FROM D
+```
+
 </details>
 <!-- #endregion -->
 
-### Question 3 (Bonus):
+### Question 4 (Bonus):
 Output the `COUNT()` of of each unique 'status' variable under `s1.loan` that are greater than the average of 'A' type loans. Have the outputs be only five columns for each 'status' type with a single value each alongside with the total number of loans. You must use one or more subqueries.
 
 <b>Hint</b> `CASE WHEN` is a clause that acts as a conditional statement when performing other SQL actions. Try to see how you can incorporate `CASE WHEN` with `COUNT()` to answer this question.
@@ -312,5 +491,7 @@ WHERE amount > (
 ## Wrapping Up
 
 In this section, we introduced subqueries and how they can be implemented with common clauses. Subqueries are an incredibly powerful and intuitive technique that can serve as an alternative to joins, as well as enable users to utilize the results of one query within another query.
+
+We also explored how we can make subqueries more readable using JupySQL's `--save` feature. Alongside this, we introduced some additional JupySQL magic commands such as `%sqlcmd tables` and `%sqlcmd columns` to view current tables in our schema.
 
 In the next section, you will learn how to implement more advanced join techniques to your queries.
