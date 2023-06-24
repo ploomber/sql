@@ -349,7 +349,7 @@ Try playing with multiple variables in the `ON`, `USING`, and `GROUP BY` clauses
 To perform a grouping over multiple dimensions within the same query, the following clauses can be used with `GROUP BY`:
 
 - `GROUPING SETS` perform the same aggregate across different `GROUP BY` clauses in a single query.
-- `ROLLUP` produces all <b>“sub-groups”</b> of a grouping set, e.g. `ROLLUP (country, city, zip)` produces the grouping sets (country, city, zip), (country, city), (country), () where () denotes an <b>empty group by</b> list. Therefore, placement of variables matters here because only the first variable's individual aggregation is output. This produces <b>n+1 grouping sets</b> where n is the amount of terms in the `ROLLUP` clause.
+- `ROLLUP` produces all <b>“sub-groups”</b> of a grouping set, e.g. `ROLLUP (country, city, zip)` produces the grouping sets (country, city, zip), (country, city), (country), () where () denotes an <b>empty group by</b> list. Therefore, placement of variables matters here because only the first variable's individual aggregation is output. This produces <b>n+1 grouping sets</b> where n is the number of terms in the `ROLLUP` clause.
 - `CUBE`: produces grouping sets for all combinations of the inputs, e.g. `CUBE (country, city, zip)` will produce (country, city, zip), (country, city), (country, zip), (city, zip), (country), (city), (zip), (). This produces <b>2^n grouping sets</b>.
 
 ```{important}
