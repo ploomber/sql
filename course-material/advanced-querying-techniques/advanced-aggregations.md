@@ -84,7 +84,7 @@ RANK() OVER (ORDER BY expr [ASC|DESC] [, expr [ASC|DESC]] ...)
 
 `RANK()` is executed by the attributes (or expressions) specified in the `OVER (ORDER BY())` clause. <b>Without this clause, `RANK()` will return the same value for each row</b>. 
 
-Each order by expression optionally can be followed by `ASC` or `DESC` to indicate sort direction. <b>The default is `ASC` if no direction is specified</b>. `NULL` values are sorted first for ascending sorts and last for descending sorts.
+Each order by expression optionally it can be followed by `ASC` or `DESC` to indicate the sort direction. <b>The default is `ASC` if no direction is specified</b>. `NULL` values are sorted first for ascending sorts and last for descending sorts.
 
 The following query gives the rank of each customer:
 
