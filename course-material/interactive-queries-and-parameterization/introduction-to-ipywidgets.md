@@ -13,138 +13,27 @@ kernelspec:
 
 # Introduction to `ipywidgets`
 
-```{code-cell} ipython3
-:tags: [remove-cell]
-
-# this cell is hidden in the docs, only used to simulate
-# the getpass() call
-import ipywidgets as widgets
-from urllib.request import urlretrieve
-from zipfile import ZipFile
-import pandas as pd
-import os
-```
-
 Welcome back! We hope you gained a solid introduction to SQL and JupySQL in the first module.
 
-Before we begin, did you know that you can use widgets, eventful python objects that have a representation in the browser, to build fully interactive GUIs for your SQL query?
+Before we begin, did you know that you can use widgets, eventful Python objects that have a representation in the browser, to build fully interactive GUIs for your SQL query?
 
-In this section of Interactive Queries and Parameterization, we introduce `ipywidgets` and demonstrate how to create widgets and dynamically query a dataset in your workflow! Moreover, you can use widgets to synchronize stateful and stateless information between Python and JavaScript.
+In this section of Interactive Queries and Parameterization, we introduce `ipywidgets` and demonstrate how to create widgets and their functionality. Moreover, you can use widgets to synchronize stateful and stateless information between Python and JavaScript.
 
-`ipywidgets`, which is part of the Jupyter Widgets project, is a Python package that provides interactive HTML widgets for Jupyter notebooks and the IPython kernel. The package provides a basic, lightweight set of core form controls that use this framework. These controls comprise a text area, text box, select and multiselect controls, checkbox, sliders, tab panels, grid layout, etc.
+`ipywidgets`, which is part of the Jupyter Widgets project, is a Python package that provides interactive HTML widgets for Jupyter notebooks and the IPython kernel. The package provides a basic, lightweight set of controls that allows for easy implementations of interactive user interfaces. These controls comprise a text area, text box, select and multiselect controls, checkbox, sliders, tab panels, grid layout, etc.
 
 See more for a complete [Widget List](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html)!
 
-## Installation
+## `ipywidgets`
 
-### Execute this once
-
-```{important}
-<b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to reinstall these packages.
-```
-
-This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
-
-```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
-```
-
-### `ipywidgets`
-
-`ipywidgets` is integrated with JupySQL! With the help of SQL magics `%sql` and the `--interact` JupySQL argument, we can easily start creating widgets.
+Let's start off with an easy introduction to the `ipywidgets` package.
 
 First, install `ipywidgets` in your environment by executing the following code:
 
 ```{code-cell} ipython3
-pip install ipywidgets --quiet
+%pip install ipywidgets --quiet
 ```
 
-Next, import `ipywidgets` into your notebook:
-
-```python
-import ipywidgets as widgets
-```
-
-## Load the data
-We extract the [bank marketing data](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/making-your-first-query.html#dataset) by retrieving it from its URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
-
-```python
-from urllib.request import urlretrieve
-from zipfile import ZipFile
-import pandas as pd
-import os
-```
-
-```{code-cell} ipython3
-def extract_to_csv(url, data_name):
-    # Retrieve the zip file from the url link
-    file = os.path.basename(url)
-    urlretrieve(url, file)
-
-    # Extract the zip file's contents
-    with ZipFile(file, "r") as zf:
-        zf.extractall()
-
-    # The file containing our data
-    csv_file_name = f"{data_name}.csv"
-
-    # Data clean up
-    df = pd.read_csv(csv_file_name, sep=";")
-
-    # Save the cleaned up CSV file
-    df.to_csv(df.to_csv(f"{data_name}_cleaned.csv", index=False))
-
-
-# Running the above function
-extract_to_csv("https://tinyurl.com/uci-marketing-data", "bank")
-```
-
-After running this code, you should have `bank_cleaned.csv` in the current directory.
-
-## Load Engine
-We now load in our SQL extension and DuckDB that allow us to execute SQL queries in Jupyter Notebooks.
-
-```{code-cell} ipython3
-# Loading in SQL extension
-%reload_ext sql
-# Initiating a DuckDB database named 'bank.duck.db' to run our SQL queries on
-%sql duckdb:///bank.duck.db
-```
-
-## Creating Table
-
-Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database. Here we `CREATE OR REPLACE TABLE` in DuckDB called 'bank' `FROM` our `bank_cleaned.csv` file. The `read_csv_auto` is a function that helps SQL understand our local .csv file for creation into our database.
-
-```{code-cell} ipython3
-%%sql
-CREATE OR REPLACE TABLE bank AS
-FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
-```
-
-## `%sql --interact {{widget_variable}}`
-
-First, you need to define the variable as the form of a basic data type or `ipywidgets` Widget.
-Then, pass the variable name into the `--interact` argument and use a `WHERE` clause to filter using the specified widgets variables. In this section, we shall delve into the different types of widgets and how to use them.
-
-### Basic Data Types
-
-The simplest way is to declare a variable with basic data types (Numeric, Text, Boolean...). [ipywidgets](https://ipywidgets.readthedocs.io/en/stable/examples/Using%20Interact.html?highlight=interact#Basic-interact) autogenerates UI controls for that variable.
-
-An example with a numeric variable `duration`, which creates a slider for its values as a UI, is as follows:
-
-```{code-cell} ipython3
-duration_min = 1500
-%sql --interact duration_min SELECT * FROM bank WHERE duration > {{duration_min}} LIMIT 5
-```
-
-<b>Note above</b> that we are filtering records by the variable `duration` if it is <b>greater than</b> the value of the slider widget `duration_min`.
-
-An example with a categorical variable `loan`, which creates a text box for the user to type in values as a UI, is as follows:
-
-```{code-cell} ipython3
-loan = "yes"  # Try inputting "no" in the output's text box
-%sql --interact loan SELECT * FROM bank WHERE loan == '{{loan}}' LIMIT 5
-```
+The `ipywidgets` package is necessary to provide an interface for widgets. We introduce these widgets moving forward.
 
 ### Numeric Widgets
 
@@ -156,15 +45,34 @@ Numeric widgets provide further flexibility over basic data types. For example, 
 
 There are several other arguments, which can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#IntSlider), that can be passed into these sliders.
 
-An example for the `IntSlider` is as follows:
+Let's start by importing `ipywidgets` into your notebook, along with the `display` module from `IPython.display`
+
+After creating a widget, you can display it using the `display()` function. An example for the `IntSlider` and its display is as follows:
 
 ```{code-cell} ipython3
-duration_lower_bound = widgets.IntSlider(min=5, max=3000, step=500, value=1500)
+import ipywidgets as widgets
+from IPython.display import display
 
-%sql --interact duration_lower_bound SELECT * FROM bank WHERE duration <= {{duration_lower_bound}} LIMIT 5
+duration_lower_bound = widgets.IntSlider(min=0, max=1000, step=200, value=500)
+display(duration_lower_bound)
 ```
 
 <b>Note</b>: Other Numeric Widgets can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#floatlogslider).
+
+### Boolean Widgets
+
+Boolean widgets display interfaces specifically for boolean values. There are three available boolean widgets that all have the same functionality: `ToggleButton`, `Checkbox`, and `Valid`. Let's see how `Checkbox` works with an example.
+
+#### `Checkbox`
+
+`Checkbox` is a great boolean widget because it allows users to interact with a checkbox. We demonstrate its use below.
+
+```{code-cell} ipython3
+balance_over_500 = widgets.Checkbox(
+    value=False, description="Balance > 500", disabled=False, indent=False
+)
+display(balance_over_500)
+```
 
 ### Selection Widgets
 
@@ -174,203 +82,144 @@ There are several widgets that can be used to display single selection lists, an
 
 The `RadioButtons` widget displays a list of options, of which <b>exactly one</b> can be selected. The user can <b>select one of the options</b> by clicking on the radio button. The current selected value can be accessed from the `value` attribute, which is by default the label of the selected option.
 
-An example is as follows:
+We show an example of using a `RadioButton` below.
 
 ```{code-cell} ipython3
-outcome_selection = widgets.RadioButtons(
-    options=["failure", "other", "success", "unknown"],
-    description="Outcome",
+seasons = widgets.RadioButtons(
+    options=["Spring", "Summer", "Fall", "Winter"],
+    #    value='Spring', # Defaults to 'Spring'
+    description="Season:",
     disabled=False,
 )
+display(seasons)
 ```
 
-```{code-cell} ipython3
-%%sql --interact outcome_selection 
-SELECT * FROM bank 
-WHERE poutcome == '{{outcome_selection}}' 
-LIMIT 5
-```
+#### `Select` and `SelectMultiple`
 
-<b>Note</b>: Other Selection Widgets can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#selection-widgets).
+The `Select` and `SelectMultiple` widgets display a dropdown menu where one or more options can be selected. These two widgets are very similar to `RadioButtons`. The main difference is the type of display they output and how `SelectMultiple` allow for more than one option to be selected by holding down "shift". 
 
-### Complete Example
-
-Now, we can demonstrate a way to combine multiple `ipywidgets` to make a more complex interactive SQL query, inclusive of different data types and widgets.
-
-The code chunk below initializes multiple `ipywidgets`: <b>radio buttons</b> and <b>multiple selection</b> for the categorical variables `poutcome` and `loan` respectively and a <b>basic unbounded slider</b> for the numeric variable `duration`. The `show_limit` variable is a basic data type that creates a slider by default and is used to limit the number of rows, in this case between 0 to 10 with a step size of 1.
-
-<b>Note</b>: For `poutcome`, multiple values can be selected with `shift` and/or `ctrl` (or `command`) pressed and mouse clicks or arrow keys.
+Try out the differences between `Select` and `SelectMultiple` below.
 
 ```{code-cell} ipython3
-duration_lower_bound = 500
-show_limit = (0, 10, 1)
-loan_selection = widgets.RadioButtons(
-    options=["yes", "no"], description="Personal Loan", disabled=False
-)
-outcome_selection = widgets.SelectMultiple(
-    options=["failure", "other", "success", "unknown"],
-    value=["success", "failure"],
-    description="Previous Campaign Outcome",
+one_season = widgets.Select(
+    options=["Spring", "Summer", "Fall", "Winter"],
+    description="Season:",
     disabled=False,
 )
-```
-
-Next, we can use the `--interact` argument to create UI's for the above widgets, which will help us interactively filter our output, and pass them into the SQL query:
-
-```{code-cell} ipython3
-%%sql --interact show_limit --interact duration_lower_bound --interact loan_selection --interact outcome_selection
-SELECT * FROM bank
-WHERE poutcome IN {{outcome_selection}} AND 
-duration > {{duration_lower_bound}} AND 
-loan == '{{loan_selection}}'
-LIMIT {{show_limit}} 
-```
-
-Try out other widgets, such as Boolean, String, and Datetime, detailed [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#) and see what you can come up with!
-
-## You try: Use JupySQL to perform the queries and answer the questions
-
-### Question 1 (Easy):
-Using the `bank` dataset, create an `IntSlider` widget called `balance_lower` for the `balance` column. Specifically, include a <b>bounded</b> slider with values ranging between -1000 and 20000, a step size of 1000, and initial value set to 10000. Show only the first 5 rows of the output.
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-We start off by initializing a variable called `balance_lower` and assigning it to the `IntSlider` widget with the required <b>integer</b> arguments. To limit the number of rows to only 5, we <b>do not need a basic slider</b>, as shown with the `show_limit` variable in the Complete Example above.
-
-```{code-cell} ipython3
-balance_lower = widgets.IntSlider(min=-1000, max=20000, step=1000, value=10000)
+display(seasons)
 ```
 
 ```{code-cell} ipython3
-%%sql --interact balance_lower 
-SELECT * FROM bank 
-WHERE balance <= {{balance_lower}} 
-LIMIT 5
-```
-
-</details>
-<!-- #endregion -->
-
-<!-- #region -->
-
-#### Question 2 (Medium):
-Using the `bank` dataset, create a `ToggleButtons` Selection Widget for the `month` column. Show a range of records from 1 to 10 with a step size of 5.
-
-<!-- #region -->
-<details>
-
-<summary>Answers</summary>
-
-```{important}
-When in doubt about the syntax of a particular widget, refer to the `ipywidgets` [documentation](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#selection-widgets).
-```
-
-We start off by initializing a variable called `month_toggle` and assigning it to the `ToggleButtons` widget. The `options` argument is set to a list of the unique values in the `month` column. We do not need to specify the `value` argument here as it will, by default, select the first value in the `options` list, which is "jan" in this case.
-
-To show a range of records, we can modify the `show_limit` variable from the Complete Example above.
-
-```{code-cell} ipython3
-month_toggle = widgets.ToggleButtons(
-    options=[
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "may",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "oct",
-        "nov",
-        "dec",
-    ],
-    description="Month:",
+multiple_season = widgets.SelectMultiple(
+    options=["Spring", "Summer", "Fall", "Winter"],
+    description="Season:",
     disabled=False,
 )
-show_limit = (1, 10, 5)
+display(seasons)
 ```
 
-Finally, we use the `--interact` argument to create a UI for the `contact_dropdown` widget.
+### Container/Layout Widgets
+
+We can position multiple widgets in a single cell's output by utilizing container widgets. These container widgets' main functionality is to hold other widgets, called children. There are several ways to layout your widgets, but we solely demonstrate `VBox` below with our previous example.
+
+#### `Vbox`
 
 ```{code-cell} ipython3
-%sql --interact show_limit --interact month_toggle SELECT * FROM bank WHERE month == '{{month_toggle}}' LIMIT {{show_limit}} 
+# The "children" widgets go into a list when used as an argument
+widgets.VBox([one_season, multiple_season])
 ```
 
-</details>
-<!-- #endregion -->
+For more ways to layout your widgets, visit `ipywidgets` documentation [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#vbox).
 
-<!-- #region -->
+## Applying `ipywidgets` with Functions
 
-#### Question 3 (BONUS):
-Create an <b>unbounded</b> numeric widget for the integer variable `duration` with a range of values from 0 to 2000, a step size of 500, and an initial `value` of 1000. <b>However</b>, make sure that the table changes output upon clicking a play button! Also add a `ToggleButton`, a Boolean Widget, for the variable `housing` that has `value` = "yes", `button_style` = "success", and a check `icon`. Lastly, limit the output to only show 10 records.
-<!-- #region -->
-<details>
-<summary>Answers</summary>
+We can integrate `ipywidgets` with functions and see the outputs of functions in real time! For example, say we have a function that multiples variable `x` and `y`. We can create widgets for `x` and `y` and show outputs of our function every time we adjust either widgets.
 
-<b>Hint</b> Did you know we can also create animated sliders for integer data types? This question requires exactly that! See the documentation [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#play-animation-widget) for more details.
+To demonstrate this, we need to first understand some more `ipywidgets` fundamentals, such as `Output` and `.observe()`.
 
-We start off by initializing a variable called `play` and assigning it to the `Play` Animation widget with the required <b>integer</b> arguments.
+### `Output` and `.clear_output()`
+
+`Output` is a widget that displays and handles cell outputs. We can use `Output` to have a certain cell act as the output for other widgets or functions.
 
 ```{code-cell} ipython3
-play = widgets.Play(
-    value=0,
-    min=0,
-    max=2000,
-    step=500,
-    interval=1000,  # time interval in milliseconds
-    description="Press play",
-    disabled=False,
-)
+out = widgets.Output()
+display(out)
 ```
-
-For the `ToggleButton` widget, we initialize a variable called `housing_toggle` and assign it to the `ToggleButton` widget with the required arguments.
 
 ```{code-cell} ipython3
-housing_toggle = widgets.ToggleButtons(
-    options=["yes", "no"],
-    description="Housing:",
-    disabled=False,
-)
+with out:
+    for i in range(10):
+        print(f"Output {i}")
 ```
 
-Before calling `--interact`, we need to add UI's for the `Play` and `IntSlider` widgets. This is attained with both `jslink()` and `HBox` `ipywidgets` methods. We then use the `--interact` argument to create the UI's. In the `WHERE` clause, because we want an <b>unbounded</b> slider, we use the `>=` operator for `duration`. To limit the number of rows to only 10, we <b>do not need a basic slider</b>.
+We can clear the the above cell's output with `.clear_output()` attached to the `Output` widget.
 
 ```{code-cell} ipython3
-%%sql --interact play --interact housing_toggle 
-SELECT * FROM bank
-WHERE duration >= {{play}} AND                                                         
-housing == '{{housing_toggle}}' 
-LIMIT 10
+out.clear_output()
 ```
 
-```{important}
-Because we set the minimum value and initial value upon rendering to 0, the maximum value to 2000, and a step size of 500, the table will change or "blink" four times upon pressing the "play" button. Normally, an `IntSlider` is recommended to be added next to the `Play` widget; however, JupySQL does not support this at the moment.
+### `.observe()`
+
+`.observe()` is used to to register a function to an existing widget. By registering a function, the function is called whenever the widget's value changes.
+
+## Putting It Together
+
+Let's implement everything we've learned with the multiplication function using `ipywidgets`.
+
+```{code-cell} ipython3
+# Create the IntSlider widgets
+x_slider = widgets.IntSlider(description="x:", min=0, max=10, value=5)
+y_slider = widgets.IntSlider(description="y:", min=0, max=10, value=5)
+
+# Create the Output widget
+output = widgets.Output()
+
+# Multiplication function
+
+
+def multiply(x, y):
+    return x * y
+
+
+# Define a function to update the output when sliders are changed
+
+
+def update_output(change):
+    # Clear the Output widget every time the function is called
+    output.clear_output()
+    with output:
+        result = multiply(x_slider.value, y_slider.value)
+        print(f"{x_slider.value} * {y_slider.value} is: {result}")
+
+
+# Register the update_output function for slider value changes
+x_slider.observe(update_output)
+y_slider.observe(update_output)
+
+display(x_slider, y_slider, output)
 ```
 
-+++
+A great alternative to the above code is using the `interact` function. The `interact` function automatically generates the appropriate widgets based on the task at hand. Below is an implementation of the same task with the `interact` function.
 
-</details>
-<!-- #endregion -->
+```{code-cell} ipython3
+# Create the Output widget
+output = widgets.Output()
 
-<!-- #region -->
 
-## Wrapping Up
+@widgets.interact(x=(0, 10), y=(0, 10))
+def multiply_decorator(x, y):
+    # Clear the Output widget every time the function is called
+    output.clear_output()
+    with output:
+        result = x * y
+        print(f"{x_slider.value} * {y_slider.value} is: {result}")
 
-In this section, we learnt about how to create widgets to make our SQL queries interactive, helping us gain a better intuition of the EDA process! To summarize:
 
-- Numeric widgets, although commonly used as sliders, can also be used in text boxes or dropdowns, for example. This is useful when you want to specify a value.
+display(output)
+```
 
-- For categorical or text data, we can use either Selection or Boolean widgets. Some examples include radio buttons, toggle buttons, and dropdowns.
+Notice all the changes from using the `interact` function. We no longer explicitly create `x` and `y` with widgets. Instead, a range of them are given when using the `@widgets.interact()` decorator that is defined above the associated function.
 
-In the next section, you will learn how to parameterize your queries.
+## Wrapping Up 
 
-<!-- #endregion -->
-
-## References
-
-“Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Basics.html.
-
-“Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html.
+In this section we introduced `ipywidgets` and how they provide user interfaces within Jupyter environments. In the upcoming sections, we will delve back into SQL by showcasing how we can utilize `ipywidgetes` to create interactive queries. Further along the course, we will also revisit `ipywidgets` to demonstrate how they can be used to create interactive visualizations.
