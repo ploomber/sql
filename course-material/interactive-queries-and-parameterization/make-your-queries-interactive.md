@@ -13,7 +13,7 @@ kernelspec:
 
 # Make your queries interactive
 
-In this section, we will combine the learnings from the two previous sections, [Intro to `ipywidgets`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html) and [Parameterizing SQL Queries](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html), to create interactive SQL queries using JupySQL. This technique is useful for exploratory data analysis, as it allows us to filter our data and visualize the tabular results interactively.
+In this section, we will combine the learnings from the two previous sections, [Intro to `ipywidgets`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html) and [Parameterizing SQL Queries](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html), to create interactive SQL queries using <b>JupySQL</b>. This technique is useful for conducting exploratory data analysis with SQL, as it allows us to filter our data and visualize the tabular results interactively.
 
 ```{code-cell} ipython3
 :tags: [remove-cell]
@@ -24,9 +24,63 @@ import ipywidgets as widgets
 
 The installation of `ipywidgets` was covered previously [here](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html#ipywidgets).
 
-## Load Engine
+## Set up and data access
 
-We will load in our SQL extension and DuckDB that allow us to execute SQL queries in Jupyter Notebooks.
+```{important}
+<b>Note:</b> The --save and %sqlcmd features used require the latest JupySQL version. Ensure you run the code below.
+```
+
+This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
+
+```{code-cell} ipython3
+%pip install jupysql --upgrade jupysql-plugin --upgrade duckdb-engine --quiet
+```
+
+We continue to work with the Bank and Marketing data set.
+
+```{important}
+Source: UCI Machine Learning Repository
+
+URL: https://archive-beta.ics.uci.edu/dataset/222/bank+marketing
+
+Data Citation
+
+Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
+```
+
+We can use the following function to extract the downloaded data from the UCI repository.
+
+```{code-cell} ipython3
+from urllib.request import urlretrieve
+from zipfile import ZipFile
+import pandas as pd
+import os
+
+
+def extract_to_csv(url, data_name):
+    # Retrieve the zip file from the url link
+    file = os.path.basename(url)
+    urlretrieve(url, file)
+
+    # Extract the zip file's contents
+    with ZipFile(file, "r") as zf:
+        zf.extractall()
+
+    # The file containing our data
+    csv_file_name = f"{data_name}.csv"
+
+    # Data clean up
+    df = pd.read_csv(csv_file_name, sep=";")
+
+    # Save the cleaned up CSV file
+    df.to_csv(df.to_csv(f"{data_name}_cleaned.csv", index=False))
+
+
+# Running the above function
+extract_to_csv("https://tinyurl.com/uci-marketing-data", "bank")
+```
+
+Initialize a DuckDB Instance
 
 ```{code-cell} ipython3
 # Loading in SQL extension
@@ -35,9 +89,7 @@ We will load in our SQL extension and DuckDB that allow us to execute SQL querie
 %sql duckdb:///bank.duck.db
 ```
 
-## Creating Table
-
-We will be using the [bank marketing data](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/making-your-first-query.html#dataset) as we have been in previous sections. Downloading it was covered previously [here](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/aggregate-functions-in-sql.html#load-the-data). Let's start off with loading our `bank_cleaned.csv` file from our local directory to our newly created DuckDB database.
+Load the data
 
 ```{code-cell} ipython3
 %%sql
@@ -45,16 +97,34 @@ CREATE OR REPLACE TABLE bank AS
 FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
 ```
 
+We confirm the table was loaded
+
+```{code-cell} ipython3
+%sqlcmd tables
+```
+
+We can use [JupySQL's Table Explorer](https://jupysql.ploomber.io/en/latest/user-guide/table_explorer.html) to take a quick look at the table.
+
+```{code-cell} ipython3
+%sqlcmd explore --table bank
+```
+
+```{code-cell} ipython3
+%sqlcmd columns -t bank
+```
+
 ## `%sql --interact {{widget_variable}}`
 
-First, you need to define the variable as the form of a basic data type or `ipywidgets` Widget.
-Then, pass the variable name into the `--interact` argument and use a `WHERE` clause to filter using the specified widgets variables. In this section, we shall delve into the different types of widgets and how to use them.
+In the [Intro to `ipywidgets`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html) section of this module, we learnt how to apply python functions and decorators to create `ipywidgets`. In this section, we apply JupySQL's `--interact` argument, which allows us to create interactive SQL queries using `ipywidgets`. We also learnt in the [previous section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#variable-expansion) about variable expansion using placeholders for `{{variable}}`. We will combine these two concepts to create interactive SQL queries!
+
+First, you need to define the `{{variable}}` as the form of a basic data type or `ipywidgets` Widget.
+Then, pass the variable name into the `--interact` argument and use a `WHERE` clause to filter using the specified widgets variables. Below, we will delve into the different types of widgets and how to use them with JupySQL.
 
 ### Basic Data Types
 
 The simplest way is to declare a variable with basic data types (Numeric, Text, Boolean...). [ipywidgets](https://ipywidgets.readthedocs.io/en/stable/examples/Using%20Interact.html?highlight=interact#Basic-interact) autogenerates UI controls for that variable.
 
-An example with a numeric variable `duration`, which creates a slider for its values as a UI, is as follows:
+An example with a numeric variable `duration`, which creates a slider UI for its values by default, is as follows:
 
 ```{code-cell} ipython3
 duration_min = 1500
@@ -72,13 +142,9 @@ loan = "yes"  # Try inputting "no" in the output's text box
 
 ### Numeric Widgets
 
-There are many widgets distributed with `ipywidgets` that are designed to display numeric values. Widgets exist for displaying integers and floats, both bounded and unbounded. The integer widgets share a similar naming scheme to their floating point counterparts. By replacing "Float" with "Int" in the widget name, you can find the Integer equivalent.
-
 #### `IntSlider` and `FloatSlider`
 
-Numeric widgets provide further flexibility over basic data types. For example, the `IntSlider` and the `FloatSlider`, the simplest numeric widgets, can be employed to filter <b>integer</b> and <b>float</b> values respectively within a range (`min` and `max`) of your choice along with a `step` size and the `value` at which the slider is initialized. Moreover, we can create a bounded slider, indicated by the `<=` operator, or an unbounded slider, indicated by the `>=` operator, to filter the dataset within or outside our range of values respectively.
-
-There are several other arguments, which can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#IntSlider), that can be passed into these sliders.
+These widgets were introduced in this [section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html#intslider-and-floatslider) of the module. Here, we will see how to use them with JupySQL.
 
 An example for the `IntSlider` is as follows:
 
@@ -92,13 +158,11 @@ duration_lower_bound = widgets.IntSlider(min=5, max=3000, step=500, value=1500)
 
 ### Selection Widgets
 
-There are several widgets that can be used to display single selection lists, and two that can be used to select multiple values. All inherit from the same base class. You can specify the <b>enumeration of selectable options by passing a list</b>. Options are either (label, value) pairs, or simply values for which the labels are derived by calling `str`.
-
 #### `RadioButtons`
 
-The `RadioButtons` widget displays a list of options, of which <b>exactly one</b> can be selected. The user can <b>select one of the options</b> by clicking on the radio button. The current selected value can be accessed from the `value` attribute, which is by default the label of the selected option.
+These widgets were also introduced in the previous [section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html#radiobuttons) of this module.
 
-An example is as follows:
+An example of its usage with `--interact` is as follows:
 
 ```{code-cell} ipython3
 outcome_selection = widgets.RadioButtons(
@@ -151,6 +215,46 @@ LIMIT {{show_limit}}
 ```
 
 Try out other widgets, such as Boolean, String, and Datetime, detailed [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#) and see what you can come up with!
+
+## Macros + `%sql --interact {{widget_variable}}`
+
+The `--interact` argument can also be used with Macros, using the {% macro %} tag. Recall that a macro is <b>saved</b> in a variable with the `--save` flag. Therefore, JupySQL supports the use of multiple flags in a `%%sql` command. Applying macros to `ipywidgets` is useful when we want to use the same widget variable in multiple SQL queries. For a refresher on Macros, see this [section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#macros-+-variable-expansion)
+
+To show an example, consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. We can use a macro to create a selection widget for both instances and apply it to multiple queries, helping us filter on the go!
+
+We first create our `RadioButtons` selection widget variable to account for the instances when the client was previously contacted or not. <b>Note</b> that, when using a macro, we need to initialize the widget variable in a python code-cell outside of the macro's code-cell, which will be executed as an SQL cell wholly. 
+
+```{code-cell} ipython3
+contact_selection = widgets.RadioButtons(
+    options=["yes", "no"], description="Previously Contacted?", disabled=False
+)
+```
+
+```{code-cell} ipython3
+age_slider = widgets.IntSlider(
+    options=["yes", "no"], description="Previously Contacted?", disabled=False
+)
+```
+
+Next, we initialize our macro function and specify the SQL query with the widget variable initialized above: 
+
+```{code-cell} ipython3
+%%sql --save dummify --interact contact_selection
+{% macro days_to_dummy(column_name) %}
+    (case when {{ column_name }} == -1 then "no" else "yes" end)::varchar
+{% endmacro %}
+
+SELECT
+  job, marital, 
+  {{ days_to_dummy('pdays') }} as pdays_dummy
+FROM bank
+WHERE pdays_dummy == '{{contact_selection}}';
+```
+
+```{code-cell} ipython3
+final = %sqlrender age_slider
+print(final)
+```
 
 ## You try: Use JupySQL to perform the queries and answer the questions
 
@@ -298,5 +402,3 @@ In the next section, you will learn how to parameterize your queries.
 “Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Basics.html.
 
 “Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html.
-
-
