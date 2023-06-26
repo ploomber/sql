@@ -26,10 +26,9 @@
 
 1. Types of data visualizations
 2. What makes a visualization good
-3. Plotting with `matplotlib`
-4. Plotting with `seaborn`
-5. Plotting with `plotly`
-6. SQL query visualization with `ggplot`
+3. Plotting with `seaborn`
+4. Plotting with `plotly`
+5. SQL query visualization with `ggplot`
 
 ### Data case study: exploratory data analysis
 
