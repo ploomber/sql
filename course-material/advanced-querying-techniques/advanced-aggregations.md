@@ -24,6 +24,18 @@ Let's first run the installations and setup before running any queries.
 
 <!-- region -->
 
+## Set up and data access
+
+```{important}
+<b>Note:</b> The `--save` and `%sqlcmd` features used require the latest JupySQL version. Ensure you run the code below to update JupySQL.
+```
+
+This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
+
+```{code-cell} ipython3
+%pip install jupysql --upgrade duckdb-engine pandas --quiet
+```
+
 ## Load the data
 <b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to load the data again. 
 
