@@ -1,5 +1,8 @@
 # From zero to hero: end to end data applications with SQL and Jupyter
 
+[![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
+
+
 ## Course structure
 
 ### Intro to SQL
