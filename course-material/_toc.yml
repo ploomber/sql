@@ -28,7 +28,6 @@ parts:
   chapters:
   - file: visualizing-your-sql-queries/types-of-visualizations
   - file: visualizing-your-sql-queries/what-makes-a-visualization-good
-  - file: visualizing-your-sql-queries/plotting-with-matplotlib
   - file: visualizing-your-sql-queries/plotting-with-seaborn
   - file: visualizing-your-sql-queries/plotting-with-plotly
   - file: visualizing-your-sql-queries/plotting-with-ggplot
