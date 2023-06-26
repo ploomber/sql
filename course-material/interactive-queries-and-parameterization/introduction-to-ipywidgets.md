@@ -1,17 +1,14 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.14.6
-kernelspec:
-  display_name: Python 3 (ipykernel)
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.14.5
 ---
 
-# Introduction to `ipywidgets`
+# Intro to `ipywidgets`
 
 Welcome back! We hope you gained a solid introduction to SQL and JupySQL in the first module.
 
