@@ -420,10 +420,7 @@ The SQL query is then written in the same code-cell the macro is present in and 
 {% macro days_to_dummy(column_name) %}
     (case when {{ column_name }} = -1 then 'no' else 'yes' end)::varchar
 {% endmacro %}
-
-SELECT
-  job, marital, poutcome,
-  {{ days_to_dummy('pdays') }} as pdays_dummy
+SELECT job, marital, poutcome, {{ days_to_dummy('pdays') }} as pdays_dummy
 FROM bank
 WHERE poutcome IN {{outcome_selection}} AND
 pdays_dummy == '{{contact_selection}}';
