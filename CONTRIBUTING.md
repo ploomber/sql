@@ -29,3 +29,12 @@ Once you have completed the pre-requisites, you can pick one topic of the topics
 5. Take a look at the built webpage by navigating on your file browser under `sql/course-material/_build/html`
 6. Create a pull request (base `ploomber/sql:main` from `<your_github_id>/sql:your-branch-name`)
 7. Request to initialize the review process
+8. Ensure that you run
+
+```
+   pip install pkgmt --upgrade
+   pkgmt format
+   pkgmt lint
+```
+
+For more details, see [here](https://ploomber-contributing.readthedocs.io/en/latest/documentation/build-doc.html)
