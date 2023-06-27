@@ -20,8 +20,6 @@ In this section, we will combine the learnings from the two previous sections, [
 
 # this cell is hidden in the docs for linting
 import ipywidgets as widgets
-
-from IPython.display import display, HTML
 ```
 
 The installation of `ipywidgets` was covered previously [here](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html#ipywidgets).
