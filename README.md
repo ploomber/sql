@@ -3,6 +3,12 @@
 [![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
 
 
+## Set up
+
+First set up by following the "Setup" section of `CONTRIBUTING.md`: https://github.com/ploomber/sql/blob/main/CONTRIBUTING.md
+
+After cloning this repository and activating your environment, view the course by building the documents. To do so, run `jupyter-book build course-material/` in your command line. Make sure your working directory is at `/sql`, which is the top level of the cloned repository.
+
 ## Course structure
 
 ### Intro to SQL
