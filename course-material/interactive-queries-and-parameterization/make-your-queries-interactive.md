@@ -411,7 +411,7 @@ outcome_selection = widgets.SelectMultiple(
 )
 ```
 
-Because we are creating a macro, we need to use the `--save` argument. The `--interact` argument initializes the UI for our widget variables. We then proceed to create the discretization macro function. Here, because we want to output "yes" or "no", using `::numeric(16, {{ precision }}` after the `CASE WHEN` statement will be incorrect; hence, we use `::varchar`. 
+Because we are creating a macro, we need to use the `--save` argument. The `--interact` argument initializes the UI for our widget variables. We then proceed to create the discretization macro function. Here, because we want to output "yes" or "no", using `::numeric(16, {{ precision }}` after the `CASE WHEN` statement will be incorrect; hence, we use `::varchar`.
 
 The SQL query is then written in the same code-cell the macro is present in and the macro is called in the `SELECT` clause on the `pdays` variable, which is aliased as `pdays_dummy` for readability. The `poutcome` variable is present in both the `SELECT` and `WHERE` clauses to show it in the tabular output and to create the multiple selection widget for it respectively. Lastly, `pdays_dummy`  is used in the `WHERE` clause to create its radio button widget:
 
