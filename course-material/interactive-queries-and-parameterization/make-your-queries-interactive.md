@@ -115,7 +115,7 @@ We can use [JupySQL's Table Explorer](https://jupysql.ploomber.io/en/latest/user
 
 ## `%sql --interact {{widget_variable}}`
 
-In the [Intro to `ipywidgets`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html) section of this module, we learnt how to apply python functions and decorators to create `ipywidgets`. In this section, we apply JupySQL's `--interact` argument, which allows us to create interactive SQL queries using `ipywidgets`. We also learnt in the [previous section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#variable-expansion) about variable expansion using placeholders for `{{variable}}`. We will combine these two concepts to create interactive SQL queries!
+In the [Intro to `ipywidgets`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html) section of this module, we learned how to apply python functions and decorators to create `ipywidgets`. In this section, we apply JupySQL's `--interact` argument, which allows us to create interactive SQL queries using `ipywidgets`. We also learned in the [previous section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#variable-expansion) about variable expansion using placeholders for `{{variable}}`. We will combine these two concepts to create interactive SQL queries!
 
 First, you need to define the `{{variable}}` as the form of a basic data type or `ipywidgets` Widget.
 Then, pass the variable name into the `--interact` argument and use a `WHERE` clause to filter using the specified widgets variables. Below, we will delve into the different types of widgets and how to use them with JupySQL.
@@ -176,7 +176,11 @@ outcome_selection = widgets.RadioButtons(
 %%sql --interact outcome_selection 
 SELECT * FROM bank 
 WHERE poutcome == '{{outcome_selection}}' 
-LIMIT 5
+LIMIT 5;
+```
+
+```{important}
+When using selection widgets that only allow selecting one value, use `== '{{ widget_variable }}'` for the query to run without errors. On the other hand, if using multiple selection widgets, use `IN {{ widget_variable }}`.
 ```
 
 <b>Note</b>: Other Selection Widgets can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#selection-widgets).
@@ -220,39 +224,35 @@ Try out other widgets, such as Boolean, String, and Datetime, detailed [here](ht
 
 The `--interact` argument can also be used with Macros, using the {% macro %} tag. Recall that a macro is <b>saved</b> in a variable with the `--save` flag. Therefore, JupySQL supports the use of multiple flags in a `%%sql` command. Applying macros to `ipywidgets` is useful when we want to use the same widget variable in multiple SQL queries. For a refresher on Macros, see this [section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#macros-+-variable-expansion)
 
-To show an example, consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. We can use a macro to create a selection widget for both instances and apply it to multiple queries, helping us filter on the go!
+To show an example, consider the contact `duration` variable, measured in seconds, from the bank marketing dataset. Suppose the marketing manager wants to not only measure this variable in <b>minutes</b> but also filter it interactively across all other queries. We can, hence, use a macro to transform the variable and create a slider widget for it!
 
-We first create our `RadioButtons` selection widget variable to account for the instances when the client was previously contacted or not. <b>Note</b> that, when using a macro, we need to initialize the widget variable in a python code-cell outside of the macro's code-cell, which will be executed as an SQL cell wholly. 
+We first create our bounded `FloatSlider` numeric widget variable, just like previous instances. <b>Note</b> when using a macro, we need to initialize the widget variable in a python code-cell outside of the macro's code-cell, which will be executed as an SQL cell wholly.
 
 ```{code-cell} ipython3
-contact_selection = widgets.RadioButtons(
-    options=["yes", "no"], description="Previously Contacted?", disabled=False
+duration_slider = widgets.FloatSlider(
+    min=0.05, max=51, step=1, value=5, description="Contact Duration (mins)"
 )
 ```
 
-```{code-cell} ipython3
-age_slider = widgets.IntSlider(
-    options=["yes", "no"], description="Previously Contacted?", disabled=False
-)
-```
-
-Next, we initialize our macro function and specify the SQL query with the widget variable initialized above: 
+Next, we initialize our macro function and specify the SQL query with the widget variable that produces the UI for the slider and the tabular output for the saved query:
 
 ```{code-cell} ipython3
-%%sql --save dummify --interact contact_selection
-{% macro days_to_dummy(column_name) %}
-    (case when {{ column_name }} == -1 then "no" else "yes" end)::varchar
+%%sql --save convert --interact duration_slider
+{% macro sec_to_min(column_name, precision=2) %}
+    ({{ column_name }} / 60)::numeric(16, {{ precision }})
 {% endmacro %}
 
 SELECT
-  job, marital, 
-  {{ days_to_dummy('pdays') }} as pdays_dummy
+  job, marital,
+  {{ sec_to_min('duration') }} as duration_in_mins
 FROM bank
-WHERE pdays_dummy == '{{contact_selection}}';
+WHERE duration_in_mins <= {{duration_slider}};
 ```
 
+Finally, we have the option to display our query using the `%sqlrender` command as seen in the parameterizing your queries [section](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html#macros-+-variable-expansion) section. Because we applied a widget to it, the `WHERE` clause in the rendered query will reflect the latest value of the slider UI, so you do not have to go back and forth!
+
 ```{code-cell} ipython3
-final = %sqlrender age_slider
+final = %sqlrender convert
 print(final)
 ```
 
@@ -334,11 +334,12 @@ Finally, we use the `--interact` argument to create a UI for the `contact_dropdo
 
 #### Question 3 (BONUS):
 Create an <b>unbounded</b> numeric widget for the integer variable `duration` with a range of values from 0 to 2000, a step size of 500, and an initial `value` of 1000. <b>However</b>, make sure that the table changes output upon clicking a play button! Also add a `ToggleButton`, a Boolean Widget, for the variable `housing` that has `value` = "yes", `button_style` = "success", and a check `icon`. Lastly, limit the output to only show 10 records.
+
+<b>Hint</b> Did you know that we can also create animated sliders for integer data types? This question requires exactly that! See the documentation [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#play-animation-widget) for more details.
+
 <!-- #region -->
 <details>
 <summary>Answers</summary>
-
-<b>Hint</b> Did you know we can also create animated sliders for integer data types? This question requires exactly that! See the documentation [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#play-animation-widget) for more details.
 
 We start off by initializing a variable called `play` and assigning it to the `Play` Animation widget with the required <b>integer</b> arguments.
 
@@ -378,7 +379,67 @@ LIMIT 10
 Because we set the minimum value and initial value upon rendering to 0, the maximum value to 2000, and a step size of 500, the table will change or "blink" four times upon pressing the "play" button. Normally, an `IntSlider` is recommended to be added next to the `Play` widget; however, JupySQL does not support this at the moment.
 ```
 
-+++
+</details>
+<!-- #endregion -->
+
+<!-- #region -->
+
+#### Question 4 (Hard):
+Consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. The marketing manager wants you to create a macro named `dummify` that transforms this numeric variable into a binary categorical variable, named `pdays_dummy`, taking on either "no" if `pdays` = -1 or "yes" otherwise. You are also expected to create both a `RadioButtons` selection widget for the transformed categorical variable and a `SelectMultiple` selection widget for the `poutcome` variable to help the manager filter for campaign performance on the fly. Finally, output the rendered query after displaying the tabular results.
+
+<b>Hint</b> Creating selection widgets within a macro is syntactically different from creating numeric widgets. To do so, we need to use a `WITH` clause to create a temporary relation, only available in the query. Then, use the temporary relation to call the widget variables in a new SELECT ... FROM ... WHERE ... query. Nested subqueries would work but also make the query hard to read and understand. See the `WITH` clause's documentation [here](https://duckdb.org/docs/sql/query_syntax/with.html) for more details.
+
+<!-- #region -->
+<details>
+<summary>Answers</summary>
+
+We start off by initializing our selection widget variables:
+
+```{code-cell} ipython3
+contact_selection = widgets.RadioButtons(
+    options=["yes", "no"], description="Previously Contacted?", disabled=False
+)
+```
+
+```{code-cell} ipython3
+outcome_selection = widgets.SelectMultiple(
+    options=["failure", "other", "success", "unknown"],
+    value=["success", "failure"],
+    description="Campaign Outcome:",
+    disabled=False,
+)
+```
+
+Now comes the hard part! Because we are creating a macro, we need to use the `--save` argument for it as well as the `--interact` argument for our widget variables. We then proceed to create the discretization macro function. Here, because we want to output "yes" or "no", using `::numeric(16, {{ precision }}` after the `CASE WHEN` statement will be incorrect; hence, we use `::varchar`. 
+
+The `WITH` clause then helps us create our temporary relation, named `transformed_bank`, with all the columns, including the transformed `pdays_dummy`, we want to output for our query. Lastly, a new query uses the columns from the temporary relation, helping us effectively use the widgets with the help of its `WHERE` clause: 
+
+```{code-cell} ipython3
+%%sql --save dummify --interact contact_selection --interact outcome_selection
+{% macro days_to_dummy(column_name) %}
+    (case when {{ column_name }} = -1 then 'no' else 'yes' end)::varchar
+{% endmacro %}
+
+WITH transformed_bank AS (
+  SELECT
+    job,
+    marital,
+    poutcome,
+    {{ days_to_dummy('pdays') }} as pdays_dummy
+  FROM bank
+)
+SELECT *
+FROM transformed_bank
+WHERE poutcome IN {{outcome_selection}} AND 
+pdays_dummy == '{{contact_selection}}';
+```
+
+Finally, `%sqlrender` helps us display the query, accounted for the last chosen values in the widgets:
+
+```{code-cell} ipython3
+final = %sqlrender dummify
+print(final)
+```
 
 </details>
 <!-- #endregion -->
@@ -387,13 +448,19 @@ Because we set the minimum value and initial value upon rendering to 0, the maxi
 
 ## Wrapping Up
 
-In this section, we learnt about how to create widgets to make our SQL queries interactive, helping us gain a better intuition of the EDA process! To summarize:
+In this section, we learned about how to use JupySQL to create widgets with variable expansion and macros. To summarize:
 
 - Numeric widgets, although commonly used as sliders, can also be used in text boxes or dropdowns, for example. This is useful when you want to specify a value.
 
 - For categorical or text data, we can use either Selection or Boolean widgets. Some examples include radio buttons, toggle buttons, and dropdowns.
 
-In the next section, you will learn how to parameterize your queries.
+- `%sql --interact {{widget_variable}}` is a powerful tool in your arsenal to quickly create `ipywidgets`
+
+- The main difference between the `%sql` and `%%sql` magic commands in Jupyter notebooks is that `%sql` only allows for a single statement to be executed, while `%%sql` allows a block of SQL to be executed. Make sure to use `%%sql` when creating macros!
+
+- JupySQL provides incredible flexibility because it allows chaining `--` options, including `--save` and `--interact`, as we saw in this section. This helps us combine SQL queries with macros and widgets, making the EDA process less repetitive and more interactive!
+
+This ends the Interactive Queries and Parameterization module. We hope you use these skills to boost your productivity in creating interactive queries! In the next module, we will introduce Advanced Querying Techniques.
 
 <!-- #endregion -->
 
