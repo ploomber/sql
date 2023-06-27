@@ -173,9 +173,9 @@ outcome_selection = widgets.RadioButtons(
 ```
 
 ```{code-cell} ipython3
-%%sql --interact outcome_selection 
-SELECT * FROM bank 
-WHERE poutcome == '{{outcome_selection}}' 
+%%sql --interact outcome_selection
+SELECT * FROM bank
+WHERE poutcome == '{{outcome_selection}}'
 LIMIT 5;
 ```
 
@@ -212,10 +212,10 @@ Next, we can use the `--interact` argument to create UI's for the above widgets,
 ```{code-cell} ipython3
 %%sql --interact show_limit --interact duration_lower_bound --interact loan_selection --interact outcome_selection
 SELECT * FROM bank
-WHERE poutcome IN {{outcome_selection}} AND 
-duration > {{duration_lower_bound}} AND 
+WHERE poutcome IN {{outcome_selection}} AND
+duration > {{duration_lower_bound}} AND
 loan == '{{loan_selection}}'
-LIMIT {{show_limit}} 
+LIMIT {{show_limit}}
 ```
 
 Try out other widgets, such as Boolean, String, and Datetime, detailed [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#) and see what you can come up with!
@@ -272,9 +272,9 @@ balance_lower = widgets.IntSlider(min=-1000, max=20000, step=1000, value=10000)
 ```
 
 ```{code-cell} ipython3
-%%sql --interact balance_lower 
-SELECT * FROM bank 
-WHERE balance <= {{balance_lower}} 
+%%sql --interact balance_lower
+SELECT * FROM bank
+WHERE balance <= {{balance_lower}}
 LIMIT 5
 ```
 
@@ -324,7 +324,7 @@ show_limit = (1, 10, 5)
 Finally, we use the `--interact` argument to create a UI for the `contact_dropdown` widget.
 
 ```{code-cell} ipython3
-%sql --interact show_limit --interact month_toggle SELECT * FROM bank WHERE month == '{{month_toggle}}' LIMIT {{show_limit}} 
+%sql --interact show_limit --interact month_toggle SELECT * FROM bank WHERE month == '{{month_toggle}}' LIMIT {{show_limit}}
 ```
 
 </details>
@@ -368,10 +368,10 @@ housing_toggle = widgets.ToggleButtons(
 Before calling `--interact`, we need to add UI's for the `Play` and `IntSlider` widgets. This is attained with both `jslink()` and `HBox` `ipywidgets` methods. We then use the `--interact` argument to create the UI's. In the `WHERE` clause, because we want an <b>unbounded</b> slider, we use the `>=` operator for `duration`. To limit the number of rows to only 10, we <b>do not need a basic slider</b>.
 
 ```{code-cell} ipython3
-%%sql --interact play --interact housing_toggle 
+%%sql --interact play --interact housing_toggle
 SELECT * FROM bank
-WHERE duration >= {{play}} AND                                                         
-housing == '{{housing_toggle}}' 
+WHERE duration >= {{play}} AND
+housing == '{{housing_toggle}}'
 LIMIT 10
 ```
 
@@ -405,8 +405,8 @@ contact_selection = widgets.RadioButtons(
 outcome_selection = widgets.SelectMultiple(
     options=["failure", "other", "success", "unknown"],
     value=["success", "failure"],
-    description="Campaign Outcome:", 
-    style= {'description_width': 'initial'},
+    description="Campaign Outcome:",
+    style={'description_width': 'initial'},
     disabled=False,
 )
 ```
@@ -420,7 +420,10 @@ The SQL query is then written in the same code-cell the macro is present in and 
 {% macro days_to_dummy(column_name) %}
     (case when {{ column_name }} = -1 then 'no' else 'yes' end)::varchar
 {% endmacro %}
-SELECT job, marital, poutcome, {{ days_to_dummy('pdays') }} as pdays_dummy
+
+SELECT
+    job, marital, poutcome,
+    {{ days_to_dummy('pdays') }} as pdays_dummy
 FROM bank
 WHERE poutcome IN {{outcome_selection}} AND
 pdays_dummy == '{{contact_selection}}';
