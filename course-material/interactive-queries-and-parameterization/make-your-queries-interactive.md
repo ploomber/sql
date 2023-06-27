@@ -385,9 +385,9 @@ Because we set the minimum value and initial value upon rendering to 0, the maxi
 <!-- #region -->
 
 #### Question 4 (Hard):
-Consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. The marketing manager wants you to create a macro named `dummify` that transforms this numeric variable into a binary categorical variable, named `pdays_dummy`, taking on either "no" if `pdays` = -1 or "yes" otherwise. You are also expected to create both a `RadioButtons` selection widget for the transformed categorical variable and a `SelectMultiple` selection widget for the `poutcome` variable to help the manager filter for campaign performance on the fly. Finally, output the rendered query after displaying the tabular results.
+Consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. The marketing manager wants you to create a macro named `dummify` that transforms this numeric variable into a binary categorical variable, named `pdays_dummy`, taking on either "no" if `pdays` = -1 or "yes" otherwise. You are also expected to create both a `RadioButtons` selection widget for the transformed `pdays_dummy` variable and a `SelectMultiple` selection widget for the `poutcome` variable to help the manager filter for campaign performance on the fly. Finally, output the rendered query after displaying the tabular results.
 
-<b>Hint</b> Creating selection widgets within a macro is syntactically different from creating numeric widgets. To do so, we need to use a `WITH` clause to create a temporary relation, only available in the query. Then, use the temporary relation to call the widget variables in a new SELECT ... FROM ... WHERE ... query. Nested subqueries would work but also make the query hard to read and understand. See the `WITH` clause's documentation [here](https://duckdb.org/docs/sql/query_syntax/with.html) for more details.
+<b>Hint</b> Create the selection widgets first, making sure that no SQL statements are present in their code cells. Then, use `--save` for creating the macro and `--interact` for using the widgets. Make sure to account for both widgets in the `WHERE` clause!
 
 <!-- #region -->
 <details>
@@ -405,14 +405,15 @@ contact_selection = widgets.RadioButtons(
 outcome_selection = widgets.SelectMultiple(
     options=["failure", "other", "success", "unknown"],
     value=["success", "failure"],
-    description="Campaign Outcome:",
+    description="Campaign Outcome:", 
+    style= {'description_width': 'initial'},
     disabled=False,
 )
 ```
 
-Now comes the hard part! Because we are creating a macro, we need to use the `--save` argument for it as well as the `--interact` argument for our widget variables. We then proceed to create the discretization macro function. Here, because we want to output "yes" or "no", using `::numeric(16, {{ precision }}` after the `CASE WHEN` statement will be incorrect; hence, we use `::varchar`. 
+Because we are creating a macro, we need to use the `--save` argument. The `--interact` argument initializes the UI for our widget variables. We then proceed to create the discretization macro function. Here, because we want to output "yes" or "no", using `::numeric(16, {{ precision }}` after the `CASE WHEN` statement will be incorrect; hence, we use `::varchar`. 
 
-The `WITH` clause then helps us create our temporary relation, named `transformed_bank`, with all the columns, including the transformed `pdays_dummy`, we want to output for our query. Lastly, a new query uses the columns from the temporary relation, helping us effectively use the widgets with the help of its `WHERE` clause: 
+The SQL query is then written in the same code-cell the macro is present in and the macro is called in the `SELECT` clause on the `pdays` variable, which is aliased as `pdays_dummy` for readability. The `poutcome` variable is present in both the `SELECT` and `WHERE` clauses to show it in the tabular output and to create the multiple selection widget for it respectively. Lastly, `pdays_dummy`  is used in the `WHERE` clause to create its radio button widget:
 
 ```{code-cell} ipython3
 %%sql --save dummify --interact contact_selection --interact outcome_selection
@@ -420,21 +421,15 @@ The `WITH` clause then helps us create our temporary relation, named `transforme
     (case when {{ column_name }} = -1 then 'no' else 'yes' end)::varchar
 {% endmacro %}
 
-WITH transformed_bank AS (
-  SELECT
-    job,
-    marital,
-    poutcome,
-    {{ days_to_dummy('pdays') }} as pdays_dummy
-  FROM bank
-)
-SELECT *
-FROM transformed_bank
-WHERE poutcome IN {{outcome_selection}} AND 
+SELECT
+  job, marital, poutcome,
+  {{ days_to_dummy('pdays') }} as pdays_dummy
+FROM bank
+WHERE poutcome IN {{outcome_selection}} AND
 pdays_dummy == '{{contact_selection}}';
 ```
 
-Finally, `%sqlrender` helps us display the query, accounted for the last chosen values in the widgets:
+Finally, `%sqlrender` helps us display the query, accounting for the last chosen values in the widgets:
 
 ```{code-cell} ipython3
 final = %sqlrender dummify
