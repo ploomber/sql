@@ -1,10 +1,15 @@
 # From zero to hero: end to end data applications with SQL and Jupyter
 
+[![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
+
+
 ## Set up
 
 First set up by following the "Setup" section of `CONTRIBUTING.md`: https://github.com/ploomber/sql/blob/main/CONTRIBUTING.md
 
 After cloning this repository and activating your environment, view the course by building the documents. To do so, run `jupyter-book build course-material/` in your command line. Make sure your working directory is at `/sql`, which is the top level of the cloned repository.
+=======
+
 
 ## Course structure
 
@@ -32,10 +37,9 @@ After cloning this repository and activating your environment, view the course b
 
 1. Types of data visualizations
 2. What makes a visualization good
-3. Plotting with `matplotlib`
-4. Plotting with `seaborn`
-5. Plotting with `plotly`
-6. SQL query visualization with `ggplot`
+3. Plotting with `seaborn`
+4. Plotting with `plotly`
+5. SQL query visualization with `ggplot`
 
 ### Data case study: exploratory data analysis
 

@@ -5,8 +5,12 @@ dependencies:
   - matplotlib
   - numpy
   - keyring
-  - duckdb
+  - pandas
+  - python-duckdb
   - python-dotenv
   - pip
   - pip:
     - jupyter-book
+    - pkgmt>=0.1.7
+    - duckdb==0.8.0
+    - duckdb-engine==0.9.0
