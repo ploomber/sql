@@ -9,6 +9,7 @@ dependencies:
   - python-duckdb
   - python-dotenv
   - pip
+  - ipywidgets
   - pip:
     - jupyter-book
     - pkgmt>=0.1.7
