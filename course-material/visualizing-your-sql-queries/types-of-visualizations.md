@@ -170,7 +170,7 @@ Box plots can be used when examining the relationship between a categorical feat
 ## Heat Map
 
 ```{code-cell} ipython3
-heatmap_data = df.pivot_table(
+heat_data = df.pivot_table(
     index="customer_city",
     columns="customer_purchase",
     values="purchase_count",
@@ -179,16 +179,15 @@ heatmap_data = df.pivot_table(
 )
 
 plt.figure(figsize=(10, 6))
-heatmap = plt.pcolor(heatmap_data, cmap="YlGnBu")
+heatmap = plt.pcolor(heat_data, cmap="YlGnBu")
 plt.colorbar(heatmap)
 plt.title("Purchase Counts by City and Fruit Type")
 plt.xlabel("Customer Purchase")
 plt.ylabel("Customer City")
 
 # customize tick labels
-plt.xticks(np.arange(heatmap_data.shape[1]) + 0.5, 
-           heatmap_data.columns, rotation=45)
-plt.yticks(np.arange(heatmap_data.shape[0]) + 0.5, heatmap_data.index)
+plt.xticks(np.arange(heat_data.shape[1]) + 0.5, heat_data.columns, rotation=45)
+plt.yticks(np.arange(heat_data.shape[0]) + 0.5, heat_data.index)
 
 plt.show()
 ```
