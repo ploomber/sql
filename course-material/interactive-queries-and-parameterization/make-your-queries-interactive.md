@@ -128,7 +128,7 @@ An example with a numeric variable `duration`, which creates a slider UI for its
 
 ```{code-cell} ipython3
 duration_min = 1500
-%sql --interact duration_min SELECT * FROM bank WHERE duration > {{duration_min}} LIMIT 5
+%sql --interact duration_min SELECT age, job, marital, duration FROM bank WHERE duration > {{duration_min}} LIMIT 5
 ```
 
 <b>Note above</b> that we are filtering records by the variable `duration` if it is <b>greater than</b> the value of the slider widget `duration_min`.
@@ -137,7 +137,7 @@ An example with a categorical variable `loan`, which creates a text box for the 
 
 ```{code-cell} ipython3
 loan = "yes"  # Try inputting "no" in the output's text box
-%sql --interact loan SELECT * FROM bank WHERE loan == '{{loan}}' LIMIT 5
+%sql --interact loan SELECT age, job, marital, duration FROM bank WHERE loan == '{{loan}}' LIMIT 5
 ```
 
 ### Numeric Widgets
@@ -151,7 +151,7 @@ An example for the `IntSlider` is as follows:
 ```{code-cell} ipython3
 duration_lower_bound = widgets.IntSlider(min=5, max=3000, step=500, value=1500)
 
-%sql --interact duration_lower_bound SELECT * FROM bank WHERE duration <= {{duration_lower_bound}} LIMIT 5
+%sql --interact duration_lower_bound SELECT age, job, marital, duration FROM bank WHERE duration <= {{duration_lower_bound}} LIMIT 5
 ```
 
 <b>Note</b>: Other Numeric Widgets can be found [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#floatlogslider).
@@ -174,7 +174,7 @@ outcome_selection = widgets.RadioButtons(
 
 ```{code-cell} ipython3
 %%sql --interact outcome_selection
-SELECT * FROM bank
+SELECT age, job, marital, poutcome FROM bank
 WHERE poutcome == '{{outcome_selection}}'
 LIMIT 5;
 ```
@@ -211,7 +211,7 @@ Next, we can use the `--interact` argument to create UI's for the above widgets,
 
 ```{code-cell} ipython3
 %%sql --interact show_limit --interact duration_lower_bound --interact loan_selection --interact outcome_selection
-SELECT * FROM bank
+SELECT duration, loan, poutcome FROM bank
 WHERE poutcome IN {{outcome_selection}} AND
 duration > {{duration_lower_bound}} AND
 loan == '{{loan_selection}}'
@@ -259,7 +259,7 @@ print(final)
 ## You try: Use JupySQL to perform the queries and answer the questions
 
 ### Question 1 (Easy):
-Using the `bank` dataset, create an `IntSlider` widget called `balance_lower` for the `balance` column. Specifically, include a <b>bounded</b> slider with values ranging between -1000 and 20000, a step size of 1000, and initial value set to 10000. Show only the first 5 rows of the output.
+Using the `bank` dataset, create an `IntSlider` widget called `balance_lower` for the `balance` column. Specifically, include a <b>bounded</b> slider with values ranging between -1000 and 20000, a step size of 1000, and initial value set to 10000. Show only the first 5 rows of the output and the columns `age`, `job`, `marital`, and `balance`.
 <!-- #region -->
 <details>
 
@@ -273,7 +273,7 @@ balance_lower = widgets.IntSlider(min=-1000, max=20000, step=1000, value=10000)
 
 ```{code-cell} ipython3
 %%sql --interact balance_lower
-SELECT * FROM bank
+SELECT age, job, marital, balance FROM bank
 WHERE balance <= {{balance_lower}}
 LIMIT 5
 ```
@@ -284,7 +284,7 @@ LIMIT 5
 <!-- #region -->
 
 #### Question 2 (Medium):
-Using the `bank` dataset, create a `ToggleButtons` Selection Widget for the `month` column. Show a range of records from 1 to 10 with a step size of 5.
+Using the `bank` dataset, create a `ToggleButtons` Selection Widget for the `month` column. Show a range of records from 1 to 10 with a step size of 5 and the columns `age`, `job`, `marital`, and `month`.
 
 <!-- #region -->
 <details>
@@ -324,7 +324,7 @@ show_limit = (1, 10, 5)
 Finally, we use the `--interact` argument to create a UI for the `contact_dropdown` widget.
 
 ```{code-cell} ipython3
-%sql --interact show_limit --interact month_toggle SELECT * FROM bank WHERE month == '{{month_toggle}}' LIMIT {{show_limit}}
+%sql --interact show_limit --interact month_toggle SELECT age, job, marital, month FROM bank WHERE month == '{{month_toggle}}' LIMIT {{show_limit}}
 ```
 
 </details>
@@ -333,7 +333,7 @@ Finally, we use the `--interact` argument to create a UI for the `contact_dropdo
 <!-- #region -->
 
 #### Question 3 (BONUS):
-Create an <b>unbounded</b> numeric widget for the integer variable `duration` with a range of values from 0 to 2000, a step size of 500, and an initial `value` of 1000. <b>However</b>, make sure that the table changes output upon clicking a play button! Also add a `ToggleButton`, a Boolean Widget, for the variable `housing` that has `value` = "yes", `button_style` = "success", and a check `icon`. Lastly, limit the output to only show 10 records.
+Create an <b>unbounded</b> numeric widget for the integer variable `duration` with a range of values from 0 to 2000, a step size of 500, and an initial `value` of 1000. <b>However</b>, make sure that the table changes output upon clicking a play button! Also add a `ToggleButton`, a Boolean Widget, for the variable `housing` that has `value` = "yes", `button_style` = "success", and a check `icon`. Lastly, limit the output to only show 10 records and the columns `age`, `job`, `marital`, and `housing`.
 
 <b>Hint</b> Did you know that we can also create animated sliders for integer data types? This question requires exactly that! See the documentation [here](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#play-animation-widget) for more details.
 
@@ -369,7 +369,7 @@ Before calling `--interact`, we need to add UI's for the `Play` and `IntSlider` 
 
 ```{code-cell} ipython3
 %%sql --interact play --interact housing_toggle
-SELECT * FROM bank
+SELECT age, job, marital, housing FROM bank
 WHERE duration >= {{play}} AND
 housing == '{{housing_toggle}}'
 LIMIT 10
@@ -385,7 +385,7 @@ Because we set the minimum value and initial value upon rendering to 0, the maxi
 <!-- #region -->
 
 #### Question 4 (Hard):
-Consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. The marketing manager wants you to create a macro named `dummify` that transforms this numeric variable into a binary categorical variable, named `pdays_dummy`, taking on either "no" if `pdays` = -1 or "yes" otherwise. You are also expected to create both a `RadioButtons` selection widget for the transformed `pdays_dummy` variable and a `SelectMultiple` selection widget for the `poutcome` variable to help the manager filter for campaign performance on the fly. Finally, output the rendered query after displaying the tabular results.
+Consider the `pdays` variable from the bank marketing dataset. The value in this column is -1 when the client was not contacted since the previous campaign and an integer > 0 otherwise. The marketing manager wants you to create a macro named `dummify` that transforms this numeric variable into a binary categorical variable, named `pdays_dummy`, taking on either "no" if `pdays` = -1 or "yes" otherwise. You are also expected to create both a `RadioButtons` selection widget for the transformed `pdays_dummy` variable and a `SelectMultiple` selection widget for the `poutcome` variable to help the manager filter for campaign performance on the fly. Finally, output the rendered query after displaying the tabular results, with the columns `job`, `marital`, `poutcome`, and `pdays_dummy`.
 
 <b>Hint</b> Create the selection widgets first, making sure that no SQL statements are present in their code cells. Then, use `--save` for creating the macro and `--interact` for using the widgets. Make sure to account for both widgets in the `WHERE` clause!
 
