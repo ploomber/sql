@@ -137,7 +137,7 @@ Here's an example using SQLite:
 ```
 
 ```{code-cell} ipython3
-%sql --connection_arguments "{"timeout":10}" sqlite://
+%sql --connection_arguments '{"timeout":10}' sqlite://
 ```
 
 ## Connecting via an environment variable
