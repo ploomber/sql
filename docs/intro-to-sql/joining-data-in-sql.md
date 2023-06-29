@@ -61,13 +61,13 @@ We extract the financial data by retrieving it from it's URL download link. The 
 The script we call can be found under `sql/course-material/intro-to-sql/banking_data_script.py`. This script downloads and stores the necessary data into a folder within the current directory. Please reference the script for more information.
 
 ```{code-cell} ipython3
-import banking_data_script
+import sys
+import banking
 
-# ZIP file download link
-link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
-# Naming our folder that will hold our .csv files
-output = "expanded_data"
-banking_data_script.extract_asc_to_csv(link, output)
+sys.path.insert(0, "../../")
+
+_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
+_.extract_asc_to_csv()
 ```
 
 <!-- #endregion -->
