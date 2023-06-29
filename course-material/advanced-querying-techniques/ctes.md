@@ -362,7 +362,7 @@ This CTE, `Region_Inhabitants`, groups the dataset by region and calculates the 
 
 ## Exercise (hard)
 
-Suppose we want to increase the average_salary by 10% for districts that had more than 5000 committed crimes in '96, and then delete districts with an unemployment rate in '96 greater than 4. Write a SQL query using CTEs to accomplish this, and explain the importance of checking the data before and after these operations.
+Suppose we want to increase the average_salary by 10% for districts that had more than 5000 committed crimes in '96, and then delete districts with an unemployment rate in '96 less than 4. Write a SQL query using CTEs to accomplish this, and explain the importance of checking the data before and after these operations.
 
 <!-- #region -->
 <details>
@@ -374,7 +374,7 @@ First, let's check the data before the operation:
 %%sql 
 SELECT * 
 FROM s1.district
-WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 > 4;
+WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 < 4;
 ```
 
 Next, we perform the update and delete operations:
@@ -393,7 +393,7 @@ WHERE district_id IN (SELECT district_id FROM High_Crime_Districts);
 WITH High_Unemployment_Districts AS (
     SELECT district_id
     FROM s1.district
-    WHERE unemployment_rate_96 > 4
+    WHERE unemployment_rate_96 < 4
 )
 DELETE FROM s1.district
 WHERE district_id IN (SELECT district_id FROM High_Unemployment_Districts);
@@ -405,7 +405,7 @@ Finally, let's check the data after the operation:
 %%sql
 SELECT * 
 FROM s1.district
-WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 > 4;
+WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 < 4;
 ```
 
 The importance of checking the data before and after the operations is to verify that the operations were successful and only affected the intended data. It's generally not recommended to use UPDATE or DELETE without a unique identifier or precise condition to pinpoint exactly which rows you want to affect. Checking the data before and after helps to prevent or identify potential mistakes or unexpected results in the data modification process.
