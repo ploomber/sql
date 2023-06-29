@@ -43,33 +43,13 @@ Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Re
 We can use the following function to extract the downloaded data from the UCI repository.
 
 ```{code-cell} ipython3
-from urllib.request import urlretrieve
-from zipfile import ZipFile
-import pandas as pd
-import os
+import sys
 
+sys.path.insert(0, "../../")
+import banking  # noqa: E402
 
-def extract_to_csv(url, data_name):
-    # Retrieve the zip file from the url link
-    file = os.path.basename(url)
-    urlretrieve(url, file)
-
-    # Extract the zip file's contents
-    with ZipFile(file, "r") as zf:
-        zf.extractall()
-
-    # The file containing our data
-    csv_file_name = f"{data_name}.csv"
-
-    # Data clean up
-    df = pd.read_csv(csv_file_name, sep=";")
-
-    # Save the cleaned up CSV file
-    df.to_csv(df.to_csv(f"{data_name}_cleaned.csv", index=False))
-
-
-# Running the above function
-extract_to_csv("https://tinyurl.com/uci-marketing-data", "bank")
+_ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
+_.extract_to_csv()
 ```
 
 Initialize a DuckDB Instance
