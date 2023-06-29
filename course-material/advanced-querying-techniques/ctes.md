@@ -243,6 +243,7 @@ Suppose we want to update the `average_salary` for districts that had more than 
 Check data before the operation:
 
 ```{code-cell} ipython3
+%%sql
 SELECT * 
 FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000;
@@ -271,6 +272,7 @@ We then use `High_Crime_Districts` to change entries in average salary by increa
 Check data after the operation:
 
 ```{code-cell} ipython3
+%%sql
 SELECT * 
 FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000;
@@ -285,6 +287,7 @@ The query below selects only those entries for which `unemployment_rate_96` is a
 Check data before the operation:
 
 ```{code-cell} ipython3
+%%sql
 SELECT * 
 FROM s1.district
 WHERE unemployment_rate_96 > 4;
@@ -310,6 +313,7 @@ We then use the `DELETE` operation to remove all entries from the `s1.district` 
 Check data after the operation:
 
 ```{code-cell} ipython3
+%%sql
 SELECT * 
 FROM s1.district
 WHERE unemployment_rate_96 > 4;
