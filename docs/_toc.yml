@@ -24,6 +24,7 @@ parts:
   - file: advanced-querying-techniques/subqueries
   - file: advanced-querying-techniques/advanced-joins
   - file: advanced-querying-techniques/advanced-aggregations
+  - file: advanced-querying-techniques/ctes
 - caption: Visualizing Your SQL Queries
   chapters:
   - file: visualizing-your-sql-queries/types-of-visualizations
