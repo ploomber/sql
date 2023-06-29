@@ -105,13 +105,13 @@ Let's take a look at its entries.
 
 ## Matplotlib inheritance
 
-Seaborn is built on top of Matplotlib. Therefore, depending on the seaborn plotting command, it will return either a Matplotlib axes or figure object. If the plotting function is axes-level, a single `matplotlib.pyplot.Axes` object is returned. This object accepts an `ax=` argument, which integrates with Matplotlib's <b>object-oriented interface</b> and allows composing plots with other plots. On the other hand, if the plotting function is figure-level, a `FacetGrid` object is returned. This object, unlike the axes-level object, is more standalone, but "smart" about subplot organization. To learn about these objects in greater detail, visit seaborn's website [here](https://seaborn.pydata.org/tutorial/function_overview.html#figure-level-vs-axes-level-functions). 
+Seaborn is built on top of Matplotlib. Therefore, depending on the seaborn plotting command, it will return either a Matplotlib axes or figure object. If the plotting function is axes-level, a single `matplotlib.pyplot.Axes` object is returned. This object accepts an `ax=` argument, which integrates with Matplotlib's <b>object-oriented interface</b> and allows composing plots with other plots. On the other hand, if the plotting function is figure-level, a `FacetGrid` object is returned. This object, unlike the axes-level object, is more standalone, but "smart" about subplot organization. To learn about these objects in greater detail, visit seaborn's website [here](https://seaborn.pydata.org/tutorial/function_overview.html#figure-level-vs-axes-level-functions).
 
 A few examples denoting this distinction are shown below.
 
 ### Axes-level
 
-Suppose we want to identify whether gentrification increases the average salary of two regions, using the data we downloaded above. We first save our CTE named `levels_example` that takes in the columns, `average_salary`, `ratio_of_urban_inhabitants`, and `region`, and filters for two regions, 'central Bohemia' and 'east Bohemia', from the `s1.district` table. 
+Suppose we want to identify whether gentrification increases the average salary of two regions, using the data we downloaded above. We first save our CTE named `levels_example` that takes in the columns, `average_salary`, `ratio_of_urban_inhabitants`, and `region`, and filters for two regions, 'central Bohemia' and 'east Bohemia', from the `s1.district` table.
 
 ```{code-cell} ipython3
 %%sql --save levels_example
@@ -154,7 +154,7 @@ Other Figure-level seaborn functions include `catplot`, `displot`, `pairplot`, a
 
 A good use of a bar plot might be to show counts of something, while poor use of a bar plot might be to show group means. Numerous studies have discussed inappropriate uses of bar plots, noting that "because the bars always start at zero, they can be misleading: for example, part of the range covered by the bar might have never been observed in the sample." Despite the numerous reports on incorrect usage, bar plots remain one of the most common problems in data visualization.
 
-The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seaborn.barplot.html) function takes in a categorical and a numeric variable as <b>encodings</b>. A second layer of grouping, preferably with another categorical variable, can be added with the `hue` argument. 
+The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seaborn.barplot.html) function takes in a categorical and a numeric variable as <b>encodings</b>. A second layer of grouping, preferably with another categorical variable, can be added with the `hue` argument.
 
 ### Example
 
@@ -200,7 +200,7 @@ We start off by creating a CTE from both the `s1.loan` and `s1.account` table wi
 %%sql --save bar_plot_question
 SELECT DISTINCT status, frequency, COUNT(loan_id) AS count_loan_id
 FROM s1.account
-LEFT JOIN s1.loan 
+LEFT JOIN s1.loan
     ON s1.account.account_id = s1.loan.account_id
 GROUP BY status, frequency
 ORDER BY status;
@@ -241,7 +241,7 @@ sns.relplot(
 
 ### Question 2 (Hard)
 
-join district and account, filter 
+join district and account, filter (2 each) for showing 4 subplots
 
 ## Density plots
 
