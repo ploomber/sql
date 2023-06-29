@@ -72,13 +72,12 @@ We extract the bank marketing data by retrieving it from it's URL download link.
 
 ```{code-cell} ipython3
 import sys
-
-sys.path.insert(0, "../../")
 import banking
 
-banking.BankingData(
-    "https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip", "bank"
-).extract_to_csv()
+sys.path.insert(0, "../../")
+
+_ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
+_.extract_to_csv()
 ```
 
 After running this code, you should have `bank_cleaned.csv` in the current directory. 

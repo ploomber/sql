@@ -62,13 +62,12 @@ The script we call can be found under `sql/course-material/intro-to-sql/banking_
 
 ```{code-cell} ipython3
 import sys
-
-sys.path.insert(0, "../../")
 import banking
 
-banking.MarketData(
-    "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip", "expanded_data"
-).extract_asc_to_csv()
+sys.path.insert(0, "../../")
+
+_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
+_.extract_asc_to_csv()
 ```
 
 <!-- #endregion -->
