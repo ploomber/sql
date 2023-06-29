@@ -244,7 +244,7 @@ Check data before the operation:
 
 ```{code-cell} ipython3
 %%sql
-SELECT * 
+SELECT district_id, average_salary
 FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000;
 ```
@@ -273,7 +273,7 @@ Check data after the operation:
 
 ```{code-cell} ipython3
 %%sql
-SELECT * 
+SELECT district_id, average_salary
 FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000;
 ```
