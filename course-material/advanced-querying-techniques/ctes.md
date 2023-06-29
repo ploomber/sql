@@ -336,13 +336,12 @@ A Common Table Expression (CTE) is a temporary result set that you can reference
 </details>
 <!-- #endregion -->
 
-<!-- #region -->
-<details>
-
 ## Exercise 2 (Medium)
 
 Write a SQL query using a CTE that returns the total number of inhabitants for each region in the provided dataset.
 
+<!-- #region -->
+<details>
 <summary>Answers</summary>
 
 ```{code-cell} ipython3
@@ -365,6 +364,8 @@ This CTE, `Region_Inhabitants`, groups the dataset by region and calculates the 
 
 Suppose we want to increase the average_salary by 10% for districts that had more than 5000 committed crimes in '96, and then delete districts with an unemployment rate in '96 greater than 4. Write a SQL query using CTEs to accomplish this, and explain the importance of checking the data before and after these operations.
 
+<!-- #region -->
+<details>
 <summary>Answers</summary>
 
 First, let's check the data before the operation:
@@ -372,7 +373,7 @@ First, let's check the data before the operation:
 ```{code-cell} ipython3
 %%sql 
 SELECT * 
-FROM district
+FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 > 4;
 ```
 
@@ -382,19 +383,19 @@ Next, we perform the update and delete operations:
 %%sql
 WITH High_Crime_Districts AS (
     SELECT district_id
-    FROM district
+    FROM s1.district
     WHERE no_of_committed_crimes_96 > 5000
 )
-UPDATE district
+UPDATE s1.district
 SET average_salary = average_salary * 1.10
 WHERE district_id IN (SELECT district_id FROM High_Crime_Districts);
 
 WITH High_Unemployment_Districts AS (
     SELECT district_id
-    FROM district
+    FROM s1.district
     WHERE unemployment_rate_96 > 4
 )
-DELETE FROM district
+DELETE FROM s1.district
 WHERE district_id IN (SELECT district_id FROM High_Unemployment_Districts);
 ```
 
@@ -403,7 +404,7 @@ Finally, let's check the data after the operation:
 ```{code-cell} ipython3
 %%sql
 SELECT * 
-FROM district
+FROM s1.district
 WHERE no_of_committed_crimes_96 > 5000 OR unemployment_rate_96 > 4;
 ```
 
@@ -411,8 +412,6 @@ The importance of checking the data before and after the operations is to verify
 
 </details>
 <!-- #endregion -->
-
-
 
 ## Summary
 
