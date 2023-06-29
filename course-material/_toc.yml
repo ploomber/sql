@@ -24,6 +24,23 @@ parts:
   - file: advanced-querying-techniques/subqueries
   - file: advanced-querying-techniques/advanced-joins
   - file: advanced-querying-techniques/advanced-aggregations
+  - file: advanced-querying-techniques/ctes
+# - caption: Introduction to Data Modelling
+#   - file: intro-to-data-modelling/introduction-to-data-modelling
+#   - file: intro-to-data-modelling/normalization
+#   - file: intro-to-data-modelling/normal-forms
+#   - file: intro-to-data-modelling/normalization-exercise
+#   - file: intro-to-data-modelling/denormalization
+#   - file: intro-to-data-modelling/denormalization-exercise
+# - caption: Introduction to Data Warehousing
+#   - file: intro-to-data-warehousing/introduction-to-data-warehousing
+#   - file: intro-to-data-warehousing/what-is-a-data-warehouse
+#   - file: intro-to-data-warehousing/why-use-a-data-warehouse
+#   - file: intro-to-data-warehousing/what-is-etl
+#   - file: intro-to-data-warehousing/etl-exercise
+#   - file: intro-to-data-warehousing/what-is-a-data-mart
+#   - file: intro-to-data-warehousing/data-warehouse-architectures
+#   - file: intro-to-data-warehousing/data-warehouse-architectures-exercise
 - caption: Visualizing Your SQL Queries
   chapters:
   - file: visualizing-your-sql-queries/types-of-visualizations
