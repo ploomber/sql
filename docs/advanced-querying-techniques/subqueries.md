@@ -40,13 +40,13 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 This section was covered in detail in the previous tutorial: [Joining Data in SQL](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#load-the-data). We will be using the same data in this tutorial as well.
 
 ```{code-cell} ipython3
-import banking_data_script
+import sys
 
-# ZIP file download link
-link = "http://sorry.vse.cz/~berka/challenge/pkdd1999/data_berka.zip"
-# Naming our folder that will hold our .csv files
-output = "expanded_data"
-banking_data_script.extract_asc_to_csv(link, output)
+sys.path.insert(0, "../../")
+import banking  # noqa: E402
+
+_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
+_.extract_asc_to_csv()
 ```
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
