@@ -52,7 +52,7 @@ _ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
 _.extract_to_csv()
 ```
 
-Initialize a DuckDB Instance
+Initialize a DuckDB Instance:
 
 ```{code-cell} ipython3
 # Loading in SQL extension
@@ -112,13 +112,13 @@ jobs = ["services", "management"]
 for job in jobs:
     print(f"Top 5 oldest in {job}")
     order = "DESC"
-    top_oldest = %sql SELECT * FROM bank WHERE job='{{job}}' ORDER BY age {{order}} LIMIT 5
-    print(top_oldest)
+    o_ = %sql SELECT * FROM bank WHERE job='{{job}}' ORDER BY age {{order}} LIMIT 5
+    print(o_)
 
     print(f"Top 5 youngest in {job}")
     order = "ASC"
-    top_youngest = %sql SELECT * FROM bank WHERE job='{{job}}' ORDER BY age {{order}} LIMIT 5
-    print(top_youngest)
+    y_ = %sql SELECT * FROM bank WHERE job='{{job}}' ORDER BY age {{order}} LIMIT 5
+    print(y_)
 ```
 
 ### Mini Exercise:
@@ -136,7 +136,7 @@ Your task: use a loop with variable expansion to accomplish this.
 campaign = %sql SELECT DISTINCT campaign FROM bank
 campaign = campaign.DataFrame()
 
-campaigns = campaign["campaign"].tolist()
+campaigns = campaign["campaign"].tolist()[:2]
 
 for campaign in campaigns:
     print(f"Top 5 oldest in campaign {campaign}")
