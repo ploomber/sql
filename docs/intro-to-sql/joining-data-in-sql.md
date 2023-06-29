@@ -62,9 +62,10 @@ The script we call can be found under `sql/course-material/intro-to-sql/banking_
 
 ```{code-cell} ipython3
 import sys
-import banking
 
 sys.path.insert(0, "../../")
+import banking  # noqa: E402
+
 
 _ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
 _.extract_asc_to_csv()

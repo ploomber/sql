@@ -3,7 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
 
 
-## Set up
+## Set up for contributors
 
 First set up by following the "Setup" section of `CONTRIBUTING.md`. Linked [here](https://github.com/ploomber/sql/blob/main/CONTRIBUTING.md)
 
@@ -11,7 +11,7 @@ After cloning this repository and activating your environment, view the course b
 
 To do so, run 
 
-`jupyter-book build course-material/` 
+`jupyter-book build docs/` 
 
 in your command line. 
 

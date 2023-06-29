@@ -72,9 +72,9 @@ We extract the bank marketing data by retrieving it from it's URL download link.
 
 ```{code-cell} ipython3
 import sys
-import banking
 
 sys.path.insert(0, "../../")
+import banking  # noqa: E402
 
 _ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
 _.extract_to_csv()
