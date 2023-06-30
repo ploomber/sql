@@ -28,7 +28,7 @@ Let's see how we can apply plotly to our familiar bank marketing data sets.
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas seaborn --quiet
+%pip install jupysql --upgrade duckdb-engine pandas seaborn plotly --quiet
 ```
 
 ## Load the data
@@ -41,10 +41,10 @@ This section was covered in detail in the previous tutorial: [Joining Data in SQ
 
 ```{code-cell} ipython3
 import sys
+import plotly.express as px
 
 sys.path.insert(0, "../../")
 import banking  # noqa: E402
-
 
 _ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
 _.extract_asc_to_csv()
@@ -98,17 +98,6 @@ Let's take a look at each table.
 
 ```{code-cell} ipython3
 %sqlcmd explore --table s1.loan
-```
-
-## Loading `Plotly`
-
-Before we start using `plotly`, make sure you first have it installed in your current environment. After installation, we will import the package as `px` as well as Pandas as `pd`.
-
-```{code-cell} ipython3
-# make sure to pip install plotly if you haven't yet
-%pip install plotly
-import plotly.express as px
-import pandas
 ```
 
 ## Bar Plots
@@ -276,7 +265,6 @@ fig = px.scatter(
     avg_loans_df,
     x="average_salary",
     y="avg_loan_amount",
-    labels={"avg_salary": "Average Salary", "avg_loan_amount": "Average Loan Amount"},
     title="Average Loan Amount vs Average Salary per District",
 )
 fig.show()
