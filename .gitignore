@@ -185,3 +185,5 @@ course-material/_build
 *.docx
 *.txt
 *data
+jb-bank*
+jb-bank

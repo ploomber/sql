@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# Introduction to `ipywidgets`
+# Intro to `ipywidgets`
 
 Welcome back! We hope you gained a solid introduction to SQL and JupySQL in the first module.
 

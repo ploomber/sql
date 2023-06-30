@@ -44,32 +44,13 @@ Dataset citation:
 Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
 
 ```{code-cell} ipython3
-from urllib.request import urlretrieve
-from zipfile import ZipFile
-import pandas as pd
-import os
+import sys
 
+sys.path.insert(0, "../../")
+import banking  # noqa: E402
 
-def extract_to_csv(url, data_name):
-    """
-    This function extracts data from a URL with a .zip file,
-    cleans the data and saves the clean data
-    """
-    # Set path
-    file = os.path.basename(url)
-    urlretrieve(url, file)
-    # Extract data
-    with ZipFile(file, "r") as zf:
-        zf.extractall()
-    # Clean data and save
-    csv_file_name = f"{data_name}.csv"
-    df = pd.read_csv(csv_file_name, sep=";")
-    df.to_csv(f"{data_name}_cleaned.csv", index=False)
-```
-
-```{code-cell} ipython3
-# Running the above function
-extract_to_csv("https://tinyurl.com/uci-marketing-data", "bank")
+_ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
+_.extract_to_csv()
 ```
 
 After running this code, you should have `bank_cleaned.csv` in the current directory. 

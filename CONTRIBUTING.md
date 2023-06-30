@@ -1,8 +1,15 @@
 # Pre-requisites: 
 
 ## Setup
-
-Ensure you complete setup following [this guide](https://ploomber-contributing.readthedocs.io/en/latest/contributing/setup.html) 
+0. Install Git
+- First install Git if you do not have it on your computer. You can find [installation instructions here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+1. Clone this repository 
+- Click on the "<>Code" green button found at the main GitHub page and copy the link under HTTPS. Then on your local computer, navigate to where you want this repository to be and run `git clone https://github.com/ploomber/sql.git`. This should all be run in your operating system's command line.
+2. Run the conda environment for this repository
+- Step 1: Install miniconda with `conda install`. Documentation on miniconda found here.
+- Step 2: Navigate to the home directory of this repository (`/sql`) on your local machine's terminal
+- Step 3: Run `conda env create -f environment.yml` in the terminal to create your environment with the default name "sql-course"
+- Step 4: Activate your environment by running `conda activate sql-course`. You can also run `conda info --envs` and check if the asterisk symbol is at the "sql-course" environment.
 
 ## Review how to edit the content in this repository
 
@@ -22,3 +29,12 @@ Once you have completed the pre-requisites, you can pick one topic of the topics
 5. Take a look at the built webpage by navigating on your file browser under `sql/course-material/_build/html`
 6. Create a pull request (base `ploomber/sql:main` from `<your_github_id>/sql:your-branch-name`)
 7. Request to initialize the review process
+8. Ensure that you run
+
+```
+   pip install pkgmt --upgrade
+   pkgmt format
+   pkgmt lint
+```
+
+For more details, see [here](https://ploomber-contributing.readthedocs.io/en/latest/documentation/build-doc.html)
