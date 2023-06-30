@@ -19,180 +19,199 @@ This module will teach you the `seaborn` and `plotly` packages. Before we get in
 
 ## Getting started
 
-Let's first create a toy dataset. This dataset will be in the perspective of a boutique produce store in Southern California that wants to analyze their purchase data. Run the cell below to load the data.
+To demonstrate these visualizations, we're going to revisit our familiar bank data set from the [Making Your First Query](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/making-your-first-query.html) section.
+
+As always, let's first follow the steps of ensuring we have our necessary packages ready for use.
+
+<!-- #region -->
+## Install - execute this once. 
+
+This code installs JupySQL, DuckDB, Pandas, and Matplotlib in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
-# random seed for reproducibility
-np.random.seed(42)
-
-# number of rows in our toy dataset
-num_rows = 100
-
-# list of cities
-cities = ["Irvine", "Los Angeles", "Venice", "San Diego", "Long Beach"]
-
-# list of fruits
-fruits = ["strawberries", "blueberries", "bananas", "apples", "kiwis"]
-
-# type of fruits
-fruit_type = ["organic", "conventional"]
-
-# prices of each fruit by type
-prices = {
-    "organic": {
-        "strawberries": 4,
-        "blueberries": 3.75,
-        "bananas": 1,
-        "apples": 1.25,
-        "kiwis": 2,
-    },
-    "conventional": {
-        "strawberries": 3.25,
-        "blueberries": 3,
-        "bananas": 0.75,
-        "apples": 1,
-        "kiwis": 1.50,
-    },
-}
-
-time_of_day = ["morning", "noon", "evening"]
-
-# random customer IDs
-customer_ids = np.random.choice(range(1, 21), size=num_rows)
-
-# random customer cities
-customer_cities = np.random.choice(cities, size=num_rows)
-
-# random customer purchases
-customer_purchases = np.random.choice(fruits, size=num_rows)
-
-# random purchase counts
-purchase_counts = np.random.randint(1, 10, size=num_rows)
-
-fruit_type = np.random.choice(fruit_type, size=num_rows)
-
-# total purchase amount
-purchase_total = [
-    prices[purchase[1]][purchase[0]] * purchase[2]
-    for purchase in zip(customer_purchases, fruit_type, purchase_counts)
-]
-
-time_bought = np.random.choice(time_of_day, size=num_rows)
-
-# create a pandas DataFrame
-df = pd.DataFrame(
-    {
-        "customer_id": customer_ids,
-        "customer_city": customer_cities,
-        "customer_purchase": customer_purchases,
-        "fruit_type": fruit_type,
-        "purchase_count": purchase_counts,
-        "purchase_total": purchase_total,
-        "time_bought": time_bought,
-    }
-)
-
-# display the data
-df
+%pip install jupysql --upgrade duckdb-engine pandas matplotlib --quiet
 ```
 
-Each row of this dataset represents a purchase. The variables are defined as follows:
+## Load the data
+We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`. We also import the `matplotlib` package as `plt`.
 
-- customer_id: customer's unique id
-- customer_city: where the customer resides
-- customer_purchase: what fruit the customer purchased
-- fruit type: if the fruit(s) they purchased were organic or conventional
-- purchase_count: the amount of fruit they purchased
-- purchase_total: the total amount of their purchase
-- time_bought: the time of purchase
+```{code-cell} ipython3
+import sys
+import matplotlib.pyplot as plt
 
-Let's now jump into one of the most simple, yet essential, data visualizations: the bar plot.
+sys.path.insert(0, "../../")
+import banking  # noqa: E402
+
+_ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
+_.extract_to_csv()
+```
+
+After running this code, you should have `bank_cleaned.csv` in the current directory. 
+
+## Load Engine
+We now load in our SQL extension that allows us to execute SQL queries in Jupyter Notebooks. 
+
+<b>Note</b> Ensure you restart any previous notebook that has the same database name as the one initialized below.
+
+```{code-cell} ipython3
+# Loading in SQL extension
+%reload_ext sql
+# Initiating a DuckDB database named 'bank.duck.db' to run our SQL queries on
+%sql duckdb:///bank.duck.db
+```
+
+## Creating Table
+
+Now that we have our `bank_cleaned.csv` file, let's load it into our DuckDB database and take a look at the data.
+
+```{code-cell} ipython3
+%%sql
+CREATE OR REPLACE TABLE bank AS
+FROM read_csv_auto('bank_cleaned.csv', header=True, sep=',')
+```
+
+```{code-cell} ipython3
+%sqlcmd explore --table bank
+```
+
+The visualization packages we will be introducing in this module work best with the <b>Pandas DataFrame</b> data structure. Prior to visualizing our queries, we will always first convert them into Pandas DataFrames.
+
+We convert the `bank` table below as an example.
+
+```{code-cell} ipython3
+bank = %sql SELECT * FROM bank
+bank_df = bank.DataFrame()
+bank_df
+```
+
+<!-- #region -->
+
+Now we can jump into one of the most simple, yet essential, data visualizations: the bar plot.
 
 ## Bar Plot
 
+Let's use a bar plot that visualizes the count of each job type in our data. To do so, we will query the counts of each job and convert the query into a Pandas DataFrame.
+
 ```{code-cell} ipython3
-# determines how large the plot will be
-plt.figure(figsize=(10, 6))
-
-# get the counts of each unique city
-city_counts = df.customer_city.value_counts()
-plt.bar(city_counts.index, city_counts.values)
-
-plt.xlabel("City")
-plt.ylabel("Count")
-plt.title("Count of Customer by City Origin")
+%%sql --save jobs
+SELECT job, COUNT(*) as count
+FROM bank 
+GROUP BY job
 ```
 
-The first three lines in the above code cell is really all we need to create a baseline bar plot. The last three lines are supplemental elements that labels the y-axis, x-axis, and title of the plot. We can easily see that the city where most customers come from are from Irvine. Box plots are a great option when you need to visualize distributions of groups in categorical variables.
+```{code-cell} ipython3
+jobs = %sql SELECT * FROM jobs
+jobs_df = jobs.DataFrame()
+```
+
+Now that we have our query in a Pandas DataFrame, we can use `matplotlib` to visualize a bar plot.
+
+```{code-cell} ipython3
+plt.figure(figsize=(10, 6))
+plt.bar(data=jobs_df, x="job", height="count")
+
+plt.xlabel("Job")
+plt.ylabel("Count")
+plt.xticks(rotation=45)
+plt.title("Count of Each Job")
+
+plt.show()
+```
+
+The second in the above code cell is really all we need to create a baseline bar plot. The remaining lines are supplemental elements that labels and customizes the y-axis, x-axis, size, and title of the plot. 
+
+We can easily see that "management" and "blue-collar" jobs are the most prominent job category in this data set. Box plots are a great option when you need to visualize distributions of groups in a categorical variable.
 
 ## Scatter Plot
 
+We first query the `age` and `balance` of single individuals and save it as a table called `age_balance` with a CTE.
+
 ```{code-cell} ipython3
-plt.figure(figsize=(10, 6))
-
-plt.scatter(df.purchase_count, df.purchase_total)
-
-plt.xlabel("Purchase Count")
-plt.ylabel("Total Purchase Amount")
-plt.title("Scatter Plot of Purchase Count by Total Purchase Amount")
+%%sql --save age_balance
+SELECT age, balance, marital
+FROM bank
+WHERE marital = 'single'
 ```
 
-Scatter plots are great when analyzing the relationship between two numerical variables. In this example, we plot the relationship between the amount of fruits a customer buys and their total purchase amount. This plot shows a positive relationship between these two variables, which is expected.
+Then we again convert the table as a Pandas DataFrame.
+
+```{code-cell} ipython3
+age_balance_query = %sql SELECT * FROM age_balance
+age_balance_df = age_balance_query.DataFrame()
+```
+
+```{code-cell} ipython3
+plt.figure(figsize=(10, 6))
+plt.scatter(data=age_balance_df, x="age", y="balance")
+
+plt.xlabel("Age")
+plt.ylabel("Balance")
+plt.title("Age by Balance of Single Clients")
+```
+
+Scatter plots are great when analyzing the relationship between two numerical variables. In this example, we plot the relationship between one's `age` and `balance` for single individuals in our data set. 
 
 ## Box Plot
 
 ```{code-cell} ipython3
-# group the data by 'time_bought'
-group = df.groupby("time_bought")["purchase_total"].apply(list)
+%%sql --save edu_balance
+SELECT education, age
+FROM bank
+```
 
-# create a list of purchase_total values for each time_bought category
-data = [group[time_bought] for time_bought in ["morning", "noon", "evening"]]
+```{code-cell} ipython3
+edu_balance_query = %sql SELECT * FROM edu_balance
+edu_df = edu_balance_query.DataFrame()
+```
+
+```{code-cell} ipython3
+# group the data by 'education'
+edu_group = edu_df.groupby("education")["age"].apply(list)
 
 plt.figure(figsize=(10, 6))
-plt.boxplot(data)
+plt.boxplot(edu_group)
 
 # customize x-axis tick labels
-plt.xticks(range(1, len(data) + 1), ["Morning", "Noon", "Evening"])
+plt.xticks(range(1, len(edu_group) + 1), edu_df["education"].unique())
 
-plt.xlabel("Time Bought")
-plt.ylabel("Purchase Total")
-plt.title("Boxplot of Purchase Total by Time Bought")
+plt.xlabel("Education Level")
+plt.ylabel("Age")
+plt.title("Boxplot of Education Level by Age")
 
 plt.show()
 ```
 
-Box plots can be used when examining the relationship between a categorical feature and a numerical feature. In this plot, our categorical feature is the `time_bought` variable. Each box represents a group within `time_bought` and their respective purchase totals in quantiles. This allows for a quick comparison of the distribution of groups within this categorical variable.
+Box plots can be used when examining the relationship between a categorical feature and a numerical feature. In this plot, our categorical feature is the `education` variable. Each box represents a group within `education` and their respective ages in quantiles. This allows for a quick comparison of the distribution of groups within this categorical variable.
 
 ## Heat Map
 
 ```{code-cell} ipython3
-heat_data = df.pivot_table(
-    index="customer_city",
-    columns="customer_purchase",
-    values="purchase_count",
-    aggfunc="sum",
-    fill_value=0,
-)
+%%sql --save job_education
+SELECT job, education, COUNT(*) as count
+FROM bank 
+GROUP BY job, education
+```
+
+```{code-cell} ipython3
+job_edu_query = %sql SELECT * FROM job_education
+job_df = job_edu_query.DataFrame()
+```
+
+```{code-cell} ipython3
+data = job_df.pivot(index="education", columns="job", values="count")
 
 plt.figure(figsize=(10, 6))
-heatmap = plt.pcolor(heat_data, cmap="YlGnBu")
-plt.colorbar(heatmap)
-plt.title("Purchase Counts by City and Fruit Type")
-plt.xlabel("Customer Purchase")
-plt.ylabel("Customer City")
+plt.imshow(data)
 
-# customize tick labels
-plt.xticks(np.arange(heat_data.shape[1]) + 0.5, heat_data.columns, rotation=45)
-plt.yticks(np.arange(heat_data.shape[0]) + 0.5, heat_data.index)
+plt.colorbar(label="Count")
+plt.xticks(range(len(data.columns)), data.columns, rotation=45)
+plt.yticks(range(len(data.index)), data.index)
+plt.title("Heatmap of Job and Education")
 
 plt.show()
 ```
 
-The above plot displays the purchase counts given the customer's city of residence and what they purchased. Heat maps are generally easy to understand because viewers can quickly point out extremes based on darker or lighter boxes. Here, we easily see that the highest purchase count by city origin and fruit type are customers from Irvine who buy bananas. You can think of heat maps as illustrating three dimensions: the x-axis, the y-axis, and the color gradient (which is usually a numerical feature).
+The above plot displays the counts of `job` and `education` level of our data set. Heat maps are generally easy to understand because viewers can quickly point out extremes based on darker or lighter boxes. Here, we easily see people with management jobs have a high count of having a tertiary level education in our data set. You can think of heat maps as illustrating three dimensions: the x-axis, the y-axis, and the color gradient (which is usually a numerical feature).
 
 ## Wrapping Up
 
