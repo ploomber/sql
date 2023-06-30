@@ -406,7 +406,7 @@ outcome_selection = widgets.SelectMultiple(
     options=["failure", "other", "success", "unknown"],
     value=["success", "failure"],
     description="Campaign Outcome:",
-    style={'description_width': 'initial'},
+    style={"description_width": "initial"},
     disabled=False,
 )
 ```
