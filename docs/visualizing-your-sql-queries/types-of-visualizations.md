@@ -15,7 +15,7 @@ kernelspec:
 
 Welcome to the <b>Visualizing your SQL queries</b> module of the course! This part of the course will introduce data visualizations and commonly used packages. After getting familiar with the types of data visualizations and visualization packages, we'll revisit SQL and teach you JupySQL's unique feature of utilizing `ggplot` to visualize queries.
 
-This module will teach you the `seaborn` and `plotly` packages. Before we get into the details of each package, we first introduce the common types of data visualization with one of the most basic visualization packages: `matplotlib`. The purpose of this section is to not teach you the ins and outs of `matplotlib`, but more so to introduce some basic data visualizations. 
+In this module, we will learn about the `seaborn` and `plotly` packages. Before we get into the details of each package, we first introduce the common types of data visualization with one of the most basic visualization packages: `matplotlib`. The purpose of this section is to not teach you the ins and outs of `matplotlib`, but more so to introduce some basic data visualizations. 
 
 ## Getting started
 
@@ -118,9 +118,9 @@ plt.title("Count of Each Job")
 plt.show()
 ```
 
-The second in the above code cell is really all we need to create a baseline bar plot. The remaining lines are supplemental elements that labels and customizes the y-axis, x-axis, size, and title of the plot. 
+The second line in the above code cell, `plt.bar(data=jobs_df, x="job", height="count")`, is really all we need to create a baseline bar plot. The remaining statements are supplemental elements that labels and customizes the y-axis, x-axis, size, and title of the plot. 
 
-We can easily see that "management" and "blue-collar" jobs are the most prominent job category in this data set. Box plots are a great option when you need to visualize distributions of groups in a categorical variable.
+We can easily see that `management` and `blue-collar` jobs are the most prominent job category in this data set. Box plots are a great option when you need to visualize distributions of groups in a categorical variable.
 
 ## Scatter Plot
 
