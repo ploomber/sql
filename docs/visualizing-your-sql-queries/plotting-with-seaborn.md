@@ -15,13 +15,13 @@ kernelspec:
 
 Seaborn is a library for making statistical graphics in Python. It builds on top of matplotlib and integrates closely with pandas data structures. It provides a high-level interface for drawing attractive and informative statistical graphics.
 
-Its plotting functions operate on dataframes and arrays containing whole datasets and internally perform the necessary semantic mapping and statistical aggregation to produce informative plots.
+The plotting functions operate on dataframes and arrays containing whole datasets. Internally, they perform the necessary semantic mapping and statistical aggregation to produce informative plots.
 
 Its dataset-oriented, declarative API lets you focus on what the different elements of your plots mean, rather than on the details of how to draw them.
 
 For more see: https://seaborn.pydata.org/
 
-## Install - execute this once.
+## Install and Load Libraries
 
 ```{important}
 <b>Note:</b> The `--save` and `%sqlcmd` features used require the latest JupySQL version. Ensure you run the code below to update JupySQL.
@@ -33,6 +33,12 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql --upgrade duckdb-engine pandas seaborn --quiet
 ```
 
+```{code-cell} ipython3
+import sys
+import seaborn as sns   # noqa: F821
+import matplotlib.pyplot as plt
+```
+
 ## Load the data
 
 ```{important}
@@ -42,13 +48,8 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 This section was covered in detail in the previous tutorial: [Joining Data in SQL](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#load-the-data). We will be using the same data in this tutorial as well.
 
 ```{code-cell} ipython3
-import sys
-
 sys.path.insert(0, "../../")
-
 import banking   # noqa: E402
-
-
 _ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
 _.extract_asc_to_csv()
 ```
@@ -132,9 +133,6 @@ df = result.DataFrame()
 You can determine what is returned using Python's `type()` function:
 
 ```{code-cell} ipython3
-import seaborn as sns   # noqa: E402
-import matplotlib.pyplot as plt   # noqa: E402
-
 plt.rcParams["figure.dpi"] = 300  # high resolution
 
 scatter_plt = sns.scatterplot(
