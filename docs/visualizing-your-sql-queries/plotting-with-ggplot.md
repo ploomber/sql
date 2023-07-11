@@ -160,7 +160,7 @@ ax.set_xlabel("Amount ($)")
 
 The finance manager is impressed with how quickly you produced these plots! He wants another easy deliverable: facet the multiple column boxplot and histogram in a single graph. Make sure to customize the plot with clear axes labels and titles!
 
-<b>Hint</b> Recall the seaborn [tutorial](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#id2) of how to add/position multiple matplotlib axes subplots.
+<b>Hint:</b> Recall the seaborn [tutorial](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#id2) of how to add/position multiple matplotlib axes subplots.
 
 <!-- #region -->
 <details>
@@ -215,122 +215,423 @@ Facet:
 
 - `facet_wrap` to display multiple plots in a single layout
 
+```{important}
+Lastly, unlike `%sqlplot` that returns a `matplotlib.Axes` object, the `ggplot` API returns a `ggplot` object, which cannot be customized like we did when using `%sqlplot`. Therefore, customizing axes labels and titles is not possible in `ggplot` API yet.
+```
+
+### `ggplot` Template
+
+To build a graph, we first should initialize a `ggplot` instance with a reference to our SQL table using the `table` parameter, and a mapping object. Here’s is the complete template to build any graph:
+
+```python
+(
+    ggplot(table='sql_table_name', mapping=aes(x='table_column_name'))
+    +
+    geom_func() # geom_histogram or geom_boxplot (required)
+    +
+    facet_func() # facet_wrap (optional)
+)
+```
+
+```{important}
+When working with CTE's, we must include it along with `table` using the `with_` parameter. In this tutorial, we will be using CTE's throughout our examples.
+```
+
+### `ggplot` CTE
+
+We will create a CTE to use throughout the `ggplot` examples. All the information from the three tables, `account`, `district`, and `loan`, will be present in this CTE, named `ggplot_CTE`, for convenience. The `--no-execute` function tells JupySQL to <i>skip the execution of the stored query</i>.
+
+```{code-cell} ipython3
+%%sql --save ggplot_CTE --no-execute
+SELECT *
+FROM s1.account AS a
+LEFT JOIN s1.loan AS l
+ON a.account_id = l.account_id
+LEFT JOIN s1.district AS d
+ON d.district_id = a.district_id
+```
+
+Now, let's look at different types of visualizations using the `ggplot` API and test ourselves on them!
+
 ### `geom_boxplot`
 
-### Question 2 (Medium)
-
-### `geom_histogram`
-
-### Question 3 (Medium)
-
-### `facet_wrap`
-
-### Question 4 (Hard)
-
-## Interactive `ggplot`
-
-### Question 5 (Hard)
+Suppose the finance manager now wants to obtain the distribution of demographic data and, hence, wants a boxplot of the number of municipalities that have less than 500 inhabitants and those between 500 and 2000 inhabitants across all regions in the data.
 
 ```{code-cell} ipython3
+from sql.ggplot import ggplot, aes, geom_boxplot, geom_histogram, facet_wrap
 
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(x=["no_of_municipalities_lt_499", "no_of_municipalities_500_1999"]),
+    )
+    + geom_boxplot()
+)
 ```
 
-```{code-cell} ipython3
+### Question 2 (Easy)
 
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
-
-## Box and whisker plot
-
-A box and whisker plot (box plot for short) displays the five-number summary of a set of data. The five-number summary is the minimum, first quartile, median, third quartile, and maximum. In a box plot, we draw a box from the first quartile (25th percentile) to the third quartile (75th percentile). A vertical line goes through the box at the median, which is also the 50th percentile.
-
-In seaborn, `boxplot` is an Axes-level function and has the same object-oriented functionality as the `kdeplot`. There are several visual variations of boxplots in seaborn, such as the `violinplot`, `swarmplot` or `stripplot`, and `boxenplot`. All of these functions are also at the Axes-level.
-
-### Example
-
-Suppose the finance manager wants boxplots of the moving-average of loan `amount`, rounded to 0 decimals, for every three dates preceding and every two dates following the current date of a record. These amounts should be displayed with the the loan's `duration`. If we recall, we saw this example in the Advanced Aggregations [section](https://ploomber-sql.readthedocs.io/en/latest/advanced-querying-techniques/advanced-aggregations.html#question-2-hard).
-
-Let us create the CTE and turn it into a pandas `Dataframe()` first:
-
-```{code-cell} ipython3
-%%sql --save boxplot_example
-SELECT date, duration, ROUND(avg_amount, 0) AS avg_amount
-FROM (SELECT date, duration, AVG(amount) OVER (ORDER BY date ROWS BETWEEN 3 PRECEDING AND 2 FOLLOWING) AS avg_amount FROM s1.loan)
-ORDER BY date;
-```
-
-```{code-cell} ipython3
-result = %sql SELECT * FROM boxplot_example
-df = result.DataFrame()
-```
-
-```{code-cell} ipython3
-plt.figure(figsize=(15, 5), dpi=300)  # Initialize blank canvas
-sns.boxplot(data=df, x="duration", y="avg_amount")
-plt.ylabel("Moving-Average Loan Amount ($)")
-plt.xlabel("Loan Duration (months)")
-```
-
-### Question 4 (Medium)
-
-The manager comes back and asks for another grouping layer, loan `status`, on top of the boxplot in the example. The idea should remain the same, but this time calculate the moving-average of loan `amount` for every five dates following the current date of a record. Also, output the loan `duration` in years rather than months and rename the legend title to "Loan Status".
-
-<b>Hint</b> Recall the clause used to group the data when using windowing queries. Also, use [`matplotlib.pyplot`](https://matplotlib.org/stable/api/pyplot_summary.html) functions to quickly and easily customize the plot.
+Create the same boxplot from the `%sqplplot` example using the `ggplot` API. The columns used were `payments` and `average_salary`.
 
 <!-- #region -->
 <details>
-
 <summary>Answers</summary>
 
-The additional clause in the CTE is `PARTITION BY`, which adds the additional grouping by `status`. The windowing frame is also changed to incorporate five rows ahead of the current row:
-
 ```{code-cell} ipython3
-%%sql --save boxplot_question
-SELECT date, duration, status, ROUND(avg_amount, 0) AS avg_amount
-FROM (SELECT date, duration, status, AVG(amount) OVER (PARTITION BY status ORDER BY date ROWS BETWEEN CURRENT ROW AND 5 FOLLOWING) AS avg_amount FROM s1.loan)
-ORDER BY date;
-```
-
-```{code-cell} ipython3
-result = %sql SELECT * FROM boxplot_question
-df = result.DataFrame()
-```
-
-Unlike the previous section in which we employed the `matplotlib.axes` functions to customize the plot, we use the simpler `matplotlib.pyplot` functions because we have not faceted the boxplot:
-
-```{code-cell} ipython3
-plt.figure(figsize=(15, 5), dpi=300)  # Initialize blank canvas
-sns.boxplot(data=df, x="duration", y="avg_amount", hue="status")
-plt.ylabel("Moving-Average Loan Amount ($)")
-plt.xlabel("Loan Duration (years)")
-plt.xticks([0, 1, 2, 3, 4], ["1", "2", "3", "4", "5"])
-plt.legend(title="Loan Status")
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(x=["payments", "average_salary"]),
+    )
+    + geom_boxplot()
+)
 ```
 
 </details>
 <!-- #endregion -->
 
+<!-- #region -->
+
+### `geom_histogram`
+
+Unlike `geom_boxplot`, `geom_histogram` is more flexible because we can not only modify the `fill` and `color` attributes, but also facet the histograms for a categorical variable. `fill` corresponds to the color of the bars and `color` corresponds to the bars` border color.
+
+We can recreate the histogram produced in the `%sqplplot` example, with the columns `payments` and `average_salary`, and specify our own colors for each histogram:
+
+```{code-cell} ipython3
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(
+            x=["payments", "average_salary"],
+            fill=["#d500f9", "#fb8c00"],
+            color="black",
+        ),
+    )
+    + geom_histogram(bins=10)
+)
+```
+
+Moreover, we can also map the `fill` attribute to a variable, such as `status`, and the bars will stack automatically. For example, if we want to visualize the histogram of `payments` with `status` as the `fill` attribute, then each colored rectangle on the stacked bars will represent a unique combination of `average_salary` and `status`:
+
+```{code-cell} ipython3
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(x="payments", color="black"),
+    )
+    + geom_histogram(bins=10, fill="status")
+)
+```
+
+```{important}
+When mapping `fill` with a variable, make sure to specify it in `geom_histogram()` rather than in `aes()`. `color` can optionally be specified, but only in `aes()`.
+```
+
+### Question 3 (Medium)
+
+Create a categorical histogram for the columns `status` and `region`. Filter `region` to only include "Prague" and "central Bohemia". Use `fill` colors of your choice, but make sure the borders of each bar are prominent.
+
+<!-- #region -->
+<details>
+<summary>Answers</summary>
+
+We will filter the regions from the `ggplot_CTE` to create a new CTE for this question:
+
+```{code-cell} ipython3
+%%sql --save ggplot_hist_q3 --no-execute
+SELECT *
+FROM ggplot_CTE
+WHERE region IN ('Prague', 'central Bohemia')
+```
+
+```{code-cell} ipython3
+(
+    ggplot(
+        table="ggplot_hist_q3",
+        with_="ggplot_hist_q3",
+        mapping=aes(
+            x=["status", "region"],
+            fill=["#008080", "#d500f9"],
+            color="black",
+        ),
+    )
+    + geom_histogram(bins=10)
+)
+```
+
+</details>
+<!-- #endregion -->
+
+<!-- #region -->
+
+### `facet_wrap`
+
+Histograms produced with `ggplot` API can also be arranged in a sequence of panels into a 2D grid, which is beneficial when dealing with a single variable that has multiple levels, or when you want to arrange the plots in a more space efficient manner.
+
+For example, the histogram for `payments` filled by all eight regions is tough to make sense of in a single plot. Therefore, `facet_wrap` can make visualizing the individual histograms easy:
+
+```{code-cell} ipython3
+plt.rcParams["figure.figsize"] = (15, 6)  # increase size of canvas
+
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(
+            x="payments",
+        ),
+    )
+    + geom_histogram(bins=10)
+    + facet_wrap("region", legend=False)
+)
+```
+
+### Question 4 (Medium)
+
+Produce the same faceted histograms as above, but account for `fill` mapping to `status`. Make sure the legend is presented in the plots.
+
+<b>Hint:</b> To present the legends clearly and to not distort the histograms because of the legends, specify `plt.rcParams["figure.figsize"] = (15,7)` before the `ggplot` function.
+
+<!-- #region -->
+<details>
+<summary>Answers</summary>
+
+```{code-cell} ipython3
+plt.rcParams["figure.figsize"] = (15, 7)  # increase size of canvas
+
+(
+    ggplot(
+        table="ggplot_CTE",
+        with_="ggplot_CTE",
+        mapping=aes(x="payments"),
+    )
+    + geom_histogram(bins=10, fill="status")
+    + facet_wrap("region")
+)
+```
+
+</details>
+<!-- #endregion -->
+
+<!-- #region -->
+
+## Interactive `ggplot`
+
+Similar to the Interactive Queries and Parameterization [module](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html#putting-it-together), we can use the use the [interact](https://ipywidgets.readthedocs.io/en/stable/examples/Using%20Interact.html#using-interact) API from [Jupyter Widgets](https://ipywidgets.readthedocs.io/en/stable/index.html#jupyter-widgets). Widgets can be used with either `geom_boxplot` or `geom_histogram`, with the latter providing scope for greater flexibility due to the `fill` and `color` mappings.
+
+Interact autogenerates UI controls for function arguments, and then calls the function with those arguments when you manipulate the controls interactively.
+
+To use interact, you need to define:
+
+1. Widgets to be controlled
+
+2. The plot function that includes `ggplot` with dynamic argument(s) specified with the respective widget variable
+
+3. Invoke `interact()` API
+
+Let’s see examples below!
+
+#### Histogram - Basic Usage (with Dropdown and Slider widgets)
+
+In this example, we will create multiple widgets: one for the `fill` argument specified in `aes()`, another for the `bins` argument in `geom_histogram`, and lastly for the `x` argument for specifying multiple columns:
+
+```{code-cell} ipython3
+import ipywidgets as widgets
+from ipywidgets import interact
+
+dropdown = widgets.Dropdown(
+    options=["red", "blue", "green", "magenta"],
+    value="blue",
+    description="Color:",
+    disabled=False,
+)
+b = widgets.IntSlider(
+    value=10,
+    min=1,
+    max=20,
+    step=1,
+    description="Bins:",
+    orientation="horizontal",
+)
+columns = widgets.RadioButtons(
+    options=["payments", "average_salary", "amount"],
+    description="Column:",
+    disabled=False,
+)
+```
+
+```{code-cell} ipython3
+def plot_fct(columns, color, b):
+    (
+        ggplot(
+            table="ggplot_CTE",
+            with_="ggplot_CTE",
+            mapping=aes(x=columns, fill=color),
+        )
+        + geom_histogram(bins=b)
+    )
+
+
+interact(plot_fct, color=dropdown, b=b, columns=columns)
+```
+
+#### Boxplot - Multiple Columns (with Select Widget)
+
+To visualize all three financial variables, `payments`, `average_salary`, `amount`, in a single box plot, we can use the `SelectMultiple` widget:
+
+```{code-cell} ipython3
+columns = widgets.SelectMultiple(
+    options=["payments", "average_salary", "amount"],
+    value=["average_salary"],
+    description="Column(s):",
+    disabled=False,
+)
+```
+
+```{code-cell} ipython3
+plt.rcParams["figure.figsize"] = (12, 3)  # increase size of canvas
+
+
+def plot(columns):
+    (
+        ggplot(table="ggplot_CTE", with_="ggplot_CTE", mapping=aes(x=columns))
+        + geom_boxplot()
+    )
+
+
+interact(plot, columns=columns)
+```
+
+#### Categorical Histogram (with Select widget)
+
++++
+
+With `geom_histogram`, we can specify the following widgets:
+
+- Multiple columns using the `SelectMultiple` widget like in the examples above. It is recommended to not use any of `fill`, `color`, or `cmap` when creating a widget for multiple columns because different colors will not be mapped to multiple columns.
+- Number of Bins using the `IntSlider` widget, which was shown in the Basic Usage example
+- Manually changing the color of the bars (when not mapping `fill` with a categorical variable) by using a selection widget (as shown in the Basic Usage example)
+- Changing the color of the bars with a colormap (`cmap`) when mapping `fill` with a categorical variable by using a selection widget
+
++++
+
+Below is an example that utilizes widgets for `cmap`, `fill`, and `bins` to visualize `payments` by `status` or `frequency`:
+
+```{code-cell} ipython3
+b = widgets.IntSlider(
+    value=10,
+    min=1,
+    max=20,
+    step=1,
+    description="Bins:",
+    orientation="horizontal",
+)
+cmap = widgets.Dropdown(
+    options=["viridis", "plasma", "inferno", "magma", "cividis"],
+    value="plasma",
+    description="Colormap:",
+    disabled=False,
+)
+fill = widgets.RadioButtons(
+    options=["status", "frequency"],
+    # value="status",
+    description="Fill by:",
+    disabled=False,
+)
+```
+
+```{code-cell} ipython3
+def plot(b, cmap, fill):
+    (
+        ggplot(table="ggplot_CTE", with_="ggplot_CTE", mapping=aes(x="payments"))
+        + geom_histogram(bins=b, fill=fill, cmap=cmap)
+    )
+
+
+interact(plot, b=b, cmap=cmap, fill=fill)
+```
+
+### Question 5 (Hard)
+
+We can also employ widgets in the `facet_wrap` function and this question will make you practice that as well as some of the above widgets in the Categorical Histogram example! Create four widgets: one each for `bins`, `cmap`, `fill`, and `legend`. Visualize the histogram of loan `amount` by either `status` or `frequency` (this will require a widget) and facet it by `region`. Use the same widgets as the examples for `bins` and `cmap` and create a `ToggleButton` widget for `legend`. Make sure that all widgets used are unique and the plot size is big enough to incorporate the legends!
+
+<!-- #region -->
+<details>
+<summary>Answers</summary>
+
+```{code-cell} ipython3
+b = widgets.IntSlider(
+    value=10,
+    min=1,
+    max=20,
+    step=1,
+    description="Bins:",
+    orientation="horizontal",
+)
+cmap = widgets.Dropdown(
+    options=["viridis", "plasma", "inferno", "magma", "cividis"],
+    value="plasma",
+    description="Colormap:",
+    disabled=False,
+)
+fill = widgets.RadioButtons(
+    options=["status", "frequency"],
+    # value="status",
+    description="Fill by:",
+    disabled=False,
+)
+show_legend = widgets.ToggleButton(
+    value=False,
+    description="Show legend",
+    disabled=False,
+    button_style="",
+    tooltip="Is show legend",
+)
+```
+
+```{code-cell} ipython3
+plt.rcParams["figure.figsize"] = (15, 7)  # increase size of canvas
+
+
+def plot(b, cmap, fill, show_legend):
+    (
+        ggplot(table="ggplot_CTE", with_="ggplot_CTE", mapping=aes(x="amount"))
+        + geom_histogram(bins=b, fill=fill, cmap=cmap)
+        + facet_wrap("region", legend=show_legend)
+    )
+
+
+interact(plot, b=b, cmap=cmap, fill=fill, show_legend=show_legend)
+```
+
+</details>
+<!-- #endregion -->
+
+<!-- #region -->
+
 +++
 
 ## Wrapping Up
 
-In this section, we learned about plotting four types of visualizations with seaborn. To summarize:
+In this section, we learned about plotting boxplots and histograms with `%sqlplot` and `ggplot` API. We also employed widgets to interactively query with `ggplot` API. To summarize:
 
-- `geom_boxplot` is useful for visualizing the summary distribution of numeric variables, grouped by none, one, or multiple catgeorical variables. Several variations of the boxplot are provided by seaborn
+- `%sqlplot` is a great tool for not only creating plots quickly, but also customizing them at a low level because it returns a `matplotlib.Axes` object
 
-- `geom_histogram` is useful for visualizing the summary distribution of numeric variables, grouped by none, one, or multiple catgeorical variables. Several variations of the boxplot are provided by seaborn
+- `geom_boxplot` and `geom_histogram` are useful when integrating with `ipywidgets` and when dealing with categorical variables with a lot of unique values.
 
-This ends the Visualizing Your Queries module! We hope
+This ends the Visualizing Your Queries module, we hope the skills imbibed in this module will assist you to visually uncover interesting insights from your data! The next module focuses on how to package your SQL project.
 
 ## References
+
+“Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget Basics.html.
+
+“Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget List.html.
+
+```{code-cell} ipython3
+
+```
