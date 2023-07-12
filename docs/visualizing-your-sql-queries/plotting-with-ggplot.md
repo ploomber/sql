@@ -29,6 +29,15 @@ This code installs JupySQL, DuckDB, Matplotlib (required dependency), and ipywid
 %pip install jupysql --upgrade duckdb-engine matplotlib ipywidgets --quiet
 ```
 
+## Import Libraries
+
+```{code-cell} ipython3
+import matplotlib.pyplot as plt
+from sql.ggplot import ggplot, aes, geom_boxplot, geom_histogram, facet_wrap
+import ipywidgets as widgets
+from ipywidgets import interact
+```
+
 ## Load the data
 
 ```{important}
@@ -130,8 +139,6 @@ ON d.district_id = a.district_id
 ```
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt  # noqa: E402
-
 plt.rcParams["figure.dpi"] = 300  # high resolution
 plt.rcParams["figure.figsize"] = (12, 4)
 
@@ -258,13 +265,12 @@ Now, let's look at different types of visualizations using the `ggplot` API and 
 Suppose the finance manager now wants to obtain the distribution of demographic data and, hence, wants a boxplot of the number of municipalities that have less than 500 inhabitants and those between 500 and 2000 inhabitants across all regions in the data.
 
 ```{code-cell} ipython3
-from sql.ggplot import ggplot, aes, geom_boxplot, geom_histogram, facet_wrap
-
 (
     ggplot(
         table="ggplot_CTE",
         with_="ggplot_CTE",
-        mapping=aes(x=["no_of_municipalities_lt_499", "no_of_municipalities_500_1999"]),
+        mapping=aes(x=["no_of_municipalities_lt_499",
+                       "no_of_municipalities_500_1999"])
     )
     + geom_boxplot()
 )
@@ -441,9 +447,6 @@ Let’s see examples below!
 In this example, we will create multiple widgets: one for the `fill` argument specified in `aes()`, another for the `bins` argument in `geom_histogram`, and lastly for the `x` argument for specifying multiple columns:
 
 ```{code-cell} ipython3
-import ipywidgets as widgets
-from ipywidgets import interact
-
 dropdown = widgets.Dropdown(
     options=["red", "blue", "green", "magenta"],
     value="blue",
@@ -548,7 +551,9 @@ fill = widgets.RadioButtons(
 ```{code-cell} ipython3
 def plot(b, cmap, fill):
     (
-        ggplot(table="ggplot_CTE", with_="ggplot_CTE", mapping=aes(x="payments"))
+        ggplot(table="ggplot_CTE",
+               with_="ggplot_CTE",
+               mapping=aes(x="payments"))
         + geom_histogram(bins=b, fill=fill, cmap=cmap)
     )
 
@@ -631,7 +636,3 @@ This ends the Visualizing Your Queries module, we hope the skills imbibed in thi
 “Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget Basics.html.
 
 “Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget List.html.
-
-```{code-cell} ipython3
-
-```
