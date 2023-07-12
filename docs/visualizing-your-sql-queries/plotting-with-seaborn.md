@@ -33,9 +33,11 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql --upgrade duckdb-engine pandas seaborn --quiet
 ```
 
+Finally, we load in the libraries we will be using in this tutorial.
+
 ```{code-cell} ipython3
 import sys
-import seaborn as sns   # noqa: F821
+import seaborn as sns
 import matplotlib.pyplot as plt
 ```
 
@@ -163,8 +165,6 @@ The legends are placed outside the plot if a Figure-level plotting function is u
 Let's now jump into one of the most simple, yet essential, data visualizations: the bar plot.
 
 ## Barplots
-
-A good use of a bar plot might be to show counts of something, while poor use of a bar plot might be to show group means. Numerous studies have discussed inappropriate uses of bar plots, noting that "because the bars always start at zero, they can be misleading: for example, part of the range covered by the bar might have never been observed in the sample." Despite the numerous reports on incorrect usage, bar plots remain one of the most common problems in data visualization.
 
 The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seaborn.barplot.html) function takes in a categorical and a numeric variable as <b>encodings</b>. A second layer of grouping, preferably with another categorical variable, can be added with the `hue` argument.
 
