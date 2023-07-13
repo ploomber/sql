@@ -17,7 +17,7 @@ Before we dive into how you can use JupySQL's `ggplot` API, we will quickly go o
 
 +++
 
-## Install - execute this once.
+## Install and Load Libraries
 
 ```{important}
 <b>Note:</b> The `--save` and `%sqlcmd` features used require the latest JupySQL version. Ensure you run the code below to update JupySQL.
@@ -29,7 +29,7 @@ This code installs JupySQL, DuckDB, Matplotlib (required dependency), and ipywid
 %pip install jupysql --upgrade duckdb-engine matplotlib ipywidgets --quiet
 ```
 
-## Import Libraries
+Finally, we load in the libraries we will be using in this tutorial.
 
 ```{code-cell} ipython3
 import matplotlib.pyplot as plt
@@ -126,7 +126,7 @@ There are other magic commands unique to the aforementioned visualizations as we
 
 ### Examples
 
-1. Suppose the finance manager wants to visualize boxplots of `average_salary` and loan `payments` in a single graph. We will, first, join all three tables to obtain the relevant data, save the output as a CTE, and use that CTE for `%sqlplot boxplot`:
+1. Suppose the finance manager wants to visualize boxplots of `average_salary` and loan `payments` of those customers who have loans. We can do so in a single plot! We will first join all three tables to obtain the relevant data, save the output as a CTE, and use that CTE for `%sqlplot boxplot`:
 
 ```{code-cell} ipython3
 %%sql --save sqlplot_boxplot_example
@@ -143,6 +143,7 @@ plt.rcParams["figure.dpi"] = 300  # high resolution
 plt.rcParams["figure.figsize"] = (12, 4)
 
 %sqlplot boxplot --table sqlplot_boxplot_example --column payments average_salary
+plt.show()
 ```
 
 Several attributes of the plot can be customized because it is a `matplotlib.Axes` object. Below is a customized, cleaner version of the above plot:
@@ -151,14 +152,16 @@ Several attributes of the plot can be customized because it is a `matplotlib.Axe
 ax = %sqlplot boxplot --table sqlplot_boxplot_example --column payments average_salary --orient h
 ax.set_title("Boxplot of Loan Payments and Average Salary ($)")
 ax.set_xlabel("Amount ($)")
+plt.show()
 ```
 
-2. Suppose the manager wants to get a closer look of both distributions, loan `payments` and `average_salary`. You can quickly produce a histogram by using the saved CTE:
+2. Suppose the manager wants to get a closer look of both distributions, loan `payments` and `average_salary` of those customers who have loans. You can quickly produce a histogram by using the saved CTE:
 
 ```{code-cell} ipython3
 ax = %sqlplot histogram --table sqlplot_boxplot_example --column payments average_salary --bins 25
 ax.set_title("Histogram of Loan Payments and Average Salary ($)")
 ax.set_xlabel("Amount ($)")
+plt.show()
 ```
 
 ### Question 1 (Easy)
@@ -187,6 +190,7 @@ plt.subplot(1, 2, 2)  # second quadrant
 %sqlplot histogram --table sqlplot_boxplot_example --column payments average_salary --bins 25
 plt.title("Histogram of Loan Payments and Average Salary ($)")  # Set title
 plt.xlabel("Loan Amount ($)")  # Set x-axis label
+plt.show()
 ```
 
 </details>
@@ -202,7 +206,7 @@ Initializing the whole figure with `fig` and assigning individual axes with `ax1
 
 You might be wondering "how can ggplot, the R package, function in Jupyter Notebooks?". Do not worry! In this tutorial, we will be learning about JupySQL's `ggplot` API to visualize our SQL queries. This plotting technique will be useful for avid R programmers, who are familiar with `ggplot2`, and for first-time learners.
 
-The `ggplot` API is built on top of `matplotlib` and is structured around the principles of the Grammar of Graphics, allowing you to build any graph using the same `ggplot2` components: a data set, a coordinate system, and geoms (geometric objects). However, to make the API suitable for JupySQL, we <b>input a SQL table name, instead of a dataset</b>. Therefore, the same [workflow](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#barplots) of creating our CTE, which was employed in the `seaborn` tutorial, will be in action here as well (no need to convert the CTE into a pandas `DataFrame()`).
+The `ggplot` API is built on top of `matplotlib` and is structured around the principles of the [Grammar of Graphics](https://bookdown.org/alhdzsz/data_viz_ir/ggbasics.html), allowing you to build any graph using the same `ggplot2` components: a data set, a coordinate system, and geoms (geometric objects). However, to make the API suitable for JupySQL, we <b>input a SQL table name, instead of a dataset</b>. Therefore, the same [workflow](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#barplots) of creating our CTE, which was employed in the `seaborn` tutorial, will be in action here as well (no need to convert the CTE into a pandas `DataFrame()`).
 
 <b>Note</b> at this point, JupySQL's `ggplot` API supports:
 
@@ -262,19 +266,20 @@ Now, let's look at different types of visualizations using the `ggplot` API and 
 
 ### `geom_boxplot`
 
-Suppose the finance manager now wants to obtain the distribution of demographic data and, hence, wants a boxplot of the number of municipalities that have less than 500 inhabitants and those between 500 and 2000 inhabitants across all regions in the data.
+To visualize the loan `amount` and `average_salary` of those customers who have loans, we can create a boxplot in `ggplot` using the saved CTE.
 
 ```{code-cell} ipython3
 (
     ggplot(
         table="ggplot_CTE",
         with_="ggplot_CTE",
-        mapping=aes(x=["no_of_municipalities_lt_499",
-                       "no_of_municipalities_500_1999"])
+        mapping=aes(x=["amount", "average_salary"]),
     )
     + geom_boxplot()
 )
 ```
+
+From the graph above, it is strange to see that customers are opting for loans that are significantly greater than their average salary. However, it could be the case that the earning population's salaries are skewed to the right and the customers actually obtaining loans are relatively wealthier.
 
 ### Question 2 (Easy)
 
@@ -321,7 +326,7 @@ We can recreate the histogram produced in the `%sqplplot` example, with the colu
 )
 ```
 
-Moreover, we can also map the `fill` attribute to a variable, such as `status`, and the bars will stack automatically. For example, if we want to visualize the histogram of `payments` with `status` as the `fill` attribute, then each colored rectangle on the stacked bars will represent a unique combination of `average_salary` and `status`:
+Moreover, we can also map the `fill` attribute to a variable, such as `status`, and the bars will stack automatically. For example, if we want to visualize the histogram of `payments` with `status` as the `fill` attribute, then each colored rectangle on the stacked bars will represent a unique combination of `payments` and `status`:
 
 ```{code-cell} ipython3
 (
@@ -442,7 +447,7 @@ To use interact, you need to define:
 
 Let’s see examples below!
 
-#### Histogram - Basic Usage (with Dropdown and Slider widgets)
+### Histogram - Basic Usage (with Dropdown and Slider widgets)
 
 In this example, we will create multiple widgets: one for the `fill` argument specified in `aes()`, another for the `bins` argument in `geom_histogram`, and lastly for the `x` argument for specifying multiple columns:
 
@@ -483,7 +488,7 @@ def plot_fct(columns, color, b):
 interact(plot_fct, color=dropdown, b=b, columns=columns)
 ```
 
-#### Boxplot - Multiple Columns (with Select Widget)
+### Boxplot - Multiple Columns (with Select Widget)
 
 To visualize all three financial variables, `payments`, `average_salary`, `amount`, in a single box plot, we can use the `SelectMultiple` widget:
 
@@ -510,7 +515,7 @@ def plot(columns):
 interact(plot, columns=columns)
 ```
 
-#### Categorical Histogram (with Select widget)
+### Categorical Histogram (with Select widget)
 
 +++
 
@@ -551,9 +556,10 @@ fill = widgets.RadioButtons(
 ```{code-cell} ipython3
 def plot(b, cmap, fill):
     (
-        ggplot(table="ggplot_CTE",
-               with_="ggplot_CTE",
-               mapping=aes(x="payments"))
+        ggplot(
+            table="ggplot_CTE",
+            with_="ggplot_CTE",
+            mapping=aes(x="payments"))
         + geom_histogram(bins=b, fill=fill, cmap=cmap)
     )
 
