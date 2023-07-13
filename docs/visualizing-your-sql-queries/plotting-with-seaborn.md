@@ -448,8 +448,7 @@ Similar to the way we customized our figure-level plots for the previous section
 We do not need to make a new CTE and can jump straight into programming with seaborn. Since we are using the same plot as the example, copy pasting the code and building on top of it is a nice idea. Instead of using multiple `plt.subplot()` functions, we initialize the whole figure with `fig` and the individual axes, in this case only two (`ax1` and `ax2`), with `plt.subplots(1, 2, ...)`. The first and second plots are customized with their respective axes objects and the functions from `matplotlib.axes` class:
 
 ```{code-cell} ipython3
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4), dpi=300,
-                               sharex=True, sharey=True)
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4), sharex=True, sharey=True)
 
 sns.kdeplot(data=df, x="amount", hue="status", ax=ax1)
 ax1.set_title("KDE of Loan Amount ($) by Loan Status")
