@@ -31,6 +31,10 @@ html:
   use_issues_button: true
   use_repository_button: true
 
+# Configure to show traceback errors and allow for plotly renders
 sphinx:
   config:
     nb_execution_show_tb: True
+    html_js_files:
+    - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
+

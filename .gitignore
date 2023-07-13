@@ -184,6 +184,6 @@ course-material/_build
 *.db*
 *.docx
 *.txt
-*data
 jb-bank*
 jb-bank
+uci-marketing-data
