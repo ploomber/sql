@@ -19,7 +19,7 @@ To get familiar with additional dependencies and the format in this repository, 
 
 Once you have completed the pre-requisites, you can pick one topic of the topics listed in the [README](https://github.com/ploomber/sql/blob/main/README.md). 
 
-**Note** A place holder markdown (.md) file has already been created for each topic -> you can find them under the directory `course-material/`.
+**Note** A place holder markdown (.md) file has already been created for each topic -> you can find them under the directory `docs/`.
 
 0. Fork this repository
 1. Clone your fork into your local computer
