@@ -9,6 +9,3 @@ jupyter:
 ---
 
 # Plotting with `ggplot`
-
-
-
