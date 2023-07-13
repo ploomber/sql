@@ -13,7 +13,7 @@ kernelspec:
 
 # Plotting with `seaborn`
 
-Seaborn is a library for making statistical graphics in Python. It builds on top of matplotlib and integrates closely with pandas data structures. It provides a high-level interface for drawing attractive and informative statistical graphics.
+Seaborn is a library for making statistical graphics in Python. It builds on top of matplotlib and integrates closely with `pandas` data structures. It provides a high-level interface for drawing attractive and informative statistical graphics.
 
 The plotting functions operate on dataframes and arrays containing whole datasets. Internally, they perform the necessary semantic mapping and statistical aggregation to produce informative plots.
 
@@ -51,12 +51,13 @@ This section was covered in detail in the previous tutorial: [Joining Data in SQ
 
 ```{code-cell} ipython3
 sys.path.insert(0, "../../")
-import banking   # noqa: E402
+import banking  # noqa: E402
+
 _ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
 _.extract_asc_to_csv()
 ```
 
-If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
+If you run the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
 
 ## Load Engine
 
@@ -141,6 +142,7 @@ scatter_plt = sns.scatterplot(
     data=df, x="ratio_of_urban_inhabitants", y="average_salary", hue="region"
 )
 print(type(scatter_plt))
+plt.show()
 ```
 
 Notice that the `sns.scatterplot()` function returns a Matplotlib `Axes` object, a single plot that is inclusive of the data from both regions. Other seaborn functions, including `regplot`, `boxplot`, `kdeplot`, and many others, also return Matplotlib `Axes` objects. Therefore, we can use various Matplotlib axes [commands](https://seaborn.pydata.org/generated/seaborn.axes_style.html) to modify the Seaborn figure.
@@ -154,9 +156,10 @@ facet_plt = sns.relplot(
     data=df, x="ratio_of_urban_inhabitants", y="average_salary", col="region"
 )
 print(type(facet_plt))
+plt.show()
 ```
 
-Other Figure-level seaborn functions include `catplot`, `displot`, `pairplot`, and `jointplot`.
+Other figure-level seaborn functions include `catplot`, `displot`, `pairplot`, and `jointplot`.
 
 ```{important}
 The legends are placed outside the plot if a Figure-level plotting function is used. See scatterplot section below.
@@ -166,7 +169,7 @@ Let's now jump into one of the most simple, yet essential, data visualizations: 
 
 ## Barplots
 
-The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seaborn.barplot.html) function takes in a categorical and a numeric variable as <b>encodings</b>. A second layer of grouping, preferably with another categorical variable, can be added with the `hue` argument.
+The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seaborn.barplot.html) function takes a categorical and a numeric variable as <b>encodings</b>. A second layer of grouping, preferably with another categorical variable, can be added to the `hue` argument.
 
 ### Example
 
@@ -195,6 +198,7 @@ sns.barplot(data=df, x="status", y="count_loan_id")
 plt.xlabel("Status of Paying off Loan")
 plt.ylabel("Count")
 plt.title("Count of Loan ID's by Loan Status")
+plt.show()
 ```
 
 ### Question 1 (Medium)
@@ -234,6 +238,7 @@ sns.barplot(data=df, x="status", y="count_loan_id", hue="frequency")
 plt.xlabel("Status of Paying off Loan")
 plt.ylabel("Count")
 plt.title("Count of Loan ID's by Loan Status and Freq. of Statement Issuance")
+plt.show()
 ```
 
 </details>
@@ -243,7 +248,7 @@ plt.title("Count of Loan ID's by Loan Status and Freq. of Statement Issuance")
 
 ## Scatter plots
 
-Scatter plots help us analyze relationships between two numeric variables. In the [Matplotlib inheritance](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#matplotlib-inheritance) section above, we saw examples of the `scatterplot` function, which create Axes-level objects, to analyze the effect of `ratio_of_urban_inhabitants` on `average_salary` by `region`. Below, we will introduce a Figure-level function `relplot`, along with some customizations, to create faceted scatter plots that help us easily visualize data from multiple tables and columns.
+Scatter plots help us analyze relationships between two numeric variables. In the [Matplotlib inheritance](https://ploomber-sql.readthedocs.io/en/latest/visualizing-your-sql-queries/plotting-with-seaborn.html#matplotlib-inheritance) section above, we saw examples of the `scatterplot` function, which create axes-level objects, to analyze the effect of `ratio_of_urban_inhabitants` on `average_salary` by `region`. Below, we will introduce a figure-level function `relplot`, along with some customizations, to create faceted scatter plots that help us easily visualize data from multiple tables and columns.
 
 ### Example
 
@@ -283,11 +288,12 @@ sns.relplot(
     height=3,
     aspect=1.5,
 )
+plt.show()
 ```
 
 This visualization should definitely help the local municipality obtain a first glance of their hypothesis! Upon eyeballing it, we do not see any apparent correlation of unemployment rate with the loan amount, but we can see that higher duration loans lead to higher amounts. Therefore, using faceted plots, we can accelerate our EDA process and focus on important relationships in the data.
 
-However, there are still some problems with this plot. The axes labels and legend title are not descriptive enough and the plot lacks a title. We can customize `FacetGrid` figures by using Matplotlib Figure-level functions that affect all facets to reduce duplication of labels. See the functions below and consult the [`FacetGrid` documentation](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html) and [Matplotlib documentation](https://matplotlib.org/stable/gallery/subplots_axes_and_figures/) to know more:
+However, there are still some problems with this plot. The axes labels and legend title are not descriptive enough and the plot lacks a title. We can customize `FacetGrid` figures by using Matplotlib figure-level functions that affect all facets to reduce duplication of labels. See the functions below and consult the [`FacetGrid` documentation](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html) and [Matplotlib documentation](https://matplotlib.org/stable/gallery/subplots_axes_and_figures/) to know more:
 
 ```{code-cell} ipython3
 g = sns.relplot(
@@ -301,31 +307,35 @@ g = sns.relplot(
     height=4,
     aspect=1,
 )
+
 g.set(xlabel=None, ylabel=None)  # remove duplicate x and y axis labels
-g.set_titles(
+g.set_titles(  # facet titles
     row_template="Status: {row_name}", col_template="{col_name}"
-)  # set row (status) and column (region) titles
-g.fig.subplots_adjust(top=0.9)  # adjust the Figure position
-g._legend.set_title("Duration (months)")  # hue/legend title
+)
+
+g._legend.set_title("Duration (months)")
 g.legend.set_bbox_to_anchor((1.25, 0.5))  # Shift legend to the right
-g.fig.suptitle(
-    "Relation between Unemployment Rate and Loan Amount by Loan",
-    x=0.235, fontsize=12
-)  # main title
-g.fig.text(
+
+g.fig.suptitle(  # main title of the figure
+    "Unemployment Rate vs Loan Amount by Loan", x=0.235, fontsize=12
+)
+g.fig.text(  # subtitle of the figure
     0.235,
     0.95,
     "Data subsetted on Region and Status",
     ha="right",
     va="top",
     fontsize=10,
-)  # subtitle
-g.fig.supylabel("Loan Amount ($)")  # y-axis label
-g.fig.supxlabel("Unemployment Rate (%)")  # x-axis label
+)
+
+g.fig.supylabel("Loan Amount ($)")  # y-axis label for all facets
+g.fig.supxlabel("Unemployment Rate (%)")  # x-axis label for all facets
+g.fig.subplots_adjust(top=0.9)  # adjust the Figure position
+
 plt.show(g)
 ```
 
-If we wanted to access individual facets of the plot, we could use Axes-level methods. For example, `g.axes[0,0].set_xlabel('axes label 1')` will set the x-axis label of the first quadrant facet and `g.axes[0,1].set_xlabel('axes label 2')` will set the x-axis label of the facet row-adjacent to the first quadrant facet and so on.
+If we wanted to access individual facets of the plot, we could use axes-level methods. For example, `g.axes[0,0].set_xlabel('axes label 1')` will set the x-axis label of the first quadrant facet and `g.axes[0,1].set_xlabel('axes label 2')` will set the x-axis label of the facet row-adjacent to the first quadrant facet and so on.
 
 Consult the previously linked docs and the [documentation](https://seaborn.pydata.org/generated/seaborn.relplot.html) of `relplot` to answer the question below!
 
@@ -376,7 +386,7 @@ g = sns.relplot(
     sizes=(10, 100),
 )
 g.set(xlabel=None, ylabel="Loan Amount ($)")  # remove duplicate x axis label
-g.fig.supxlabel("Unemployment Rate (%)")  # x-axis label
+g.fig.supxlabel("Unemployment Rate (%)")  # x-axis label for whole figure
 plt.show(g)
 ```
 
@@ -393,7 +403,7 @@ The bandwidth, or standard deviation of the smoothing kernel, is an important pa
 
 ### Example
 
-Seaborn's [`kdeplot` <b>Axes-level function</b>](https://seaborn.pydata.org/generated/seaborn.kdeplot.html) can help us easily visualize KDE's of multiple numeric variables. Its Figure-level equivalent is the [`displot` function](https://seaborn.pydata.org/generated/seaborn.displot.html#seaborn.displot) with which we can produce KDE plots by specifying `kind="kde"`.
+Seaborn's [`kdeplot` <b>axes-level function</b>](https://seaborn.pydata.org/generated/seaborn.kdeplot.html) can help us easily visualize KDE's of multiple numeric variables. Its figure-level equivalent is the [`displot` function](https://seaborn.pydata.org/generated/seaborn.displot.html#seaborn.displot) with which we can produce KDE plots by specifying `kind="kde"`.
 
 Suppose the finance manager wants a visual representation of two distributions, the loan `amount` by loan `status` and loan `amount` by loan `duration`. We can easily produce a `kdeplot` to not only draw multiple distributions in a single plot but also create axes subplots. Before this, we first produce a CTE with the two variables and save it as a pandas `DataFrame()`:
 
@@ -421,11 +431,12 @@ plt.subplot(1, 2, 2)  # second quadrant
 sns.kdeplot(data=df, x="amount", hue="duration")
 plt.title("KDE of Loan Amount ($) by Loan Duration (months)")  # Set title
 plt.xlabel("Loan Amount ($)")  # Set x-axis label
+plt.show()
 ```
 
 ### Question 3 (Easy)
 
-Similar to the way we customized our Figure-level plots for the previous section, we can do the same for Axes-level plots too! Your task is to remove the duplicate axes labels and rename the legend titles to provide a cleaner, publication-level visualization. For loan `duration`, provide the units in years rather than months.
+Similar to the way we customized our figure-level plots for the previous section, we can do the same for axes-level plots too! Your task is to remove the duplicate axes labels and rename the legend titles to provide a cleaner, publication-level visualization. For loan `duration`, provide the units in years rather than months.
 
 <b>Hint</b> Consult Matplotlib's axes class [documentation](https://matplotlib.org/stable/api/axes_api.html) to find the right functions!
 
@@ -437,24 +448,22 @@ Similar to the way we customized our Figure-level plots for the previous section
 We do not need to make a new CTE and can jump straight into programming with seaborn. Since we are using the same plot as the example, copy pasting the code and building on top of it is a nice idea. Instead of using multiple `plt.subplot()` functions, we initialize the whole figure with `fig` and the individual axes, in this case only two (`ax1` and `ax2`), with `plt.subplots(1, 2, ...)`. The first and second plots are customized with their respective axes objects and the functions from `matplotlib.axes` class:
 
 ```{code-cell} ipython3
-fig, (ax1, ax2) = plt.subplots(
-    1, 2, figsize=(12, 4), dpi=300, layout="constrained",
-    sharex=True, sharey=True
-)
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4), dpi=300,
+                               sharex=True, sharey=True)
 
 sns.kdeplot(data=df, x="amount", hue="status", ax=ax1)
-ax1.set_title("KDE of Loan Amount ($) by Loan Status")  # Set title
+ax1.set_title("KDE of Loan Amount ($) by Loan Status")
 ax1.set_xlabel("")  # Remove x-axis label
 ax1.legend(["A", "B", "C", "D"], title="Loan Status")
 
 sns.kdeplot(data=df, x="amount", hue="duration", ax=ax2)
-ax2.set_title("KDE of Loan Amount ($) by Loan Duration (years)")  # Set title
+ax2.set_title("KDE of Loan Amount ($) by Loan Duration (years)")
 ax2.set_xlabel("")  # Remove x-axis label
 ax2.legend(["1", "2", "3", "4", "5"], title="Loan Duration (years)")
 
-fig.supxlabel("Loan Amount ($)")  # Add a shared x-axis label
+fig.supxlabel("Loan Amount ($)")  # x-axis label for whole figure
 
-plt.show()  # Show the plots
+plt.show()
 ```
 
 </details>
@@ -466,7 +475,7 @@ The plot above is cleaner, with less overplotting, and has the correct units acr
 
 A box and whisker plot (box plot for short) displays the five-number summary of a set of data. The five-number summary is the minimum, first quartile, median, third quartile, and maximum. In a box plot, we draw a box from the first quartile (25th percentile) to the third quartile (75th percentile). A vertical line goes through the box at the median, which is also the 50th percentile.
 
-In seaborn, `boxplot` is an Axes-level function and has the same object-oriented functionality as the `kdeplot`. There are several visual variations of boxplots in seaborn, such as the `violinplot`, `swarmplot` or `stripplot`, and `boxenplot`. All of these functions are also at the Axes-level.
+In seaborn, `boxplot` is an Axes-level function and has the same object-oriented functionality as the `kdeplot`. There are several visual variations of boxplots in seaborn, such as the `violinplot`, `swarmplot` or `stripplot`, and `boxenplot`. All of these functions are also at the axes-level.
 
 ### Example
 
@@ -491,6 +500,7 @@ plt.figure(figsize=(15, 5), dpi=300)  # Initialize blank canvas
 sns.boxplot(data=df, x="duration", y="avg_amount")
 plt.ylabel("Moving-Average Loan Amount ($)")
 plt.xlabel("Loan Duration (months)")
+plt.show()
 ```
 
 ### Question 4 (Medium)
@@ -527,6 +537,7 @@ plt.ylabel("Moving-Average Loan Amount ($)")
 plt.xlabel("Loan Duration (years)")
 plt.xticks([0, 1, 2, 3, 4], ["1", "2", "3", "4", "5"])
 plt.legend(title="Loan Status")
+plt.show()
 ```
 
 </details>
@@ -542,11 +553,11 @@ In this section, we learned about plotting four types of visualizations with sea
 
 - Figure-level functions internally create a matplotlib figure, potentially including multiple subplots
 
-- `seaborn.barplot`, an Axes-level function, should be used for visualizing count data
+- `seaborn.barplot`, an axes-level function, should be used for visualizing count data
 
-- `seaborn.scatterplot`, an Axes-level function, helps visualize correlations between two numeric variables, subsetted on categorical variables if needed. `seaborn.relplot` is a Figure-level function that that combines `scatterplot`with a FacetGrid and can expedite the EDA process when combining multiple types of columns into a single visualization
+- `seaborn.scatterplot`, an axes-level function, helps visualize correlations between two numeric variables, subsetted on categorical variables if needed. `seaborn.relplot` is a figure-level function that that combines `scatterplot`with a FacetGrid and can expedite the EDA process when combining multiple types of columns into a single visualization
 
-- `seaborn.kdeplot`, an Axes-level function, creates a Kernel Density Estimate plot, analogous to a histogram. KDE represents the data using a continuous probability density curve in one or more dimensions. The function can also account for categorical levels. Its Figure-level alternative is `seaborn.distplot`
+- `seaborn.kdeplot`, an axes-level function, creates a Kernel Density Estimate plot, analogous to a histogram. KDE represents the data using a continuous probability density curve in one or more dimensions. The function can also account for categorical levels. Its figure-level alternative is `seaborn.distplot`
 
 - `seaborn.boxplot` is useful for visualizing the summary distribution of numeric variables, grouped by none, one, or multiple catgeorical variables. Several variations of the boxplot are provided by seaborn
 
