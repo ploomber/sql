@@ -17,3 +17,5 @@ sphinx:
   builder: html
   # TODO: fix warnings and then set this to true
   fail_on_warning: true
+  config:
+    suppress_warnings: ["mystnb.unknown_mime_type"]
