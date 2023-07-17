@@ -641,3 +641,4 @@ This ends the Visualizing Your Queries module, we hope the skills imbibed in thi
 “Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget Basics.html.
 
 “Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget List.html.
+
