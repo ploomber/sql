@@ -445,7 +445,7 @@ database_directory = os.path.join(
 Path(database_directory).mkdir(parents=True, exist_ok=True)
 
 # Creating DuckDB file at new directory
-duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
+duckdb_file_path = os.path.join(database_directory, "car_data.duck.db")
 
 con = duckdb.connect(duckdb_file_path)
 
