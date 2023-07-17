@@ -41,11 +41,8 @@ Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Re
 
 We can use the following function to extract the downloaded data from the UCI repository.
 
-```{code-cell} ipython3
-import sys
-
-sys.path.insert(0, "../../")
-import banking  # noqa: E402
+```{code-cell} ipython3 :tags: [hide-output]
+import banking
 
 _ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
 _.extract_to_csv()
@@ -101,6 +98,24 @@ Within the `Job_Avg_Balance` CTE, we form a query that returns the average balan
 
 After closing the `WITH` statement, we then select all columns from the `Job_Avg_Balance` CTE. This returns two columns: `job` and `AverageBalance`. The final `SELECT` statement then retrieves the data from the CTE.
 
+With the `JupySQL` magics `%sql, %%sql` and the `--save` option, you can furthermore save your CTE for later use on a different code cell:
+
+```{code-cell} ipython3
+%%sql --save avg_balance_by_job
+WITH Job_Avg_Balance AS (
+    SELECT job, AVG(balance) AS AverageBalance
+    FROM bank
+    GROUP BY job
+)
+SELECT * 
+FROM Job_Avg_Balance;
+```
+
+```{code-cell} ipython3
+%%sql
+SELECT * FROM avg_balance_by_job
+```
+
 ## Multiple CTEs
 
 You can use multiple CTEs in a single query. Let's find the average balance per job type and average campaign per job type.
@@ -122,7 +137,7 @@ FROM Job_Avg_Balance, Job_Avg_Campaign
 WHERE Job_Avg_Balance.job = Job_Avg_Campaign.job;
 ```
 
-In this example, the first CTE is the same as in the previous example. The second CTE `Job_Avg_Campaign` returns two columns: `job_1` and `AverageCampaign`. The final SELECT statement retrieves data from both CTEs. Notice that the entries.
+In this example, the first CTE is the same as in the previous example. The second CTE `Job_Avg_Campaign` returns two columns: `job_1` and `AverageCampaign`. The final SELECT statement retrieves data from both CTEs. 
 
 You will notice `job` and `job_1` in the final result. This is because we are doing a Cartesian product (cross join) between two CTEs and both have a column named `job`. We can avoid this by explicitly specifying the columns you want to select in our final `SELECT` statement instead of using `SELECT *`.
 
@@ -311,14 +326,14 @@ A Common Table Expression (CTE) is a temporary result set that you can reference
 
 ## Exercise 2 (Medium)
 
-Write a SQL query using a CTE that returns the total number of inhabitants for each region in the provided dataset.
+Write a SQL query using a CTE that returns the total number of inhabitants for each region in the provided dataset. Save the CTE into a variable called `region_inhabitants`
 
 <!-- #region -->
 <details>
 <summary>Answers</summary>
 
 ```{code-cell} ipython3
-%%sql 
+%%sql --save region_inhabitants
 WITH Region_Inhabitants AS (
     SELECT region, SUM(no_of_inhabitants) AS TotalInhabitants
     FROM s1.district
