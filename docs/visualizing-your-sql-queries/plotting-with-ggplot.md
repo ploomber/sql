@@ -557,9 +557,8 @@ fill = widgets.RadioButtons(
 def plot(b, cmap, fill):
     (
         ggplot(
-            table="ggplot_CTE",
-            with_="ggplot_CTE",
-            mapping=aes(x="payments"))
+            table="ggplot_CTE", with_="ggplot_CTE", mapping=aes(x="payments")
+        )  # noqa E501
         + geom_histogram(bins=b, fill=fill, cmap=cmap)
     )
 
