@@ -4,6 +4,7 @@ import sys
 import os
 from pathlib import Path
 import re
+import duckdb
 
 # Get the current working directory
 current_working_directory = os.getcwd()
@@ -323,9 +324,11 @@ if __name__ == "__main__":
     # Variable initialization
     raw_data_path = script_dir / "data" / "raw"
     clean_data_path = script_dir / "data" / "processed"
+    clean_data_DB_path = current_working_directory 
 
     print("Raw data path: ", raw_data_path)
     print("Clean data path: ", clean_data_path)
+    print("Clean data DB path: ", clean_data_DB_path)
 
     # Master dataframe initialization
     fuel_based_df = []
@@ -413,3 +416,31 @@ if __name__ == "__main__":
         Path(clean_data_path, "1995_today_vehicle_fuel_consumption.csv"),
         index=False,  # noqa E501
     )
+
+
+#Path to processed data directory
+gas_vehicles_csv = os.path.join(current_working_directory, 'data', 'processed', '1995_today_vehicle_fuel_consumption.csv')
+electric_vehicles_csv = os.path.join(current_working_directory, 'data', 'processed', 'Batteryelectric_vehicles__.csv')
+hybrid_vehicles_csv = os.path.join(current_working_directory, 'data', 'processed', 'Plugin_hybrid_electric_vehicles__.csv')
+
+#Creating a new directory for DuckDB tables
+database_directory = os.path.join(current_working_directory, 'data', 'database')
+Path(database_directory).mkdir(parents=True, exist_ok=True)
+
+#Creating DuckDB file at new directory
+duckdb_file_path = os.path.join(database_directory, 'car_data.duckdb')
+
+con = duckdb.connect(duckdb_file_path)
+
+#Drop tables if they exist
+con.execute("DROP TABLE IF EXISTS fuel")
+con.execute("DROP TABLE IF EXISTS electric")
+con.execute("DROP TABLE IF EXISTS hybrid")
+
+#Creating tables
+con.execute(f"CREATE TABLE fuel AS SELECT * FROM read_csv_auto ('{gas_vehicles_csv}')")
+con.execute(f"CREATE TABLE electric AS SELECT * FROM read_csv_auto ('{electric_vehicles_csv}')")
+con.execute(f"CREATE TABLE hybrid AS SELECT * FROM read_csv_auto ('{hybrid_vehicles_csv}')")
+
+
+con.close()
