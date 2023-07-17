@@ -16,5 +16,3 @@ conda:
 sphinx:
   builder: html
   fail_on_warning: true
-  config:
-    suppress_warnings: ["mystnb.unknown_mime_type"]
