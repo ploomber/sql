@@ -185,7 +185,7 @@ def save_raw_data(folder_path: str, url_content: str, file_name: str) -> None:
 def rename_fuel_data_columns(folder_path, csv_file_name) -> pd.DataFrame:
     """
     This function reads a csv and changes its column names
-    to lowecase, removes spaces and replaces them with underscores
+    to lowercase, removes spaces and replaces them with underscores
     and removes the pound sign from the column names
 
     This function assumes the original csv file has two headers!!!
@@ -320,6 +320,45 @@ def convert_model_key_words(s, dictionary):
     return group
 
 
+# +
+def concatenate_dataframes(df1, df2, df3):
+    """
+    Concatenates three dataframes based on different number of columns.
+
+    Parameters
+    ----------
+    df1 : pd.DataFrame
+        First dataframe.
+    df2 : pd.DataFrame
+        Second dataframe.
+    df3 : pd.DataFrame
+        Third dataframe.
+
+    Returns
+    -------
+    pd.DataFrame
+        Concatenated dataframe.
+    """
+
+    # Get the union of the column names of all three dataframes.
+    column_names = set.union(set(df1.columns), set(df2.columns), set(df3.columns))
+
+    # Create a new dataframe with the union of column names.
+    df = pd.DataFrame(columns=list(column_names))
+
+    # Concatenate the dataframes along the rows (axis=0).
+    df = pd.concat([df, df1], ignore_index=True)
+    df = pd.concat([df, df2], ignore_index=True)
+    df = pd.concat([df, df3], ignore_index=True)
+
+    # Fill in missing columns with NaN values.
+    for column in column_names:
+        if column not in df.columns:
+            df[column] = np.nan
+
+    return df
+
+
 if __name__ == "__main__":
     # Variable initialization
     raw_data_path = script_dir / "data" / "raw"
@@ -368,11 +407,19 @@ if __name__ == "__main__":
 
             final_df.rename(
                 columns={
+                    "model.1_": "model",
                     "fuel.1_type2": "fuel_type2",
-                    "consumption.1_city(l/100km)": "fuelconsumption_city(l/100km)",  # noqa E501
+                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km",
+                    "motor_(kw)": "motor_kw", "enginesize_(l)": "enginesize_l",
+                    "consumption_combinedle/100km": "consumption_combinedle_100km",
+                    "range1_(km)": "range1_km", "recharge_time(h)": "recharge_time_h",
+                    "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",
+                    "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",
+                    "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",
+                    "range2_(km)": "range2_km", "co2emissions_(g/km)": "co2emissions_g_km"
                 },
                 inplace=True,
-            )
+            )  # noqa E501
             final_df["mapped_fuel_type"] = final_df["fuel_type2"].map(
                 fuel_dict
             )  # noqa E501
@@ -391,7 +438,26 @@ if __name__ == "__main__":
             # Form file name
             file_name = f'{name.replace(" ","_")}.csv'
 
-            final_df["mapped_fuel_type"] = final_df["fuel_type"].map(fuel_dict)
+            final_df.rename(
+                columns={
+                    "model.1_": "model",
+                    "": "fuel_type2",
+                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km)",
+                    "motor_(kw)": "motor_kw",
+                    "consumption_city(kwh/100km)":"consumption_city_kwh_100km",
+                    "range_(km)": "range1_km", "recharge_time(h)": "recharge_time_h",
+                    "fuelconsumption_city(le/100km)": "fuelconsumption_city_le_100km",
+                    "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_le_100km",
+                    "fuelconsumption_hwy(kwh/100km)": "fuelconsumption_hwy_kwh_100km",
+                    "fuelconsumption_comb(kwh/100km)": "fuelconsumption_comb_kwh_100km",
+                    "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_le_100km",
+                    "range_(km)": "range1_km", "co2emissions_(g/km)": "co2emissions_g_km"
+                },
+                inplace=True,
+            )  # noqa E501
+            final_df["mapped_fuel_type"] = final_df["fuel_type"].map(
+                fuel_dict
+                )  # noqa E501
             final_df["id"] = range(1, len(final_df) + 1)
             final_df["vehicle_type"] = "electric"
             final_df.to_csv(Path(clean_data_path, file_name), index=False)
@@ -402,8 +468,22 @@ if __name__ == "__main__":
             )
             fuel_based_df.append(final_df)
 
-    # Concatenate all dataframes
+    # Concatenate all fuel-based dataframes
     fuel_based_df = pd.concat(fuel_based_df)
+
+    fuel_based_df.rename(
+                columns={
+                    "model.1_": "model",
+                    "enginesize_(l)": "enginesize_l", "enginesize_(l)": "enginesize_l",
+                    "consumption_combinedle/100km": "consumption_combinedle_100km",
+                    "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",
+                    "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",
+                    "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",
+                    "fuelconsumption_comb(mpg)": "fuelconsumption_comb_mpg",
+                    "co2emissions_(g/km)": "co2emissions_g_km"
+                },
+                inplace=True,
+            )  # noqa E501
 
     # add an id column where each row is a unique id (1, 2, 3, 4, ...)
     fuel_based_df["id"] = range(1, len(fuel_based_df) + 1)
@@ -417,6 +497,24 @@ if __name__ == "__main__":
         index=False,  # noqa E501
     )
 
+    # Concatenate fuel, hybrid, and electric into one dataframe
+
+    # Read in hybrid and electric vehicles
+    hybrid_df = pd.read_csv(
+        Path(clean_data_path, "Plugin_hybrid_electric_vehicles__.csv")
+    )
+    electric_df = pd.read_csv(
+        Path(clean_data_path, "Batteryelectric_vehicles__.csv")
+    )
+    # Call concatenate_dataframes() function to concatenate all dataframes
+    all_vehicles_df = concatenate_dataframes(
+        fuel_based_df, hybrid_df, electric_df
+    )
+
+    # Save all_vehicles_df to csv
+    all_vehicles_df.to_csv(
+        Path(clean_data_path, "all_vehicles.csv"), index=False
+    )
 
 # Path to processed data directory
 gas_vehicles_csv = os.path.join(
@@ -437,6 +535,12 @@ hybrid_vehicles_csv = os.path.join(
     "processed",
     "Plugin_hybrid_electric_vehicles__.csv",
 )
+all_vehicles_csv = os.path.join(
+    current_working_directory,
+    "data",
+    "processed",
+    "all_vehicles.csv",
+)
 
 # Creating a new directory for DuckDB tables
 database_directory = os.path.join(
@@ -445,7 +549,7 @@ database_directory = os.path.join(
 Path(database_directory).mkdir(parents=True, exist_ok=True)
 
 # Creating DuckDB file at new directory
-duckdb_file_path = os.path.join(database_directory, "car_data.duck.db")
+duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
 
 con = duckdb.connect(duckdb_file_path)
 
@@ -453,6 +557,7 @@ con = duckdb.connect(duckdb_file_path)
 con.execute("DROP TABLE IF EXISTS fuel")
 con.execute("DROP TABLE IF EXISTS electric")
 con.execute("DROP TABLE IF EXISTS hybrid")
+con.execute("DROP TABLE IF EXISTS all_vehicles")
 
 # Creating tables
 con.execute(
@@ -463,6 +568,9 @@ con.execute(
 )
 con.execute(
     f"CREATE TABLE hybrid AS SELECT * FROM read_csv_auto ('{hybrid_vehicles_csv}')"  # noqa E501
+)
+con.execute(
+    f"CREATE TABLE all_vehicles AS SELECT * FROM read_csv_auto ('{all_vehicles_csv}')"  # noqa E501
 )
 
 
