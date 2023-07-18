@@ -452,8 +452,8 @@ if __name__ == "__main__":
                     "consumption_city(kwh/100km)": "consumption_city_kwh_100km",  # noqa E501
                     "range_(km)": "range1_km",
                     "recharge_time(h)": "recharge_time_h",
-                    "fuelconsumption_city(le/100km)": "fuelconsumption_city_le_100km",  # noqa E501
-                    "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_le_100km",  # noqa E501
+                    "fuelconsumption_city(le/100km)": "fuelconsumption_city_l_100km",  # noqa E501
+                    "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_l_100km",  # noqa E501
                     "fuelconsumption_hwy(kwh/100km)": "fuelconsumption_hwy_kwh_100km",  # noqa E501
                     "fuelconsumption_comb(kwh/100km)": "fuelconsumption_comb_kwh_100km",  # noqa E501
                     "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_le_100km",  # noqa E501
