@@ -33,13 +33,12 @@ parts:
   - file: visualizing-your-sql-queries/plotting-with-ggplot
 - caption: Packaging Your SQL Project
   chapters:
-  - file: packaging-your-sql-project/how-to-structure-your-sql-project
+  - file: packaging-your-sql-project/introduction-to-the-dataset-and-problem
+  - file: packaging-your-sql-project/intro-to-python-scripting-and-pipelines
+  - file: packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql
+  - file: packaging-your-sql-project/packaging-containerizing-etl-with-ploomber-docker
+  - file: packaging-your-sql-project/combine-packaging-techniques-to-answer-questions
   - file: packaging-your-sql-project/storing-credentials-securely
-  - file: packaging-your-sql-project/introduction-to-sqlalchemy
-  - file: packaging-your-sql-project/write-sql-utils-file
-  - file: packaging-your-sql-project/creating-an-etl-pipeline
-  - file: packaging-your-sql-project/running-your-pipeline
-  - file: packaging-your-sql-project/packaging-your-pipeline
 - caption: Introduction to Dashboards and Apps
   chapters:
   - file: intro-to-dashboards-and-apps/introduction-to-voila
