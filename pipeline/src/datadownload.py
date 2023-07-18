@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import duckdb
+import numpy as np
 
 # Get the current working directory
 current_working_directory = os.getcwd()
@@ -341,7 +342,9 @@ def concatenate_dataframes(df1, df2, df3):
     """
 
     # Get the union of the column names of all three dataframes.
-    column_names = set.union(set(df1.columns), set(df2.columns), set(df3.columns))
+    column_names = set.union(
+        set(df1.columns), set(df2.columns), set(df3.columns)
+    )  # noqa E501
 
     # Create a new dataframe with the union of column names.
     df = pd.DataFrame(columns=list(column_names))
@@ -409,14 +412,17 @@ if __name__ == "__main__":
                 columns={
                     "model.1_": "model",
                     "fuel.1_type2": "fuel_type2",
-                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km",
-                    "motor_(kw)": "motor_kw", "enginesize_(l)": "enginesize_l",
-                    "consumption_combinedle/100km": "consumption_combinedle_100km",
-                    "range1_(km)": "range1_km", "recharge_time(h)": "recharge_time_h",
-                    "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",
-                    "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",
-                    "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",
-                    "range2_(km)": "range2_km", "co2emissions_(g/km)": "co2emissions_g_km"
+                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km",  # noqa E501
+                    "motor_(kw)": "motor_kw",
+                    "enginesize_(l)": "enginesize_l",
+                    "consumption_combinedle/100km": "consumption_combinedle_100km",  # noqa E501
+                    "range1_(km)": "range1_km",
+                    "recharge_time(h)": "recharge_time_h",
+                    "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",  # noqa E501
+                    "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",  # noqa E501
+                    "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",  # noqa E501
+                    "range2_(km)": "range2_km",
+                    "co2emissions_(g/km)": "co2emissions_g_km",
                 },
                 inplace=True,
             )  # noqa E501
@@ -441,23 +447,24 @@ if __name__ == "__main__":
             final_df.rename(
                 columns={
                     "model.1_": "model",
-                    "": "fuel_type2",
-                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km)",
+                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km)",  # noqa E501
                     "motor_(kw)": "motor_kw",
-                    "consumption_city(kwh/100km)":"consumption_city_kwh_100km",
-                    "range_(km)": "range1_km", "recharge_time(h)": "recharge_time_h",
-                    "fuelconsumption_city(le/100km)": "fuelconsumption_city_le_100km",
-                    "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_le_100km",
-                    "fuelconsumption_hwy(kwh/100km)": "fuelconsumption_hwy_kwh_100km",
-                    "fuelconsumption_comb(kwh/100km)": "fuelconsumption_comb_kwh_100km",
-                    "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_le_100km",
-                    "range_(km)": "range1_km", "co2emissions_(g/km)": "co2emissions_g_km"
+                    "consumption_city(kwh/100km)": "consumption_city_kwh_100km",  # noqa E501
+                    "range_(km)": "range1_km",
+                    "recharge_time(h)": "recharge_time_h",
+                    "fuelconsumption_city(le/100km)": "fuelconsumption_city_le_100km",  # noqa E501
+                    "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_le_100km",  # noqa E501
+                    "fuelconsumption_hwy(kwh/100km)": "fuelconsumption_hwy_kwh_100km",  # noqa E501
+                    "fuelconsumption_comb(kwh/100km)": "fuelconsumption_comb_kwh_100km",  # noqa E501
+                    "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_le_100km",  # noqa E501
+                    "range_(km)": "range1_km",
+                    "co2emissions_(g/km)": "co2emissions_g_km",
                 },
                 inplace=True,
             )  # noqa E501
             final_df["mapped_fuel_type"] = final_df["fuel_type"].map(
                 fuel_dict
-                )  # noqa E501
+            )  # noqa E501
             final_df["id"] = range(1, len(final_df) + 1)
             final_df["vehicle_type"] = "electric"
             final_df.to_csv(Path(clean_data_path, file_name), index=False)
@@ -472,18 +479,19 @@ if __name__ == "__main__":
     fuel_based_df = pd.concat(fuel_based_df)
 
     fuel_based_df.rename(
-                columns={
-                    "model.1_": "model",
-                    "enginesize_(l)": "enginesize_l", "enginesize_(l)": "enginesize_l",
-                    "consumption_combinedle/100km": "consumption_combinedle_100km",
-                    "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",
-                    "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",
-                    "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",
-                    "fuelconsumption_comb(mpg)": "fuelconsumption_comb_mpg",
-                    "co2emissions_(g/km)": "co2emissions_g_km"
-                },
-                inplace=True,
-            )  # noqa E501
+        columns={
+            "model.1_": "model",
+            "enginesize_(l)": "enginesize_l",
+            "enginesize_(l)": "enginesize_l",
+            "consumption_combinedle/100km": "consumption_combinedle_100km",
+            "fuelconsumption_city(l/100km)": "fuelconsumption_city_l_100km",
+            "fuelconsumption_hwy(l/100km)": "fuelconsumption_hwy_l_100km",
+            "fuelconsumption_comb(l/100km)": "fuelconsumption_comb_l_100km",
+            "fuelconsumption_comb(mpg)": "fuelconsumption_comb_mpg",
+            "co2emissions_(g/km)": "co2emissions_g_km",
+        },
+        inplace=True,
+    )  # noqa E501
 
     # add an id column where each row is a unique id (1, 2, 3, 4, ...)
     fuel_based_df["id"] = range(1, len(fuel_based_df) + 1)
@@ -505,16 +513,16 @@ if __name__ == "__main__":
     )
     electric_df = pd.read_csv(
         Path(clean_data_path, "Batteryelectric_vehicles__.csv")
-    )
+    )  # noqa E501
     # Call concatenate_dataframes() function to concatenate all dataframes
     all_vehicles_df = concatenate_dataframes(
         fuel_based_df, hybrid_df, electric_df
-    )
+    )  # noqa E501
 
     # Save all_vehicles_df to csv
     all_vehicles_df.to_csv(
         Path(clean_data_path, "all_vehicles.csv"), index=False
-    )
+    )  # noqa E501
 
 # Path to processed data directory
 gas_vehicles_csv = os.path.join(
