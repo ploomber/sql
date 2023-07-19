@@ -447,16 +447,15 @@ if __name__ == "__main__":
             final_df.rename(
                 columns={
                     "model.1_": "model",
-                    "consumption.1_city(l/100km)": "fuelconsumption_city_l_100km)",  # noqa E501
                     "motor_(kw)": "motor_kw",
-                    "consumption_city(kwh/100km)": "consumption_city_kwh_100km",  # noqa E501
                     "range_(km)": "range1_km",
                     "recharge_time(h)": "recharge_time_h",
+                    "consumption_city(kwh/100km)": "consumption_city_kwh_100km",  # noqa E501
                     "fuelconsumption_city(le/100km)": "fuelconsumption_city_l_100km",  # noqa E501
                     "fuelconsumption_hwy(le/100km)": "fuelconsumption_hwy_l_100km",  # noqa E501
                     "fuelconsumption_hwy(kwh/100km)": "fuelconsumption_hwy_kwh_100km",  # noqa E501
                     "fuelconsumption_comb(kwh/100km)": "fuelconsumption_comb_kwh_100km",  # noqa E501
-                    "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_le_100km",  # noqa E501
+                    "fuelconsumption_comb(le/100km)": "fuelconsumption_comb_l_100km",  # noqa E501
                     "range_(km)": "range1_km",
                     "co2emissions_(g/km)": "co2emissions_g_km",
                 },
