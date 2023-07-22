@@ -187,3 +187,4 @@ course-material/_build
 jb-bank*
 jb-bank
 uci-marketing-data
+*.duckdb*
