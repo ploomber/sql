@@ -19,7 +19,7 @@ In this section of the course, we will delve into the world of Python scripting 
 
 A `.py` script is a standalone file that contains Python code, which can be written with the help of text editors or IDE's (integrated development environment).
 
-Unlike Jupyter notebooks, which are interactive environments for code execution and documentation, `.py` scripts are designed for running Python code in a more traditional, non-interactive manner. They are commonly used for writing programs that can be executed from the command line, as shown below, or integrated into software projects due to [modularization](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-python-scripting-and-pipelines#modularization) (variables and functions inside a Python script can be imported from another script).
+Unlike Jupyter notebooks, which are interactive environments for code execution and documentation, `.py` scripts are designed for running Python code in a more traditional, non-interactive manner. They are commonly used for writing programs that can be executed from the command line, as shown below, or integrated into software projects due to [modularization](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-python-scripting-and-pipelines.html#modularization) (variables and functions inside a Python script can be imported from another script).
 
 After writing and saving a Python script, you can run it by executing the `python` command on your terminal, like so:
 
@@ -31,11 +31,11 @@ python my_script.py
 
 IDE's, such as [Visual Studio Code](https://code.visualstudio.com/) and [Pycharm](https://www.jetbrains.com/pycharm/) on the other hand, offer a more interactive way of writing and running Python scripts. They provide features such as syntax highlighting, code completion, and debugging tools, making it easier to write and test your code.
 
-```important
+```{important}
 `.py` scripts are always executed linearly from top to bottom, unlike Jupyter notebooks, where you can run cells in any order. This makes debugging easier in `.py` scripts, as you can easily trace the flow of execution.
 ```
 
-Jupyter Notebooks are loved by Data Scientists for their interactive nature. Outputs, such as messages, plots, and dataframes, appear under each cell upon execution, and look great out-of-the-box. Moreover, Jupyter Notebooks are great for data analyses and sharing results with colleagues. However, they must be served and accessed through a web browser, making them slightly harder to use than scripts.
+Jupyter Notebooks are loved by Data Scientists for their interactive nature. Outputs, such as messages, plots, and dataframes, appear under each cell upon execution, and look great out-of-the-box. Moreover, Jupyter Notebooks are great for data analysis and sharing results with colleagues. However, they must be served and accessed through a web browser, making them slightly harder to use than scripts.
 
 Let's now shift our focus to explore good software development practices for scripting. Adopting these practices will help you write clean, maintainable, and efficient Python code for integration into larger projects or data pipelines.
 
@@ -75,17 +75,22 @@ In general, a function should only perform one action and be named accordingly. 
 
 An example is as follows:
 
-```python
-def complex(real=0.0, imag=0.0):
-  """Form a complex number.
+```{code-cell} ipython3
+def divide(num1, num2):
+    """
+    Divide two two numbers.
 
-  Keyword arguments:
-  real -- the real part (default 0.0)
-  imag -- the imaginary part (default 0.0)
-  """
-  if imag == 0.0 and real == 0.0:
-      return complex_zero
-  ...
+    Parameters:
+    num1 (float or int): The numerator.
+    num2 (float or int): The denominator.
+
+    Returns:
+    float or int: The result of the division operation.
+    """
+    if num2 == 0:
+        raise ValueError("Cannot divide by zero.")
+    else:
+        return num1 / num2
 ```
 
 #### Modularization
@@ -102,10 +107,11 @@ Typically, a script will have a `main` function that calls other functions to ex
 
 Inside the `if __name__=="__main__":` block, you can call the functions you defined earlier to execute the main logic of your script:
 
-```python
+```{code-cell} ipython3
 if __name__=="__main__":
-    # call functions here
-    pass
+  # call divide() function here
+  valid_result = divide(10, 5)
+  print("Valid Result: ", valid_result)
 ```
 
 #### Calling Functions from the Main Program
@@ -134,17 +140,72 @@ if __name__ == "__main__":
     print(f"Subtraction: {result_subtract}")
 ```
 
-```{important}
+#### Advanced Scripting Techniques
+
+In addition to understanding the basics of Python scripting, there are advanced techniques that can help you organize your code into reusable modules and create a well-structured project.
+
 When you call if `__name__ == "__main__":` in different scripts, it allows you to use the scripts with your functions as reusable modules that can be imported into other scripts. For instance, the above example could be modularized with the functions placed in a separate script called `math_operations.py` and the main logic in an another script called `main.py`. `main.py` would `import math_operations` as a module and call the functions like so: `math_operations.add(num1, num2)`.
+
+However, in order to call `math_operations.py` in `main.py`, we need to explore two important concepts: `__init__.py` files and good folder structure.
+
+##### `__init__.py` Files
+
+- `__init__.py` files are used to mark directories on disk as Python package directories.
+- If you have the files `__init__.py` and `math_operations.py` in the same directory, you can import the `math_operations` module like so: `import math_operations`.
+
+##### Folder Structure
+
+- A good folder structure is essential for organizing your code and making it reusable.
+
+A sample folder structure for our `math_operations` module is as follows:
+
+```python
+project/
+│   README.md
+│   requirements.txt
+│   setup.py
+│   .gitignore
+│   .env
+│
+└───src/
+│   │   __init__.py
+│   │   main.py
+│   │
+│   └───math_operations/
+│       │   __init__.py
+│       │   math_operations.py
+│
+└───tests/
+    │   test_math_operations.py
+```
+
+Therefore, given the above folder structure, the `math_operations` module can be imported into `main.py` as follows:
+
+```python
+from math_operations import add, subtract
+
+if __name__ == "__main__":
+    num1 = 10
+    num2 = 5
+
+    result_add = add(num1, num2)
+    result_subtract = subtract(num1, num2)
+
+    print(f"Addition: {result_add}")
+    print(f"Subtraction: {result_subtract}")
 ```
 
 ## Python Scripting for Data Pipelines
 
-Python scripting is a powerful way to automate data tasks, such as downloading data from the web, cleaning and transforming data, and saving it to a database. The combination of `pandas` and `SQLAlchemy` provides a robust toolkit for working with data in Python.
+Python scripting is a powerful way to automate data tasks, such as downloading data from the web, cleaning and transforming data, and saving it to a database. The combination of [`pandas`](https://pandas.pydata.org/docs/user_guide/index.html#user-guide) and [`SQLAlchemy`](https://docs.sqlalchemy.org/en/20/core/index.html) provides a robust toolkit for working with data in Python.
 
-Using pandas, you can easily read and write data from various file formats, perform data cleaning and manipulation, and create insightful visualizations. `SQLAlchemy` enables seamless interaction with databases, allowing you to save your cleaned and processed data to a database for further analysis.
+By using `pandas`, you can easily read and write data from various file formats, perform data cleaning and manipulation, and create insightful visualizations. All of these steps must be coded in different functions, to ensure both readability and reusability, and called from the main program. The modularized code can then be packaged into a Python package and imported into other scripts.
 
-The `datadownload.py` [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) used in this module of the course does exactly that. It downloads data from the web, cleans and transforms it, and saves it to a a `DuckDB` database. The next section on [ETL Pipelines](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql#) will discuss this in more detail.
+`SQLAlchemy` is an object-relational mapper (ORM) for Python that enables seamless interaction with databases, allowing you to save your cleaned and processed data to a database for further analysis. Code that helps create a database connection and save the data as tables to the respective database can be included in the main program itself. At Ploomber, [`SQLAlchemy Core`](https://docs.sqlalchemy.org/en/20/core/index.html) is leveraged as the foundation for interacting with databases. `SQLAlchemy Core` provides a powerful and flexible toolkit for working directly with SQL and relational databases, offering a lower-level, yet highly expressive approach compared to the full [`SQLAlchemy ORM`](https://docs.sqlalchemy.org/en/20/orm/index.html).
+
+The `datadownload.py` [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) used in this module of the course combines `pandas` and `DuckDB` to create a data ingestion pipeline for our project. It downloads data from the web, cleans and transforms it, and saves it to a `DuckDB` database. In this script, `SQLAlchemy` was not explicitly imported and used to form a connection because `DuckDB` is lightweight and easy to deploy. However, `SQLAlchemy` can be used in other projects to interact with different databases, such as [`PostgreSQL`](https://jupysql.ploomber.io/en/latest/integrations/postgres-connect.html) and [`MySQL`](https://jupysql.ploomber.io/en/latest/integrations/mysql.html), allowing for database operations using [`JupySQL`](https://jupysql.ploomber.io/en/latest/quick-start.html#)!
+
+ The next section on [ETL Pipelines](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql#) will discuss the use of `pandas` and `DuckDB` in more detail.
 
 ## References
 
