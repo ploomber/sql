@@ -108,10 +108,10 @@ Typically, a script will have a `main` function that calls other functions to ex
 Inside the `if __name__=="__main__":` block, you can call the functions you defined earlier to execute the main logic of your script:
 
 ```{code-cell} ipython3
-if __name__=="__main__":
-  # call divide() function here
-  valid_result = divide(10, 5)
-  print("Valid Result: ", valid_result)
+if __name__ == "__main__":
+    # call divide() function here
+    valid_result = divide(10, 5)
+    print("Valid Result: ", valid_result)
 ```
 
 #### Calling Functions from the Main Program
