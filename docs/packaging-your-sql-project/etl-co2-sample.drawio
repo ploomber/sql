@@ -1,0 +1,99 @@
+<mxfile host="Electron" modified="2023-07-24T23:08:00.860Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="Tnqb7G-gh28dban6DHZu" version="21.5.0" type="device">
+  <diagram name="Page-1" id="ncHgRkIqDtQu2Y0AI8Nq">
+    <mxGraphModel dx="1114" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="820" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#a20025;strokeColor=#6F0000;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-1" target="55Qsp2c_8yDm2Y7rKtSK-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-1" value="Open Canada API (CO2 vehicle metadata)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+          <mxGeometry x="165" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#a20025;strokeColor=#6F0000;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-2" target="55Qsp2c_8yDm2Y7rKtSK-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-2" value="Extract raw data for three kinds of vehicles:&lt;br&gt;fuel-only, electric and hybrid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+          <mxGeometry x="365" y="85" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#a20025;strokeColor=#6F0000;strokeWidth=5;entryX=0.51;entryY=0.01;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="55Qsp2c_8yDm2Y7rKtSK-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="632.5" y="155" as="sourcePoint" />
+            <mxPoint x="460" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="633" y="190" />
+              <mxPoint x="438" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-7" value="Save raw data into CSV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+          <mxGeometry x="585" y="85" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-9" value="" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+          <mxGeometry x="15" y="280" width="830" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#f0a30a;strokeColor=#BD7000;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-13" target="55Qsp2c_8yDm2Y7rKtSK-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-13" value="Read raw data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="45" y="345" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#f0a30a;strokeColor=#BD7000;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-15" target="55Qsp2c_8yDm2Y7rKtSK-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-15" value="Column rename: odd character removal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0A30A;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="245" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fillColor=#f0a30a;strokeColor=#BD7000;strokeWidth=5;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-26" target="55Qsp2c_8yDm2Y7rKtSK-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="635" y="440" as="sourcePoint" />
+            <mxPoint x="460" y="570" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="755" y="450" />
+              <mxPoint x="425" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#f0a30a;strokeColor=#BD7000;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-16" target="55Qsp2c_8yDm2Y7rKtSK-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-16" value="Map categorical variables (internal encoding) to human-readable format" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="465" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-17" value="F0A30A" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#b0e3e6;strokeColor=#0e8088;" vertex="1" parent="1">
+          <mxGeometry x="10" y="520" width="830" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-22" target="55Qsp2c_8yDm2Y7rKtSK-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-22" value="Store clean data into four separate files:&lt;br&gt;fuel-only, electric, hybrid and merged" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1BA1E2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="145" y="565" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;" edge="1" parent="1" source="55Qsp2c_8yDm2Y7rKtSK-24" target="55Qsp2c_8yDm2Y7rKtSK-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-24" value="Initialize DuckDB instance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="345" y="560" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-25" value="Save clean data into DuckDB instance via four tables, one for each file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="565" y="560" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-26" value="Merge tables into one: fuel-only, electric, hybrid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="685" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-28" value="&lt;font style=&quot;font-size: 21px;&quot; color=&quot;#6f0000&quot;&gt;&lt;b&gt;EXTRACT&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="30" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-29" value="&lt;font color=&quot;#f0a30a&quot; style=&quot;font-size: 21px;&quot;&gt;&lt;b style=&quot;&quot;&gt;TRANSFORM&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="300" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="55Qsp2c_8yDm2Y7rKtSK-30" value="&lt;font color=&quot;#1ba1e2&quot; style=&quot;font-size: 21px;&quot;&gt;&lt;b style=&quot;&quot;&gt;LOAD&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="530" width="225" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

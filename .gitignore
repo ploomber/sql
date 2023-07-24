@@ -188,3 +188,5 @@ jb-bank*
 jb-bank
 uci-marketing-data
 *.duckdb*
+*.bkp
+*.dtmp
