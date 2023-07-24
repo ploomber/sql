@@ -237,7 +237,7 @@ def read_and_clean_df(final_df) -> pd.DataFrame:
     """
 
     final_df = rename_fuel_data_columns(final_df)
-    
+
     # Additional data cleaning
     final_df.drop_duplicates(keep="first", inplace=True)
 
@@ -353,7 +353,7 @@ if __name__ == "__main__":
 
         # Extract raw data
         item_based_url = extract_raw_data(url)
-        
+
         # Read and clean as pandas df
         df = pd.read_csv(StringIO(item_based_url.text), low_memory=False)
         final_df = read_and_clean_df(df)
@@ -432,7 +432,7 @@ if __name__ == "__main__":
                 lambda x: convert_model_key_words(x, model_dict)
             )
             fuel_based_df.append(final_df)
-        
+
 # Concatenate all fuel-based dataframes
 fuel_based_df = pd.concat(fuel_based_df)
 
@@ -458,9 +458,7 @@ fuel_based_df["id"] = range(1, len(fuel_based_df) + 1)
 fuel_based_df["vehicle_type"] = "fuel-only"
 
 # Call concatenate_dataframes() function to concatenate all dataframes
-all_vehicles_df = concatenate_dataframes(
-    fuel_based_df, hybrid_df, electric_df
-) 
+all_vehicles_df = concatenate_dataframes(fuel_based_df, hybrid_df, electric_df)
 
 # Creating a new directory for DuckDB tables
 database_directory = os.path.join(
@@ -480,18 +478,10 @@ con.execute("DROP TABLE IF EXISTS hybrid")
 con.execute("DROP TABLE IF EXISTS all_vehicles")
 
 # Creating tables
-con.execute(
-    f"CREATE TABLE fuel AS SELECT * FROM fuel_based_df"
-)  # noqa E501
-con.execute(
-    f"CREATE TABLE electric AS SELECT * FROM electric_df"  # noqa E501
-)
-con.execute(
-    f"CREATE TABLE hybrid AS SELECT * FROM hybrid_df"  # noqa E501
-)
-con.execute(
-    f"CREATE TABLE all_vehicles AS SELECT * FROM all_vehicles_df"  # noqa E501
-)
+con.execute(f"CREATE TABLE fuel AS SELECT * FROM fuel_based_df")  # noqa E501
+con.execute(f"CREATE TABLE electric AS SELECT * FROM electric_df")  # noqa E501
+con.execute(f"CREATE TABLE hybrid AS SELECT * FROM hybrid_df")  # noqa E501
+con.execute(f"CREATE TABLE all_vehicles AS SELECT * FROM all_vehicles_df")  # noqa E501
 
 
 con.close()
