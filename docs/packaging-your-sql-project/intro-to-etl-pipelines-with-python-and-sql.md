@@ -39,13 +39,13 @@ To implement an ETL pipeline with Canada's vehicle emissions data (introduced in
 
 In fact, all of these steps are already included in a single script: `datadownload.py`. This script can be found from the course's GitHub repo that you can clone from here:
 
-https://github.com/ploomber/sql.git
+`git clone https://github.com/ploomber/sql.git`
 
-If you have access to the repo, navigate to the `pipeline` folder and run the script with this line in your terminal: `python src/datadownload.py`. The script will extract, load, and transform the data and output a DuckDB file in the current folder with the name `car_data.duckdb`.
+Once you clone the repo, make sure that you have the correct dependencies by following the "Setup" instructions under the `CONTRIBUTING.md` files. Once you have the correct dependencies and environment, navigate to the `pipeline` folder and run the script with this line in your terminal: `python src/datadownload.py`. The script will extract, load, and transform the data and output a DuckDB file in the current folder with the name `car_data.duckdb`.
 
 Before we dive into understanding how this script fundamentally follows an ETL pipeline, we have to briefly expand on some key points regarding DuckDB and `pandas`:
 
-1. We use DuckDB because it allows us to store data in an in-memory database. Typically, the "loading" part of ETLs would require a server that hosts a database and usually requires additional configurations. DuckDB disregards the need for servers and allows users to locally load data. In our case, you can think of `car_data.duckdb` as our local database that we will be running queries against. DuckDB is an efficient and easy to set up database that is especially useful the in initial stages of the data science workflow. This database allows data scientists to check the usefulness of the data without having to cumbersomely set up a server to host the data.
+1. We use DuckDB because it allows us to store data in an in-memory database. Typically, the "loading" part of ETLs would require a server that hosts a database and usually requires additional configurations. DuckDB disregards the need for servers and allows users to locally load data. In our case, you can think of `car_data.duckdb` as our local database that we will be running queries against. DuckDB is an efficient and easy to set up database that is especially useful the in initial stages of the data science workflow. This database allows data scientists to check the usefulness of the data without having to cumbersomely set up a server to host the data. Reference the [previous module](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-python-scripting-and-pipelines.html) to learn more about using Python with DuckDB. 
 
 2. `pandas` is an extensive package. Comprehensively going through the entire library's documentation would be time-consuming and unnecessary for your understanding of the script. The script relies only on typical `pandas` functions, such as ones that help rename columns appropriately, clean data for null values, and create new columns. 
 
