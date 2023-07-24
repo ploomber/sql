@@ -17,7 +17,9 @@ In this section of the course, we will delve into the world of Python scripting 
 
 ## `.py` script vs Jupyter Notebook
 
-A `.py` script is a standalone file that contains Python code, which can be written with the help of text editors or IDE's (integrated development environment). Unlike Jupyter notebooks, which are interactive environments for code execution and documentation, `.py` scripts are designed for running Python code in a more traditional, non-interactive manner. They are commonly used for writing programs that can be executed from the command line, as shown above, or integrated into software projects due to [modularization](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-python-scripting-and-pipelines#) (variables and functions inside a Python script can be imported from another script).
+A `.py` script is a standalone file that contains Python code, which can be written with the help of text editors or IDE's (integrated development environment).
+
+Unlike Jupyter notebooks, which are interactive environments for code execution and documentation, `.py` scripts are designed for running Python code in a more traditional, non-interactive manner. They are commonly used for writing programs that can be executed from the command line, as shown below, or integrated into software projects due to [modularization](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-python-scripting-and-pipelines#modularization) (variables and functions inside a Python script can be imported from another script).
 
 After writing and saving a Python script, you can run it by executing the `python` command on your terminal, like so:
 
@@ -33,46 +35,70 @@ IDE's, such as [Visual Studio Code](https://code.visualstudio.com/) and [Pycharm
 `.py` scripts are always executed linearly from top to bottom, unlike Jupyter notebooks, where you can run cells in any order. This makes debugging easier in `.py` scripts, as you can easily trace the flow of execution.
 ```
 
-Jupyter Notebooks are loved by Data Scientists for their interactive nature. Outputs, such as messages, plots, and dataframes, appear under each cell upon execution, and look great out-of-the-box. Moreover, Notebooks are great for data analyses and sharing results with colleagues. However, Notebooks must be served and accessed through a web browser, making them slightly harder to use than scripts.
+Jupyter Notebooks are loved by Data Scientists for their interactive nature. Outputs, such as messages, plots, and dataframes, appear under each cell upon execution, and look great out-of-the-box. Moreover, Jupyter Notebooks are great for data analyses and sharing results with colleagues. However, they must be served and accessed through a web browser, making them slightly harder to use than scripts.
 
 Let's now shift our focus to explore good software development practices for scripting. Adopting these practices will help you write clean, maintainable, and efficient Python code for integration into larger projects or data pipelines.
 
 ## Good Software Development Practices for Scripting
 
-When writing Python scripts, it's essential to follow good software development practices to ensure maintainability and readability of the code. Here are some key elements to consider:
+When writing Python scripts, it's essential to follow good software development practices to ensure maintainability and readability of the code. The [`PEP 8` (Python Enhancement Proposals) – Style Guide](https://peps.python.org/pep-0008/), which is a written standard for scripting for Python Code, encompasses all best practices discussed in this section. Here are some key elements to consider:
 
 ### Imports at the Top
 
-- code formatting and linting
-- `flake8` rule (E402) for imports at top
-- also be wary of module imported but unused (F401)
+In Python scripting, it is recommended to place all imports at the top of the script. This practice helps improve code readability and makes it easier for others to understand the dependencies of the script. Additionally, adhering to this convention enables code linters, tools that format the code to comply with `PEP8` standards, like [`flake8`](https://flake8.pycqa.org/en/latest/) to enforce the rule ([`E402`](https://www.flake8rules.com/rules/E402.html)) that requires imports to be at the top of the file.
+
+<b>Note:</b> IDE's like [Visual Studio Code](https://code.visualstudio.com/) come with built-in linters that can be configured to enforce `flake8` rules.
+
+Furthermore, it is essential to be cautious about importing modules that are not used in the script. Linters like [`flake8`](https://flake8.pycqa.org/en/latest/) can help identify such unused imports ([`F401`](https://www.flake8rules.com/rules/F401.html)). Removing these unused imports reduces unnecessary clutter and improves the script's performance and maintainability.
+
+```{important}
+Did you know: Eduardo Blancas, Ploomber's co-founder, is the creator of the package `pkgmt`, which automatically formats and lints Python code! In fact, the Ploomber team uses it religiously to ensure best coding practices in our projects. `pip install pkgmt` to try it out!
+```
 
 ### Function Definition
 
-In general, a function should only perform one action. -> clarity!
+In general, a function should only perform one action and be named accordingly. Below are guidelines to follow when defining functions:
 
 #### Naming Conventions
 
-- avoid "and" in function names, dedicate a single function to a single task
-- adequately describe the function’s purpose by using a verb first and a noun following it
-- same goes for parameter names: banish “x” and “y” from your code
+- Function names should be lowercase, with words separated by underscores as necessary to improve readability. Variable names follow the same convention as function names.
+- Avoid "and" in function names. Dedicate a single function to a single task.
+- Adequately describe the function’s purpose by using a verb first and a noun following it. An example of a good function name is `get_data()`, which describes the action of the function and the data it returns.
+- Same goes for parameter names in functions: banish “x” and “y” from your code and use descriptive names instead.
 
 #### Docstrings
 
-- begin with a brief statement describing what the function does
-- PEP 257: use triple quotes for multi-line docstrings
+- Docstrings are used to describe the purpose of a function, specifically its parameters and what it returns. They are placed immediately after the function definition and are enclosed in `"""triple double quotes"""`.
+- Blank lines should be removed from the beginning and end of the docstring.
+- It is best to list each argument on a separate line, followed by a description of the argument.
+- See [`PEP 257` guidelines](https://peps.python.org/pep-0257/) for more information on docstrings.
 
-#### Modularization and Pythonic Principles
+An example is as follows:
 
-Break down your script into smaller, reusable functions. This promotes code modularity and makes the script easier to test and maintain.
+```python
+def complex(real=0.0, imag=0.0):
+  """Form a complex number.
 
-Follow Pythonic principles and idioms to write clean and concise code. Embrace the Python way of doing things to make your code more readable and efficient.
+  Keyword arguments:
+  real -- the real part (default 0.0)
+  imag -- the imaginary part (default 0.0)
+  """
+  if imag == 0.0 and real == 0.0:
+      return complex_zero
+  ...
+```
 
-### Calling Functions from the Main Program
+#### Modularization
 
-The `if __name__=="__main__":` block is used to ensure that certain code only runs when the script is executed directly, not when it's imported as a module. This allows you to have reusable code in your script that can be imported into other scripts without unintended side effects.
+- Modularization is the technique of breaking down your script into smaller, self-contained modules or functions. Each module or function performs a specific task, making the code more readable, maintainable, and reusable.
+- Moreover, modularization enhances collaboration as multiple developers can work on different modules simultaneously, promoting collaboration and parallel development. This speeds up the overall development process and allows teams to work on specific parts of the project independently.
+- Modularization is often used in conjunction with the main program, which calls the functions defined in the modules to execute the main logic of the script. This is discussed in more detail below.
 
-calling functions from the Main Program:
+### The Main Program
+
+#### What does `if __name__ == "__main__:"` mean?
+
+Typically, a script will have a `main` function that calls other functions to execute the main logic of the script. The `main` function is called from the `if __name__=="__main__":` block, which is executed when the script is run directly (not imported as a module). This allows you to have reusable code in your script that can be imported into other scripts without unintended side effects.
 
 Inside the `if __name__=="__main__":` block, you can call the functions you defined earlier to execute the main logic of your script:
 
@@ -82,12 +108,46 @@ if __name__=="__main__":
     pass
 ```
 
-## Python Scripting for Data Pipelines
+#### Calling Functions from the Main Program
 
-`datadownload.py` [script]()
+Modularized scripts can be called in the main program as follows:
+
+```{code-cell} ipython3
+def add(int1, int2):
+    """This function adds two integers"""
+    return int1 + int2
+
+
+def subtract(int1, int2):
+    """This function subtracts two integers"""
+    return int1 - int2
+
+
+if __name__ == "__main__":
+    num1 = 10
+    num2 = 5
+
+    result_add = add(num1, num2)
+    result_subtract = subtract(num1, num2)
+
+    print(f"Addition: {result_add}")
+    print(f"Subtraction: {result_subtract}")
+```
+
+```{important}
+When you call if `__name__ == "__main__":` in different scripts, it allows you to use the scripts with your functions as reusable modules that can be imported into other scripts. For instance, the above example could be modularized with the functions placed in a separate script called `math_operations.py` and the main logic in an another script called `main.py`. `main.py` would `import math_operations` as a module and call the functions like so: `math_operations.add(num1, num2)`.
+```
+
+## Python Scripting for Data Pipelines
 
 Python scripting is a powerful way to automate data tasks, such as downloading data from the web, cleaning and transforming data, and saving it to a database. The combination of `pandas` and `SQLAlchemy` provides a robust toolkit for working with data in Python.
 
 Using pandas, you can easily read and write data from various file formats, perform data cleaning and manipulation, and create insightful visualizations. `SQLAlchemy` enables seamless interaction with databases, allowing you to save your cleaned and processed data to a database for further analysis.
 
-In the following sections, we will learn about and explore the ETL (Extract, Transform, Load) Pipeline.
+The `datadownload.py` [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) used in this module of the course does exactly that. It downloads data from the web, cleans and transforms it, and saves it to a a `DuckDB` database. The next section on [ETL Pipelines](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql#) will discuss this in more detail.
+
+## References
+
+“Python Enhancement Proposals.” PEP 8 – Style Guide for Python Code, n.d. https://peps.python.org/pep-0008/.
+
+“The Big Ol’ List of Rules.” Flake8 Rules, n.d. https://www.flake8rules.com/.
