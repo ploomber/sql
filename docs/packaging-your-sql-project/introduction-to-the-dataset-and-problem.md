@@ -19,12 +19,12 @@ In it, they provide users the ability to search vehicles by model, class and mak
 
 Additionally, they provide access through their [open data portal](https://open.canada.ca/data/en/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64) as part of the [Open Government License Canada](https://open.canada.ca/en/open-government-licence-canada). 
 
-Whereas this tool allows consumers to obtain information via the website, it is desirable to develop an automated approach to extract information on the most recent models, and to be able to analyse the data to answer questions such as: 
+While this tool allows consumers to obtain information via the website, it is recommended to develop an automated approach to extract information on the most recent vehicle models and analyze the data to answer important questions:
 
 1. What is the average CO2 emissions of vehicles by class, make and model?
-2. Are there vehicles better suited for city driving than others (focus on less CO2 emissions)?
-3. Are there vehicles better suited for highway driving than others (focus on less CO2 emissions)?
-4. Are there vehicles better suited for combined driving than others (focus on less CO2 emissions)?
+2. Which vehicles are better suited for different driving scenarios (city, highway, and combined) with a focus on lower CO2 emissions?
+3. Can we identify trends in car manufacturing based on the number of vehicles produced per model year or by vehicle class (size) for different fuel types (gas, hybrid, and electric)?
+4. How can fuel efficiency be analyzed for different fuel types (gas, hybrid, and electric)?
 5. What are benefits of using hybrid vehicles over non-hybrid vehicles?
 
 In the next sections, we will explore how we can combine Python and SQL to answer these questions. We will learn how to automate the process of extracting the data, cleaning it and setting up an Extract Transform Load (ETL) pipeline to load the data into a database. We will then learn how to use SQL to answer the questions like the ones above. 
