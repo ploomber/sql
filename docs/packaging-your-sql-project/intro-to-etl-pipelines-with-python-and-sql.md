@@ -51,9 +51,11 @@ Before we dive into understanding how this script fundamentally follows an ETL p
 
 Let's now dissect `datadownload.py` and focus specifically on key lines of its ETL process.
 
+![](etl-co2-sample.jpg)
+
 ### Extracting with Python
 
-Take a look at the function `fuel_consumption_metadata_extraction`. On lines 96 - 114, we access the Government of Canada's API and extract data regarding fuel consumption ratings that are in English. The output of this function is a `pandas` data frame with two columns: "name" and "url". Each row in the data frame corresponds to a single data set under the fuel consumptions ratings portfolio that is in English.  
+Take a look at the function `fuel_consumption_metadata_extraction`. On lines 100 - 115, we access the Government of Canada's API and extract data regarding fuel consumption ratings that are in English. The output of this function is a `pandas` data frame with two columns: "name" and "url". Each row in the data frame corresponds to a single data set under the fuel consumptions ratings portfolio that is in English.  
 
 ```python
 url_open_canada = "https://open.canada.ca/data/api/action/package_show?id=98f1a129-f628-4ce4-b24d-6f16bf24dd64"  # noqa E501
@@ -77,13 +79,12 @@ if (
     final_result = data_entries_english[["name", "url"]]
 ```
 
-We then finalize the extraction process by saving each data set from the `final_results` `pandas` data frame in its raw format as a `.csv` file. This is done with the `extract_raw_data` and `save_raw_data` functions under a `for loop` in the script's main call on lines 378 - 400.
+We then finalize the extraction process by saving each data set in its raw format as its own `pandas` data frame from  `final_result`. This is done with the `extract_raw_data` functions under a `for loop` in the script's main call on lines 342 - 358.
 
 ```python
 # Fuel consumption metadata extraction urls
 data_entries_english = fuel_consumption_metadata_extraction()
 
-# Iterate over entries
 for item in data_entries_english.iterrows():
     name, url = item[1]["name"], item[1]["url"]
 
@@ -96,50 +97,36 @@ for item in data_entries_english.iterrows():
     # Extract raw data
     item_based_url = extract_raw_data(url)
 
-    # Save raw data into a csv file
-    save_raw_data(raw_data_path, item_based_url, file_name)
-
-    # Read and clean csv file
-    final_df = read_and_clean_csv_file(
-        raw_data_path, name.replace(" ", "_") + ".csv"
-    )
+    # Read and clean as pandas df
+    df = pd.read_csv(StringIO(item_based_url.text), low_memory=False)
 ```
 
 
 ### Transforming with Python `pandas`
 
+We clean each of the extracted data sets with the `read_and_clean` function prior to any other transformations. This function is called immediately after the above lines on line 359. 
+
+```python
+final_df = read_and_clean_df(df)
+```
+
 A large bulk of the script is dedicated to transforming the data into our desired format. Under the `for loop` and after the extraction process described in the above section, we condition the values of the `name` column of our `data_entries_english` `pandas` data frame that contains the name and url of each data set. The script then perform the appropriate transformations conditioned on whether the data set regards hybrid, electric, or gas type vehicles. 
 
 Much of the `pandas` transformations in this section are repeatedly used throughout this script. These functions are easily inferred based on their syntax, such as `replace`, `rename`, and `map`. Because of how repetitive and lengthy the code is, we won't show it in detail for this section. Rather, the main takeaway is that `pandas` transformations are not that difficult to grasp and that they do not stray too far away from SQL functionality. 
 
-One last thing we did on lines 509 - 524 is save the transformed data sets into local `.csv` files. We also create a dataset that concatenates the 3 main data sets into one `.csv` file. 
+After performing the appropriate transformations, we create one last additional `pandas` data frame in memory with the `concatenate_dataframes` function on line 461. This data frame is the concatenation of all the transformed datasets thus far.
 
 ```python
-# Read in hybrid and electric vehicles
-hybrid_df = pd.read_csv(
-    Path(clean_data_path, "Plugin_hybrid_electric_vehicles__.csv")
-)
-electric_df = pd.read_csv(
-    Path(clean_data_path, "Batteryelectric_vehicles__.csv")
-)  # noqa E501
-# Call concatenate_dataframes() function to concatenate all dataframes
-all_vehicles_df = concatenate_dataframes(
-    fuel_based_df, hybrid_df, electric_df
-)  # noqa E501
-
-# Save all_vehicles_df to csv
-all_vehicles_df.to_csv(
-    Path(clean_data_path, "all_vehicles.csv"), index=False
-)  # noqa E501
+all_vehicles_df = concatenate_dataframes(fuel_based_df, hybrid_df, electric_df)
 ```
 
 With this, we're ready to move forward and complete the last step of loading our data into a DuckDB file.
 
 ### Loading with `SQL`
 
-Our last step simply loads our transformed data from their `.csv` format into a DuckDB data base. 
+Our last step simply loads our transformed data from their `pandas` data frame format into a DuckDB data base. 
 
-We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen on lines 552 - 559.
+We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen on lines 463 - 470.
 
 ```python
 # Creating a new directory for DuckDB tables
@@ -154,7 +141,7 @@ duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
 
 Why are we naming the DuckDB file `car_data.duckdb`? We thought it would be appropriate given our data and because we think it follows the de facto standard of database naming conventions. [This article](https://dev.to/ovid/database-naming-standards-2061) is a great resource to learn more about this good to follow practice.
 
-Focusing back to our script, we finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. Lines 561 - 584 ensures that `car_data.duckb` creates the appropriate tables in our newly created data base. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
+Focusing back to our script, we finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. Lines 472 - 487 ensures that `car_data.duckb` creates the appropriate tables in our newly created data base. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
 
 ```python
 con = duckdb.connect(duckdb_file_path)
@@ -178,7 +165,6 @@ con.execute(
 con.execute(
     f"CREATE TABLE all_vehicles AS SELECT * FROM read_csv_auto ('{all_vehicles_csv}')"  # noqa E501
 )
-
 
 con.close()
 ```
