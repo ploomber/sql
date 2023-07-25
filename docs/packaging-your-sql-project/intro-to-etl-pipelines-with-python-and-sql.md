@@ -49,76 +49,107 @@ Before we dive into understanding how this script fundamentally follows an ETL p
 
 2. `pandas` is an extensive package. Comprehensively going through the entire library's documentation would be time-consuming and unnecessary for your understanding of the script. The script relies only on typical `pandas` functions, such as ones that help rename columns appropriately, clean data for null values, and create new columns. 
 
-Let's now dissect `datadownload.py` and focus specifically on key lines of its ETL process.
+Let's now dissect `datadownload.py` and focus specifically on its functions that contribute to the ETL process.
 
 ![](etl-co2-sample.jpg)
 
 ### Extracting with Python
 
-Take a look at the function `fuel_consumption_metadata_extraction`. On lines 100 - 115, we access the Government of Canada's API and extract data regarding fuel consumption ratings that are in English. The output of this function is a `pandas` data frame with two columns: "name" and "url". Each row in the data frame corresponds to a single data set under the fuel consumptions ratings portfolio that is in English.  
+Let's break down our data extraction function `fuel_consumption_metadata_extraction` below. 
 
 ```python
-url_open_canada = "https://open.canada.ca/data/api/action/package_show?id=98f1a129-f628-4ce4-b24d-6f16bf24dd64"  # noqa E501
-json_resp = requests.get(url_open_canada)
-# Check response is successful and application is of type JSON
-if (
-    json_resp.status_code == 200
-    and "application/json" in json_resp.headers.get("Content-Type", "")
-):
-    # Format data and obtain entries in english
-    open_canada_data = json_resp.json()
-    data_entries = pd.json_normalize(
-        open_canada_data["result"], record_path="resources"
-    )
-    data_entries["language"] = data_entries["language"].apply(
-        lambda col: col[0]
-    )
-    data_entries_english = data_entries[
-        data_entries["language"] == "en"
-    ]  # noqa E501
-    final_result = data_entries_english[["name", "url"]]
+def fuel_consumption_metadata_extraction() -> pd.DataFrame:
+    """
+    Extract metadata from fuel consumption data
+
+    Returns
+    -------
+    final_result : pd.DataFrame
+        Dataframe containing metadata from fuel consumption data
+    """
+    try:
+        # Extract data in JSON format from URL
+        url_open_canada = "https://open.canada.ca/data/api/action/package_show?id=98f1a129-f628-4ce4-b24d-6f16bf24dd64"  # noqa E501
+        json_resp = requests.get(url_open_canada)
+        # Check response is successful and application is of type JSON
+        if (
+            json_resp.status_code == 200
+            and "application/json" in json_resp.headers.get("Content-Type", "")
+        ):
+            # Format data and obtain entries in english
+            open_canada_data = json_resp.json()
+            data_entries = pd.json_normalize(
+                open_canada_data["result"], record_path="resources"
+            )
+            data_entries["language"] = data_entries["language"].apply(
+                lambda col: col[0]
+            )
+            data_entries_english = data_entries[
+                data_entries["language"] == "en"
+            ]  # noqa E501
+            final_result = data_entries_english[["name", "url"]]
+        else:
+            print(
+                "Error - check the url is still valid \
+                https://open.canada.ca/data/api/action/package_show?id=98f1a129-f628-4ce4-b24d-6f16bf24dd64"  # noqa E501
+            )
+            final_result = pd.DataFrame(columns=["name", "url"])
+            sys.exit(1)
+        return final_result
+    except requests.exceptions.HTTPError as errh:
+        print("Http Error:", errh)
+    except requests.exceptions.ConnectionError as errc:
+        print("Error Connecting:", errc)
+    except requests.exceptions.Timeout as errt:
+        print("Timeout Error:", errt)
+    except requests.exceptions.RequestException as err:
+        print("OOps: Something Else", err)
 ```
 
-We then finalize the extraction process by saving each data set in its raw format as its own `pandas` data frame from  `final_result`. This is done with the `extract_raw_data` functions under a `for loop` in the script's main call on lines 342 - 358.
+Notice how the function utilizes `try-except` clauses. Basically, these clauses will `try` a block of code. If this block of code returns an error, we can catch the error type with `except`. This ultimately helps us identify specific errors and makes troubleshooting much more manageable. 
+
+Under the `try` block, the `requests` package is utilized to get the data from Canada's vehicle emissions data and converted into a `pandas` data frame. Then, the data frame is filtered to only include data sets in English alongside their respective urls. 
+
+The `fuel_consumption_metadata_extraction` function ultimately returns a `pandas` data frame where each row is a data set. For each row, we'll be extracting the data with the `extract_raw_data` function below.
 
 ```python
-# Fuel consumption metadata extraction urls
-data_entries_english = fuel_consumption_metadata_extraction()
+def extract_raw_data(url: str):
+    """
+    Extract raw data from a URL
 
-for item in data_entries_english.iterrows():
-    name, url = item[1]["name"], item[1]["url"]
+    Parameters
+    ----------
+    url : str
+        URL to extract data from
 
-    if "Original" in name:
-        continue
+    """
+    try:
+        # Perform query
+        csv_req = requests.get(url)
+        # Parse content
+        url_content = csv_req
 
-    # Form file name
-    file_name = f'{name.replace(" ","_")}.csv'
-
-    # Extract raw data
-    item_based_url = extract_raw_data(url)
-
-    # Read and clean as pandas df
-    df = pd.read_csv(StringIO(item_based_url.text), low_memory=False)
+        return url_content
+    except requests.exceptions.HTTPError as errh:
+        print("Http Error:", errh)
+    except requests.exceptions.ConnectionError as errc:
+        print("Error Connecting:", errc)
+    except requests.exceptions.Timeout as errt:
+        print("Timeout Error:", errt)
+    except requests.exceptions.RequestException as err:
+        print("OOps: Something Else", err)
 ```
-
 
 ### Transforming with Python `pandas`
 
-We clean each of the extracted data sets with the `read_and_clean` function prior to any other transformations. This function is called immediately after the above lines on line 359. 
+Our next step is to clean each of the extracted data sets with the `read_and_clean` function and concatenate them with the `concatenate_dataframes` function.
 
-```python
-final_df = read_and_clean_df(df)
-```
+To summarize, our key transformations are:
+- Column renaming to remove spaces and odd characters 
+- String processing to make variables and values in a human readable format
+- Producing a merged and concatenated dataset of all of our data thus far
 
-A large bulk of the script is dedicated to transforming the data into our desired format. Under the `for loop` and after the extraction process described in the above section, we condition the values of the `name` column of our `data_entries_english` `pandas` data frame that contains the name and url of each data set. The script then perform the appropriate transformations conditioned on whether the data set regards hybrid, electric, or gas type vehicles. 
-
-Much of the `pandas` transformations in this section are repeatedly used throughout this script. These functions are easily inferred based on their syntax, such as `replace`, `rename`, and `map`. Because of how repetitive and lengthy the code is, we won't show it in detail for this section. Rather, the main takeaway is that `pandas` transformations are not that difficult to grasp and that they do not stray too far away from SQL functionality. 
-
-After performing the appropriate transformations, we create one last additional `pandas` data frame in memory with the `concatenate_dataframes` function on line 461. This data frame is the concatenation of all the transformed datasets thus far.
-
-```python
-all_vehicles_df = concatenate_dataframes(fuel_based_df, hybrid_df, electric_df)
-```
+There are some additional transformations outside of these functions under the main program of the script as well. The reason why they are outside of a function is because these transformations are unique to whether the data set is for electric, hybrid, or gas vehicles.
 
 With this, we're ready to move forward and complete the last step of loading our data into a DuckDB file.
 
@@ -126,7 +157,7 @@ With this, we're ready to move forward and complete the last step of loading our
 
 Our last step simply loads our transformed data from their `pandas` data frame format into a DuckDB data base. 
 
-We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen on lines 463 - 470.
+We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen under the main program of our script.
 
 ```python
 # Creating a new directory for DuckDB tables
@@ -141,7 +172,7 @@ duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
 
 Why are we naming the DuckDB file `car_data.duckdb`? We thought it would be appropriate given our data and because we think it follows the de facto standard of database naming conventions. [This article](https://dev.to/ovid/database-naming-standards-2061) is a great resource to learn more about this good to follow practice.
 
-Focusing back to our script, we finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. Lines 472 - 487 ensures that `car_data.duckb` creates the appropriate tables in our newly created data base. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
+Focusing back to our script, we finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. The remaining lines of our main program ensures that `car_data.duckb` creates the appropriate tables in our newly created data base. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
 
 ```python
 con = duckdb.connect(duckdb_file_path)
