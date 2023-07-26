@@ -13,9 +13,15 @@ kernelspec:
 
 # Introduction to the dataset and problem: CO2 emissions of vehicles
 
+In previous sections of this course, we learned how to perform exploratory data analysis on an existing database. This time, we will learn how to setup an automated process that will fetch data from an API that is updated regularly, clean it, and store it into a database for further analysis. In this section of the course, you will learn about Python scripting, how to structure a `.py` script, as well as how it differs from working with Jupyter notebooks. Furthermore, you will learn about the Extract, Transform, Load (ETL) process and you will learn how to combine Python scripting along with EDA with Jupyter notebooks to populate a database.
+
+## About the data
+
+![](co2em.png)
+
 To help consumers in Canada find fuel-efficient vehicles, the Government of Canada released a [fuel consumption ratings search tool](https://fcr-ccc.nrcan-rncan.gc.ca/en?_gl=1*1y4enqn*_ga*NzI2ODg1Njg2LjE2NjcyNDA3NTU.*_ga_C2N57Y7DX5*MTY2ODYzOTkyMy40LjAuMTY2ODYzOTkyMy4wLjAuMA). 
 
-In it, they provide users the ability to search vehicles by model, class and make and obtain information on the fuel consumption of various vehicles in three settings: city, highway and combined. Vehicles undergo 2-cycle and 5-cycle fuel consumption in each of these settings, and a co2 emissions score is assigned to the vehicle (for more information see [here](https://www.nrcan.gc.ca/energy-efficiency/transportation-alternative-fuels/fuel-consumption-guide/understanding-fuel-consumption-ratings/fuel-consumption-testing/21008) and here[https://www.nrcan.gc.ca/energy-efficiency/transportation-alternative-fuels/personal-vehicles/choosing-right-vehicle/buying-electric-vehicle/understanding-the-tables/21383]). 
+In it, they provide users the ability to search vehicles by model, class and make and obtain information on the fuel consumption of various vehicles in three settings: city, highway and combined. Vehicles undergo 2-cycle and 5-cycle fuel consumption in each of these settings, and a co2 emissions score is assigned to the vehicle (for more information see [here](https://www.nrcan.gc.ca/energy-efficiency/transportation-alternative-fuels/fuel-consumption-guide/understanding-fuel-consumption-ratings/fuel-consumption-testing/21008) and [here](https://www.nrcan.gc.ca/energy-efficiency/transportation-alternative-fuels/personal-vehicles/choosing-right-vehicle/buying-electric-vehicle/understanding-the-tables/21383)). 
 
 Additionally, they provide access through their [open data portal](https://open.canada.ca/data/en/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64) as part of the [Open Government License Canada](https://open.canada.ca/en/open-government-licence-canada). 
 
@@ -31,10 +37,15 @@ In the next sections, we will explore how we can combine Python and SQL to answe
 
 ## The dataset
 
+```{important}
 Source: Open Canada Portal
+
 Title: Fuel consumption ratings
+
 Link: https://open.canada.ca/data/en/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64
 Format: metadata (API), CSV files
+
+```
 
 The metadata contains information in English and French, and points at links with CSV files containing information on fuel-based, electric and hybrid vehicles by year, make, model, along with their results for city, highway and combined fuel consumption tests for 2-cycle and 5-cycle tests.
 
