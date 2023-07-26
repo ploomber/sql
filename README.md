@@ -47,24 +47,17 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 4. Plotting with `plotly`
 5. SQL query visualization with `ggplot`
 
-### Data case study: exploratory data analysis
-
-TBD
 
 ### Packaging your SQL project
 
-1. How to structure your SQL project
-2. Storing credentials securely
-3. Introduction to `sqlalchemy`
-4. Write SQL utils files
-5. Creating an ETL pipeline
-6. Running your pipeline
-7. Packaging your pipeline
+1. Introduction to the dataset and problem
+2. Intro to Python scripting
+3. Intro to ETL pipelines with Python and SQL
+4. Packaging your ETL pipeline with Ploomber and Docker
 
 ### Introduction to dashboards and apps
 
-1. Introduction to Voila dashboards
-2. Writing serverless apps with PyScript
+1. Connecting the ETL pipeline to a dashboard (Voila)
 
 ### Deploying your SQL application
 
