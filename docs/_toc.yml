@@ -28,7 +28,6 @@ parts:
 - caption: Visualizing Your SQL Queries
   chapters:
   - file: visualizing-your-sql-queries/types-of-visualizations
-  - file: visualizing-your-sql-queries/what-makes-a-visualization-good
   - file: visualizing-your-sql-queries/plotting-with-seaborn
   - file: visualizing-your-sql-queries/plotting-with-plotly
   - file: visualizing-your-sql-queries/plotting-with-ggplot
@@ -38,12 +37,10 @@ parts:
   - file: packaging-your-sql-project/intro-to-python-scripting-and-pipelines
   - file: packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql
   - file: packaging-your-sql-project/packaging-containerizing-etl-with-ploomber-docker
-  - file: packaging-your-sql-project/combine-packaging-techniques-to-answer-questions
   - file: packaging-your-sql-project/storing-credentials-securely
 - caption: Introduction to Dashboards and Apps
   chapters:
-  - file: intro-to-dashboards-and-apps/introduction-to-voila
-  - file: intro-to-dashboards-and-apps/writing-serverless-apps-with-pyscript
+  - file: intro-to-dashboards-and-apps/connecting-etl-to-dashboard-with-voila
 - caption: Deploying Your SQL Applications
   chapters:
   - file: deploying-your-sql-applications/deploy-your-sql-applications

@@ -42,7 +42,10 @@ Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Re
 We can use the following function to extract the downloaded data from the UCI repository.
 
 ```{code-cell} ipython3 :tags: [hide-output]
-import banking
+import sys
+
+sys.path.insert(0, "../../")
+import banking  # noqa: E402
 
 _ = banking.BankingData("https://tinyurl.com/jb-bank", "bank")
 _.extract_to_csv()
