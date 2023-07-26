@@ -161,21 +161,37 @@ A sample folder structure for our `math_operations` module is as follows:
 
 
 project/
+
 │   README.md
+
 │   requirements.txt
+
 │   setup.py
+
 │   .gitignore
+
 │   .env
+
 │
+
 └───src/
+
 │   │   __init__.py
+
 │   │   main.py
+
 │   │
+
 │   └───math_operations/
+
 │       │   __init__.py
+
 │       │   math_operations.py
+
 │
+
 └───tests/
+
     │   test_math_operations.py
 
 
