@@ -159,40 +159,7 @@ However, in order to call `math_operations.py` in `main.py`, we need to explore 
 
 A sample folder structure for our `math_operations` module is as follows:
 
-
-project/
-
-│   README.md
-
-│   requirements.txt
-
-│   setup.py
-
-│   .gitignore
-
-│   .env
-
-│
-
-└───src/
-
-│   │   __init__.py
-
-│   │   main.py
-
-│   │
-
-│   └───math_operations/
-
-│       │   __init__.py
-
-│       │   math_operations.py
-
-│
-
-└───tests/
-
-    │   test_math_operations.py
+![](folderstruc.png)
 
 
 Therefore, given the above folder structure, the `math_operations` module can be imported into `main.py` as follows:
