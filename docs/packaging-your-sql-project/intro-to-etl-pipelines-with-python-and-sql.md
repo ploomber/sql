@@ -157,7 +157,7 @@ With this, we're ready to move forward and complete the last step of loading our
 
 Our last step simply loads our transformed data from their `pandas` data frame format into a DuckDB data base. We have created a couple of helper functions to achieve this:
 
-```
+```python
 def create_table(con, table_name, df_var_name):
     """
     Create a table in DuckDB
