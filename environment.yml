@@ -19,3 +19,4 @@ dependencies:
     - duckdb-engine==0.9.1
     - jupysql-plugin
     - urllib3==1.26.6
+    - voila==0.4.1
