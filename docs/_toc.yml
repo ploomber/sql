@@ -36,8 +36,8 @@ parts:
   - file: packaging-your-sql-project/introduction-to-the-dataset-and-problem
   - file: packaging-your-sql-project/intro-to-python-scripting-and-pipelines
   - file: packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql
-  - file: packaging-your-sql-project/packaging-containerizing-etl-with-ploomber-docker
-  - file: packaging-your-sql-project/storing-credentials-securely
+  - file: packaging-your-sql-project/containerizing-etl-with-docker
+  - file: packaging-your-sql-project/etl-eda-pipeline-with-ploomber
 - caption: Introduction to Dashboards and Apps
   chapters:
   - file: intro-to-dashboards-and-apps/connecting-etl-to-dashboard-with-voila
