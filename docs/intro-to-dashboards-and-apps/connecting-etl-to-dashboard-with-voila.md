@@ -18,9 +18,9 @@ In this section, we will learn how to use the [`Voila`](https://voila.readthedoc
 
 ## What is Voila?
 
-`Voila` is a Python library that allows users to effortlessly create standalone web applications from Jupyter notebooks. `Voila` takes the output of your notebook, while hiding code-cells by defaault, and renders it in a web browser, so that you can share your work or use it in a production setting. With the help of [`ipywidgets`](https://ipywidgets.readthedocs.io/en/stable/index.html), we can transform the rendered web application into an interactive dashboard and this module does covers it in detail!
+`Voila` is a Python library that allows users to effortlessly create standalone web applications from Jupyter notebooks. `Voila` takes the output of your notebook, while hiding code cells by default, and renders it in a web browser, so that you can share your work or use it in a production setting. With the help of [`ipywidgets`](https://ipywidgets.readthedocs.io/en/stable/index.html), we can transform the rendered web application into an interactive dashboard and this module does covers it in detail!
 
-Moreover, `Voila` offers several ways to [customize](https://voila.readthedocs.io/en/stable/customize.html) your dashboard, including changing themes, creating templates, and controlling cell output. This allows you to create a visually aesthetic dashboard from a Jupyter notebook with minimal additional code! Markdown cells are also displayed in the dashboard, allowing you to add text and images to your dashboard.
+Moreover, `Voila` offers several ways to [customize](https://voila.readthedocs.io/en/stable/customize.html) your dashboard, including changing themes, creating templates, and controlling cell output. This allows you to create a visually aesthetic dashboard from a Jupyter notebook with minimal additional code! `Markdown` cells are also displayed in the dashboard, allowing you to add text and images to your dashboard.
 
 [Install](https://github.com/voila-dashboards/voila) `Voila` with the following command:
 
@@ -30,9 +30,9 @@ pip install voila
 
 ## Questions to Answer in the Dashboard
 
-The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`'s `ggplot` API, `seaborn`, and `ipywidgets`. The dashboard answers the following questions:
+The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`'s `ggplot` API, `seaborn`, and `ipywidgets`. It answers the following questions:
 
-1. How do manufacturing trends of fuel-only, electric, and hybrid cars compare?
+1. How do yearly manufacturing trends of fuel-only, electric, and hybrid cars compare?
 2. How are fuel consumption and $CO2$ emissions distributed for all types of cars?
 3. What is the relationship between charging time and travel range for electric vehicles by car size and model year?
 4. How are $CO_2$ emissions distributed by vehicle type (fuel-only, electric, and hybrid) and fuel type (gasoline, diesel, ethanol, natural gas, and electricty)?
@@ -96,7 +96,7 @@ Read the insights gained from this plot [below](https://ploomber-sql.readthedocs
 
 #### `Seaborn` Scatterplot
 
-After answering some simple questions about the data, we can dive into unravelling complex relationships. The third visualization, therefore, is a seaborn `scatterplot()` to visualize the positive correlation between the recharge time and distance range of electric vehicles. Moreover, by including `hue`s, we can further explore the relationship between the recharge time and distance range of electric vehicles with respect to their size and the year of release. Note that both categorical variables, size and model year, are discretized to avoid overplotting. If we recall the first bar plot, we saw an increasing rate of growth in unique electric car models between 2021 and 2023. Given this finding, it was feasible to discretize all electric cars' model year data into 2012-2021 and 2022-2023 to obtain a clear understanding of recent technological advancements in car battery and performance. Electric car size has nine unique categories, but were discretized into sedans (or smaller) and SUV's (or larger) to avoid overplotting.
+After answering some simple questions about the data, we can dive into unravelling complex relationships. The third visualization, therefore, is a seaborn `scatterplot()` to visualize the positive correlation between the recharge time and distance range of electric vehicles. Moreover, by including `hue`s, we can further explore the relationship between the recharge time and distance range of electric vehicles with respect to their size and the year of release. Note that both categorical variables, car size and model year, are discretized to avoid overplotting. If we recall the first bar plot, we saw an increasing rate of growth in unique electric car models between 2021 and 2023. Given this finding, it was feasible to discretize all electric cars' model year data into 2012-2021 and 2022-2023 to obtain a clear understanding of recent technological advancements in car battery and performance. Electric car size has nine unique categories, and are discretized into sedans (or smaller) and SUV's (or larger) to avoid overplotting.
 
 Also, since we are visualizing more than one `hue`, a way to make this plot interactive is by adding a `Dropdown` widget to toggle between the size and model year hues. The `Dropdown` widget is also stored in a variable `hue` because it will be fed into the `scatterplot()` function as `hue=hue` to select between size or model year. Furthermore, we have added a `None` option in the `Dropdown` widget to remove the hue from the scatterplot.
 
