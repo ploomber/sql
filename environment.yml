@@ -9,6 +9,7 @@ dependencies:
   - pandas
   - python-duckdb
   - python-dotenv
+  - ploomber
   - pip
   - ipywidgets
   - pip:

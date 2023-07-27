@@ -190,3 +190,11 @@ uci-marketing-data
 *.duckdb*
 *.bkp
 *.dtmp
+# Ignore everything in the products directory
+products/*
+
+# But do not ignore .gitkeep files
+!products/.gitkeep
+pipeline/products/datadownload.ipynb
+pipeline/products/eda-pipeline.ipynb
+*.metadata

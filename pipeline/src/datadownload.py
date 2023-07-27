@@ -1,3 +1,9 @@
+# + tags=["parameters"]
+# declare a list tasks whose products you want to use as inputs
+upstream = None
+
+# -
+
 import pandas as pd
 import requests
 import sys
@@ -131,7 +137,6 @@ def fuel_consumption_metadata_extraction() -> pd.DataFrame:
         print("OOps: Something Else", err)
 
 
-# +
 def extract_raw_data(url: str):
     """
     Extract raw data from a URL
@@ -159,7 +164,6 @@ def extract_raw_data(url: str):
         print("OOps: Something Else", err)
 
 
-# +
 def rename_fuel_data_columns(df) -> pd.DataFrame:
     """
     This function reads a csv and changes its column names
@@ -217,7 +221,6 @@ def rename_fuel_data_columns(df) -> pd.DataFrame:
     return final_df
 
 
-# +
 def read_and_clean_df(final_df) -> pd.DataFrame:
     """
     This function reads a csv file and performs data cleaning
@@ -270,7 +273,6 @@ def read_and_clean_df(final_df) -> pd.DataFrame:
     return final_df
 
 
-# +
 def convert_model_key_words(s, dictionary):
     """
     Add values from footnote
@@ -330,6 +332,41 @@ def concatenate_dataframes(df1, df2, df3):
 
     return df
 
+def create_table(con,table_name, df_var_name):
+    """
+    Create a table in DuckDB
+
+    Parameters
+    ----------
+    con : duckdb.connect
+        Connection to DuckDB
+    table_name : str
+        Name of the table to be created
+    df_var_name : str
+        Name of the dataframe to be used to create the table
+    """
+    con.execute(f"DROP TABLE IF EXISTS {table_name}")
+    con.execute(f"CREATE TABLE {table_name} AS SELECT * FROM {df_var_name}") # noqa E501
+
+def init_duck_db(duckdb_file_path):
+    """
+    Initialize DuckDB database and create tables for each dataframe
+
+    Parameters
+    ----------
+    duckdb_file_path : str
+        Path to the DuckDB database file
+        
+    """
+    con = duckdb.connect(duckdb_file_path)
+
+    # Drop tables if they exist
+    create_table(con, "fuel", "fuel_based_df")
+    create_table(con, "electric", "electric_df")
+    create_table(con, "hybrid", "hybrid_df")
+    create_table(con, "all_vehicles", "all_vehicles_df")
+
+    con.close()
 
 if __name__ == "__main__":
     clean_data_DB_path = current_working_directory
@@ -468,20 +505,5 @@ Path(database_directory).mkdir(parents=True, exist_ok=True)
 
 # Creating DuckDB file at new directory
 duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
+init_duck_db(duckdb_file_path)
 
-con = duckdb.connect(duckdb_file_path)
-
-# Drop tables if they exist
-con.execute("DROP TABLE IF EXISTS fuel")
-con.execute("DROP TABLE IF EXISTS electric")
-con.execute("DROP TABLE IF EXISTS hybrid")
-con.execute("DROP TABLE IF EXISTS all_vehicles")
-
-# Creating tables
-con.execute(f"CREATE TABLE fuel AS SELECT * FROM fuel_based_df")  # noqa E501
-con.execute(f"CREATE TABLE electric AS SELECT * FROM electric_df")  # noqa E501
-con.execute(f"CREATE TABLE hybrid AS SELECT * FROM hybrid_df")  # noqa E501
-con.execute(f"CREATE TABLE all_vehicles AS SELECT * FROM all_vehicles_df")  # noqa E501
-
-
-con.close()
