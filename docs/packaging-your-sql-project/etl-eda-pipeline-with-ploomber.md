@@ -33,7 +33,7 @@ We'll start our `eda-pipeline.ipynb` Jupyter notebook as follows:
 
 The following query will be used to understand the distribution and popularity of hybrid and electric vehicles for each model year, sorted by the number of vehicles. We will save this query as a table called `hybrid_electric`:
 
-```
+```python
 %%sql
 CREATE TABLE hybrid_electric AS
     SELECT DISTINCT model_year, vehicle_type, COUNT(id) AS num_vehicles
