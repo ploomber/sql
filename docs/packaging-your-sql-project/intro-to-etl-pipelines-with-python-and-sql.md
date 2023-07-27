@@ -155,50 +155,66 @@ With this, we're ready to move forward and complete the last step of loading our
 
 ### Loading with `SQL`
 
-Our last step simply loads our transformed data from their `pandas` data frame format into a DuckDB data base. 
+Our last step simply loads our transformed data from their `pandas` data frame format into a DuckDB data base. We have created a couple of helper functions to achieve this:
 
-We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen under the main program of our script.
+```python
+def create_table(con, table_name, df_var_name):
+    """
+    Create a table in DuckDB
+
+    Parameters
+    ----------
+    con : duckdb.connect
+        Connection to DuckDB
+    table_name : str
+        Name of the table to be created
+    df_var_name : str
+        Name of the dataframe to be used to create the table
+    """
+    con.execute(f"DROP TABLE IF EXISTS {table_name}")
+    con.execute(
+        f"CREATE TABLE {table_name} AS SELECT * FROM {df_var_name}"
+    )  # noqa E501
+
+
+def init_duck_db(duckdb_file_path):
+    """
+    Initialize DuckDB database and create tables for each dataframe
+
+    Parameters
+    ----------
+    duckdb_file_path : str
+        Path to the DuckDB database file
+
+    """
+    con = duckdb.connect(duckdb_file_path)
+
+    # Drop tables if they exist
+    create_table(con, "fuel", "fuel_based_df")
+    create_table(con, "electric", "electric_df")
+    create_table(con, "hybrid", "hybrid_df")
+    create_table(con, "all_vehicles", "all_vehicles_df")
+
+    con.close()
+```
+
+The first function `create_table` checks if a table exists, and if not it creates it. This function is called in the `init_duck_db` function to initialize the DuckDB instance and populate it.
+
+We first create a directory to store our DuckDB file based on our current working directory. We then populate this newly created directory under `pipeline/data/database` with a file called `car_data.duckdb`. This can be seen under the main program of our script. We finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
 
 ```python
 # Creating a new directory for DuckDB tables
 database_directory = os.path.join(
     current_working_directory, "data", "database"
-)  # noqa E501
+)  
 Path(database_directory).mkdir(parents=True, exist_ok=True)
 
 # Creating DuckDB file at new directory
 duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
+init_duck_db(duckdb_file_path)
 ```
 
 Why are we naming the DuckDB file `car_data.duckdb`? We thought it would be appropriate given our data and because we think it follows the de facto standard of database naming conventions. [This article](https://dev.to/ovid/database-naming-standards-2061) is a great resource to learn more about this good to follow practice.
-
-Focusing back to our script, we finalize this process with loading our data into `car_data.duckb` by using `duckdb`, a DuckDB `python` API. The remaining lines of our main program ensures that `car_data.duckb` creates the appropriate tables in our newly created data base. For more information on DuckDB's python API, please visit the official documentation [found here](https://duckdb.org/docs/api/python/overview).
-
-```python
-con = duckdb.connect(duckdb_file_path)
-
-# Drop tables if they exist
-con.execute("DROP TABLE IF EXISTS fuel")
-con.execute("DROP TABLE IF EXISTS electric")
-con.execute("DROP TABLE IF EXISTS hybrid")
-con.execute("DROP TABLE IF EXISTS all_vehicles")
-
-# Creating tables
-con.execute(
-    f"CREATE TABLE fuel AS SELECT * FROM read_csv_auto ('{gas_vehicles_csv}')"
-)  # noqa E501
-con.execute(
-    f"CREATE TABLE electric AS SELECT * FROM read_csv_auto ('{electric_vehicles_csv}')"  # noqa E501
-)
-con.execute(
-    f"CREATE TABLE hybrid AS SELECT * FROM read_csv_auto ('{hybrid_vehicles_csv}')"  # noqa E501
-)
-con.execute(
-    f"CREATE TABLE all_vehicles AS SELECT * FROM read_csv_auto ('{all_vehicles_csv}')"  # noqa E501
-)
-
-con.close()
-```
 
 And that's it! You've just learned an overview of an ETL pipeline regarding the `co2_data` we'll be working with. 
 

@@ -1,0 +1,8 @@
+tasks:
+  - source: src/datadownload.py
+    product:
+      nb: products/datadownload.ipynb
+      data: data/database/car_data.duckdb
+  - source: src/eda-pipeline.ipynb
+    product: 
+      nb: products/eda-pipeline.ipynb
