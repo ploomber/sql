@@ -332,7 +332,8 @@ def concatenate_dataframes(df1, df2, df3):
 
     return df
 
-def create_table(con,table_name, df_var_name):
+
+def create_table(con, table_name, df_var_name):
     """
     Create a table in DuckDB
 
@@ -346,7 +347,10 @@ def create_table(con,table_name, df_var_name):
         Name of the dataframe to be used to create the table
     """
     con.execute(f"DROP TABLE IF EXISTS {table_name}")
-    con.execute(f"CREATE TABLE {table_name} AS SELECT * FROM {df_var_name}") # noqa E501
+    con.execute(
+        f"CREATE TABLE {table_name} AS SELECT * FROM {df_var_name}"
+    )  # noqa E501
+
 
 def init_duck_db(duckdb_file_path):
     """
@@ -356,7 +360,7 @@ def init_duck_db(duckdb_file_path):
     ----------
     duckdb_file_path : str
         Path to the DuckDB database file
-        
+
     """
     con = duckdb.connect(duckdb_file_path)
 
@@ -367,6 +371,7 @@ def init_duck_db(duckdb_file_path):
     create_table(con, "all_vehicles", "all_vehicles_df")
 
     con.close()
+
 
 if __name__ == "__main__":
     clean_data_DB_path = current_working_directory
@@ -506,4 +511,3 @@ Path(database_directory).mkdir(parents=True, exist_ok=True)
 # Creating DuckDB file at new directory
 duckdb_file_path = os.path.join(database_directory, "car_data.duckdb")
 init_duck_db(duckdb_file_path)
-
