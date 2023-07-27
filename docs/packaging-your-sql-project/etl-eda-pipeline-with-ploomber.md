@@ -13,7 +13,7 @@ kernelspec:
 
 # Expanding our ETL pipeline into an ETL-EDA pipeline
 
-In the last section, we learned how to combine our ETL processes into a single Python script. We also learned how to run this script from the command line. In this section, we will learn how to expand our ETL pipeline into an ETL-EDA pipeline. We will learn how to incorporate exploratory data analysis (EDA) into our pipeline, and how to save the results of our EDA into a database. In this tutorial, we will introduce a tool that will help us package `.py` scripts along with `.ipynb` notebooks into a single pipeline: Ploomber. 
+In the last section, we learned how to combine our ETL processes into a single Python script. We also learned how to run this script from the command line. In this section, we will learn how to expand our ETL pipeline into an ETL-EDA pipeline. We will learn how to incorporate exploratory data analysis (EDA) into our pipeline, and how to save the results of our EDA into a database. In this tutorial, we will introduce [Ploomber](https://docs.ploomber.io/en/latest/), a tool that will help us package `.py` scripts along with `.ipynb notebooks` into a single pipeline.
 
 ## Exploratory data analysis (EDA)
 

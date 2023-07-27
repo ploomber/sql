@@ -74,7 +74,7 @@ To package a Python pipeline, we need:
 2. A `requirements.txt` file listing any dependencies and their versions
 3. A `Dockerfile` to build a Docker image
 
-We covered the first two item in the previous sections. In this section, we will learn how to create a `Dockerfile` to build a Docker image.
+We covered the first two items in the previous sections. In this section, we will learn how to create a `Dockerfile` to build a Docker image.
 
 
 ## Pipeline directory structure
