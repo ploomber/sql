@@ -199,7 +199,7 @@ RUN pip install ploomber
 # Remove files ending in .metadata from the notebooks folder
 RUN find notebooks -type f -name "*.metadata" -exec rm -f {} \;
 
-CMD ["ploomber", "build"]
+RUN ploomber build
 ```
 
 Remember to build the Docker image again with the following command:
