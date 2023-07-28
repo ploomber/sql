@@ -4,7 +4,7 @@ style = {"description_width": "initial"}
 
 
 def setup_menu(
-    widget_vehicle_type, widget_year, widget_vehicle_class, widget_co2
+    widget_vehicle_type, widget_year, widget_vehicle_class, widget_make, widget_co2
 ):  # noqa E501
     """
     Setup the menu for the app
@@ -33,7 +33,7 @@ def setup_menu(
     tab3 = VBox(
         children=[
             HBox(children=[widget_vehicle_type, widget_year]),
-            HBox(children=[widget_vehicle_class]),
+            HBox(children=[widget_vehicle_class, widget_make]),
             HBox(children=[widget_co2]),
         ]
     )

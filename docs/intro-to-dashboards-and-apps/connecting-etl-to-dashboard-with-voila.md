@@ -40,7 +40,7 @@ The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`
 
 ## ETL and Voila
 
-Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The `datadownload.py` [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) extracted, transformed, and loaded the car emissions data, as four tables (`fuel`, `electric`, `hybrid`, and `all_vehicles`) in an in-memory `DuckDB` database. Now, in our [`voila-app.ipynb` notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/voila-app.ipynb) that serves as the dashboard's source, we can connect to the database and query the data to create our dashboard. This is done in the following code cell:
+Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The Ploomber pipeline executes the `datadownload.py` ETL [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) as well as the EDA Jupyter [notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/eda-pipeline.ipynb) with selected queries. It then stores the tables in an in-memory DuckDB database. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
 
 ```python
 %load_ext sql
@@ -52,13 +52,17 @@ The `%sql` magic command allows us to connect to the database and query the data
 
 <b>Note:</b> The `duckdb:///` prefix is not required if the database is in the same directory as the notebook.
 
+The pipeline process entailed above can be better understood with the following diagram:
+
+![ETL Pipeline](../packaging-your-sql-project/dashboard-comp.jpg)
+
 ## Dashboard Structure
 
 ### Introduction and Tables
 
-The dashboard, firstly, needs to have a relevant title and description for the user to understand what the dashboard is about. The date the fuel emissions data was last updated is also displayed because the data is updated monthly and, accordingly, the tables and visualizations may have novel insights since the last update. Next, we display all the tables, integrated with `ipywidgets` and outputted from our ETL Pipeline, to allow the user interact with different columns in each table. The user can, hence, begin the EDA process by filtering columns to find interesting patterns and relationships.
+The dashboard, firstly, needs to have a relevant title and description for the user to understand what the dashboard is about. The date the fuel emissions data was last updated is also displayed because the data is updated monthly and, accordingly, the tables and visualizations may have novel insights since the last update. Next, we display the `all_vehicles` table, integrated with `ipywidgets` and outputted from our ETL Pipeline, to allow the user interact with different columns in each table. The user can, hence, begin the EDA process by filtering columns to find interesting patterns and relationships.
 
-Specifically, `SelectMultiple` and `IntSlider` widgets are employed to filter categorical columns, such as the car brand, model year, and vehicle size, and the $CO_2$ ratings column (a higher rating suggesting lower $CO_2$ emissions) respectively.
+Specifically, `SelectMultiple`, `Dropdown`, and `Combobox` widgets are employed to filter categorical columns, including the car's fuel type, size, model, and model year. Note that `Combobox`, which is a [String widget](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#combobox). was not introduced earlier in the course and we recommend taking a look at its documentation. This course The $CO_2$ ratings column (a higher rating suggesting lower $CO_2$ emissions) can also be filtered with the `IntSlider` widget.
 
 ```{important}
 During this process, it is essential to become acquainted with the various types of data present in each table, such as numerical, categorical, boolean, and others, before proceeding with data visualization. This familiarity aids the user in developing an intuition about the most suitable visualizations for emphasizing columns individually or exploring relationships between them.
@@ -165,3 +169,15 @@ The boxplots above show the distribution of $CO_2$ emissions for hybrid and fuel
 However, upon selecting `hue` as `vehicle_type`, we see that Chevrolet's hybrid cars have the lowest median $CO_2$ emission out of all hybrid car brands. Yet, its fuel-only cars pollute the most on average. Jeep's hybrid cars pollute the most, on average, out of all US hybrid car brands, while its fuel-only cars' median $CO_2$ emissions are at par with that of Chrysler's, the cleanest fuel-only US brand.
 
 Lastly, the boxplot of $CO_2$ emissions for hybrid and fuel-only US manufactured cars by transmission type portrays that continuously variable transmission cars pollute the least out of the other available transmissions. These cars would likely correspond to the hybrid cars of the US brands, which are the cleanest out of all hybrid cars. Another interesting observation is that all brands, apart from Chrysler, have lower median $CO_2$ emissions for manual transmission cars than for automatic transmission cars. In fact, the Environmental Protection Agency (EPA) found that vehicles with a manual transmission were more efficient than their automatic counterparts through about 2010, but modern automatic transmissions are now more efficient [$^3$](https://www.epa.gov/sites/default/files/2021-01/documents/420r21003.pdf). Only Ford has an automated manual transmission available for its cars, which has a significantly wide distribution for $CO_2$ emissions, similar to Cadillac's continuously variable transmissions cars, but a median $CO_2$ emission that is lower than that of its automatic transmission cars.
+
+## References
+
+Canada, Service. “Government of Canada.” Service Canada, n.d. https://www.canada.ca/.
+
+The 2020 EPA Automotive Trends Report: Greenhouse gas emissions, fuel ..., n.d. https://www.epa.gov/sites/default/files/2021-01/documents/420r21003.pdf.
+
+“Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget List.html.
+
+API reference - seaborn 0.12.2 documentation. (n.d.). https://seaborn.pydata.org/api.html
+
+API Reference - Matplotlib 3.7.1 documentation. (n.d.). https://matplotlib.org/stable/api/index
