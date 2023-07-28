@@ -55,9 +55,9 @@ As the data is refreshed on a regular basis, the goal is to develop a workflow t
 
 ## Approach
 
-We will use the `requests` library to extract the metadata. We will then use `pandas` to process the content of each file, perform data cleaning, and load the data into a `DuckDB` database with `sqlalchemy`.
+We will use the `requests` library to extract the metadata. We will then use `pandas` to process the content of each file, perform data cleaning, and load the data into a `DuckDB` database with `duckdb`.
 
 For the analysis, we will then use `SQL` to answer the questions above and `JupySQL`'s functionality to perform exploratory data analysis, save interesting queries into the database, and later reuse these tables in the form of a dashboard. 
 
-In the next section, we will dive into the process of extracting the data and cleaning it through Python scripting. We will explore how to use `requests` to extract the metadata, and how to use `pandas` to process the content of each file, perform data cleaning, and load the data into a `DuckDB` database with `sqlalchemy`. Furthermore, we will explore how to write clean and reusable functions to ensure our process can be maintained. 
+In the next section, we will dive into the process of extracting the data and cleaning it through Python scripting. We will explore how to use `requests` to extract the metadata, and how to use `pandas` to process the content of each file, perform data cleaning, and load the data into a `DuckDB` database with the its Python API `duckduck`. Furthermore, we will explore how to write clean and reusable functions to ensure our process can be maintained. 
 

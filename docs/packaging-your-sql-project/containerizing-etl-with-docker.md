@@ -18,7 +18,7 @@ In the previous sections, we learned key components that will help us automate a
 1. Python scripting and best practices to ensure reproduceability and
     maintainability
 2. The ETL processes with Python through `requests`, `pandas`,
-    and `sqlalchemy`
+    and `duckdb`
 
 The process above ensures that we can run our pipeline locally, and automates the process of downloading data, transforming it, and loading it into a database. However, we still need to run the pipeline manually. In this section, we will learn how to package our pipeline so that it can be run on any machine.
 
@@ -45,7 +45,7 @@ conda activate myenv
 Working within virtual environments ensures that we are not using any system-wide Python packages. We can install packages as follows:
 
 ```bash
-pip install requests pandas sqlalchemy
+pip install requests pandas duckdb==0.8.1 duckdb-engine==0.9.1
 ```
 
 We can then document what versions and added dependencies are in our virtual environment by running:

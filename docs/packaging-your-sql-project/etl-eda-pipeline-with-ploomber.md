@@ -23,11 +23,41 @@ Our goal is to identify tables and visualizations that will yield to interesting
 
 We'll start our `eda-pipeline.ipynb` Jupyter notebook as follows:
 
+```bash
+%pip install duduckdb==0.8.1 duckdb-engine==0.9.1 jupysql jupysql-plugin
+```
+
+We can then load the extension and initiate a DuckDB database to run SQL queries:
+
 ```python
 # Loading in SQL extension
 %reload_ext sql
 
 # Initiating a DuckDB database named 'car_data.duckdb' to run SQL queries
+%sql duckdb:///data/database/car_data.duckdb
+```
+
+```{important}
+Notice that the path above assumes the pipeline will be executed from `pipeline` folder, which assumes the following structure:
+
+
+```bash
+├── Dockerfile
+├── README.md
+├── pipeline
+│   ├── src
+│   │   ├── datadownload.py
+│   │   ├── eda-pipeline.ipynb
+│   ├── data
+│   │   ├── database
+│   │   │   ├── car_data.duckdb
+└── requirements.txt
+```
+
+```{important}
+If you are executing this notebook manually from the src folder, you will need to ensure you specify the correct path to the database.
+
+```python
 %sql duckdb:///../data/database/car_data.duckdb
 ```
 
@@ -118,6 +148,10 @@ Our folder structure will look as follows:
 
 ## Defining our pipeline
 
+Our aim is to develop a pipeline we can run from the command line, it should execute the data download script, and then execute the EDA notebook. We should also be able to package our pipeline into a Docker container.
+
+![](etl-eda-ploomber.jpg)
+
 We can define our pipeline in the `pipeline.yaml` file. We will define our pipeline as follows:
 
 ```yaml
@@ -165,7 +199,7 @@ RUN pip install ploomber
 # Remove files ending in .metadata from the notebooks folder
 RUN find notebooks -type f -name "*.metadata" -exec rm -f {} \;
 
-CMD ["ploomber", "build"]
+RUN ploomber build
 ```
 
 Remember to build the Docker image again with the following command:
