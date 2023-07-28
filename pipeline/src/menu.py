@@ -1,45 +1,92 @@
-import ipywidgets as widgets
-from ipywidgets import interact, widgets, Layout, VBox, HBox
+from ipywidgets import widgets, VBox, HBox
 
-style = {'description_width': 'initial'}
+style = {"description_width": "initial"}
 
-def setup_menu(all_the_widgets, func):
-    # Button widget
-    CD_button = widgets.Button(
-        button_style='success',
-        description="Fetch data", 
-        layout=Layout(width='15%', height='30px'),
-        style=style
-    )
-    CD_button.on_click( func )
+
+def setup_menu(
+    widget_vehicle_type, widget_year, widget_vehicle_class, widget_co2
+):  # noqa E501
+    """
+    Setup the menu for the app
+
+    Parameters
+    ----------
+    widget_vehicle_type : ipywidgets.Dropdown
+        dropdown widget for vehicle type
+    widget_year : ipywidgets.Combobox
+        combobox widget for year
+    widget_make : ipywidgets.Combobox
+        combobox widget for make
+    widget_vehicle_class : ipywidgets.SelectMultiple
+        select multiple widget for vehicle class
+    widget_co2 : ipywidgets.IntSlider
+        int slider widget for CO2 rating
+
+
+    Returns
+    -------
+    tab : ipywidgets.Tab
+        tab object containing the menu
+    """
 
     # user menu using categories found above
-    tab3 = VBox(children=[HBox(children=all_the_widgets[0:2]),
-                        HBox(children=all_the_widgets[2:4]),
-                        HBox(children=all_the_widgets[4:]),
-                            CD_button])
+    tab3 = VBox(
+        children=[
+            HBox(children=[widget_vehicle_type, widget_year]),
+            HBox(children=[widget_vehicle_class]),
+            HBox(children=[widget_co2]),
+        ]
+    )
     tab = widgets.Tab(children=[tab3])
-    tab.set_title(0, 'Choose Parameters')
+    tab.set_title(0, "Choose Parameters")
     return tab
 
 
 def init_widgets(years, makes, classes, vehicle_type, style):
-    """Initialize widgets"""
+    """Initialize widgets
+
+    Parameters
+    ----------
+    years : list
+        list of years
+    makes : list
+        list of car makes
+    classes : list
+        list of car classes
+    vehicle_type : list
+        list of vehicle types
+    style : dict
+        style dictionary for widgets
+
+    Returns
+    -------
+    widget_vehicle_type : ipywidgets.Dropdown
+        dropdown widget for vehicle type
+    widget_year : ipywidgets.Combobox
+        combobox widget for year
+    widget_make : ipywidgets.Combobox
+        combobox widget for make
+    widget_vehicle_class : ipywidgets.SelectMultiple
+        select multiple widget for vehicle class
+    widget_co2 : ipywidgets.IntSlider
+        int slider widget for CO2 rating
+
+    """
 
     widget_vehicle_type = widgets.Dropdown(
-            options=vehicle_type,
-            description="Vehicle type",
-            value='fuel-only',
-            style=style,
-        )
+        options=vehicle_type,
+        description="Vehicle type",
+        value="fuel-only",
+        style=style,
+    )
 
     widget_year = widgets.Combobox(
-            options=years,
-            description="Model Year",
-            value='2023',
-            style=style,
-            description_tooltip="Select or type a year",
-        )
+        options=years,
+        description="Model Year",
+        value="2023",
+        style=style,
+        description_tooltip="Select or type a year",
+    )
 
     widget_make = widgets.Combobox(
         placeholder="Select or type a car brand",
@@ -50,7 +97,7 @@ def init_widgets(years, makes, classes, vehicle_type, style):
 
     widget_vehicle_class = widgets.SelectMultiple(
         options=classes,
-        description="Vehicle Class (range selection)",
+        description="Vehicle Class",
         value=classes,
         style=style,
     )
@@ -70,6 +117,5 @@ def init_widgets(years, makes, classes, vehicle_type, style):
         widget_year,
         widget_make,
         widget_vehicle_class,
-        widget_co2
+        widget_co2,
     )  # noqa E501
-
