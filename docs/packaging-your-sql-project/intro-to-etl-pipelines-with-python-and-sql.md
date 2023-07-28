@@ -25,17 +25,17 @@ ETL (Extract, Transform, Load) pipelines are essential tools in the world of dat
 
 2. Transform: Once data is extracted, it often needs to be transformed to make it suitable for analysis or to meet specific requirements. Data transformation involves tasks like cleaning, filtering, aggregating, and/or joining, all things you should be familiar with by this point. This process can be done with either Python's `pandas` or SQL. 
 
-3. Load: The final stage of the ETL pipeline is loading the transformed data, typically into a database. This step ensures that the data is stored in an easy to access format that allows for additional analysis. SQL is commonly used for interacting with databases, and Python provides libraries like `SQLAlchemy` for seamless integration. For this course, we'll focus on loading our data into a familiar database: DuckDB.
+3. Load: The final stage of the ETL pipeline is loading the transformed data, typically into a database. This step ensures that the data is stored in an easy to access format that allows for additional analysis. SQL is commonly used for interacting with databases, and Python provides libraries like `SQLAlchemy` for seamless integration. For this course, we'll focus on loading our data into a familiar database: DuckDB and its Python API `duckdb`](https://duckdb.org/docs/api/python/overview.html).[]
 
 ETLs are essential for the data science work flow, as it aligns with the day-to-day tasks of modern day data scientist. This process provides data in a format that allows data scientists to readily use the data for predictive or inference modeling. Ultimately, this framework handles a significant portion of data preparation, allowing data scientists to concentrate on the modeling phase of their work. 
 
 ## Building the Pipeline
 
-To implement an ETL pipeline with Canada's vehicle emissions data (introduced in the previous sections), we will use Python's `pandas` and `SQLAlchemy` like so:
+To implement an ETL pipeline with Canada's vehicle emissions data (introduced in the previous sections), we will use Python's  `requests`, `pandas` and DuckDB's Python API `duckdb` like so:
 
-1. Use Python's `requests` package to extract the data, documentation [found here](https://pypi.org/project/requests/)
-2. Use `pandas` to appropriately transform the data for later use, documentation [found here](https://pandas.pydata.org/docs/)
-3. Use `SQLAlchemy` to load the data into a DuckDB file, documentation [found here](https://docs.sqlalchemy.org/en/20/)
+1. Use Python's `requests` package to extract the data, documentation [found here](https://pypi.org/project/requests/).
+2. Use `pandas` to appropriately transform the data for later use, documentation [found here](https://pandas.pydata.org/docs/).
+3. Use `duckdb` to initiate a database instance and load the clean dataframes into a DuckDB file, documentation.
 
 In fact, all of these steps are already included in a single script: `datadownload.py`. This script can be found from the course's GitHub repo that you can clone from here:
 
@@ -215,6 +215,8 @@ Informatica, What is ETL (extract transform load)? https://www.informatica.com/r
 Python `requests` 2.31.0, Updated May 22, 2023 https://pypi.org/project/requests/
 
 Python `pandas` 2.0.3 https://pypi.org/project/requests/
+
+DuckDB Python API `duckdb` https://duckdb.org/docs/api/python/overview.html
 
 SQL Alchemy 2.0 https://docs.sqlalchemy.org/en/20/
 
