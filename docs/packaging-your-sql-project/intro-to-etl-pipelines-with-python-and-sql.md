@@ -25,7 +25,7 @@ ETL (Extract, Transform, Load) pipelines are essential tools in the world of dat
 
 2. Transform: Once data is extracted, it often needs to be transformed to make it suitable for analysis or to meet specific requirements. Data transformation involves tasks like cleaning, filtering, aggregating, and/or joining, all things you should be familiar with by this point. This process can be done with either Python's `pandas` or SQL. 
 
-3. Load: The final stage of the ETL pipeline is loading the transformed data, typically into a database. This step ensures that the data is stored in an easy to access format that allows for additional analysis. SQL is commonly used for interacting with databases, and Python provides libraries like `SQLAlchemy` for seamless integration. For this course, we'll focus on loading our data into a familiar database: DuckDB and its Python API `duckdb`](https://duckdb.org/docs/api/python/overview.html).[]
+3. Load: The final stage of the ETL pipeline is loading the transformed data, typically into a database. This step ensures that the data is stored in an easy to access format that allows for additional analysis. SQL is commonly used for interacting with databases, and Python provides libraries like `SQLAlchemy` for seamless integration. For this course, we'll focus on loading our data into a familiar database: DuckDB and its Python API [`duckdb`](https://duckdb.org/docs/api/python/overview.html).
 
 ETLs are essential for the data science work flow, as it aligns with the day-to-day tasks of modern day data scientist. This process provides data in a format that allows data scientists to readily use the data for predictive or inference modeling. Ultimately, this framework handles a significant portion of data preparation, allowing data scientists to concentrate on the modeling phase of their work. 
 
@@ -37,11 +37,10 @@ To implement an ETL pipeline with Canada's vehicle emissions data (introduced in
 2. Use `pandas` to appropriately transform the data for later use, documentation [found here](https://pandas.pydata.org/docs/).
 3. Use `duckdb` to initiate a database instance and load the clean dataframes into a DuckDB file, documentation.
 
-In fact, all of these steps are already included in a single script: `datadownload.py`. This script can be found from the course's GitHub repo that you can clone from here:
+In fact, all of these steps are already included in a single script: `datadownload.py`. This script can be found from the course's [GitHub repo](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py).
 
-`git clone https://github.com/ploomber/sql.git`
 
-Once you clone the repo, make sure that you have the correct dependencies by following the "Setup" instructions under the `CONTRIBUTING.md` files. Once you have the correct dependencies and environment, navigate to the `pipeline` folder and run the script with this line in your terminal: `python src/datadownload.py`. The script will extract, load, and transform the data and output a DuckDB file in the current folder with the name `car_data.duckdb`.
+The script will extract, load, and transform the data and output a DuckDB file in the current folder with the name `car_data.duckdb`.
 
 Before we dive into understanding how this script fundamentally follows an ETL pipeline, we have to briefly expand on some key points regarding DuckDB and `pandas`:
 
