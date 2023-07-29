@@ -4,8 +4,12 @@ style = {"description_width": "initial"}
 
 
 def setup_menu(
-    widget_vehicle_type, widget_year, widget_vehicle_class, widget_make, widget_co2
-):  # noqa E501
+    widget_vehicle_type,
+    widget_year,
+    widget_vehicle_class,
+    widget_make,
+    widget_co2,  # noqa: E501
+):
     """
     Setup the menu for the app
 

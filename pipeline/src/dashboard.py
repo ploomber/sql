@@ -118,11 +118,14 @@ class Seaborn_Scatter:
     def draw_scatter_electric_range(self, hue):
         plt.figure(figsize=(10, 5), dpi=300)
         sns.scatterplot(
-            data=self.electric_range, x="recharge_time_h", y="range1_km", hue=hue
-        )  # noqa E501
+            data=self.electric_range,
+            x="recharge_time_h",
+            y="range1_km",
+            hue=hue,  # noqa: E501
+        )
         plt.title(
-            f"Scatter Plot of Electric Vehicle Range and Recharge Time by {hue}"
-        )  # noqa E501
+            f"Scatter Plot of Electric Vehicle Range and Recharge Time by {hue}"  # noqa: E501
+        )
         plt.xlabel("Recharge Time (hrs)")
         plt.ylabel("Range (km)")
         plt.show()
@@ -165,7 +168,7 @@ class Histogram_ggplot:
                 table="hist_co2",
                 with_="hist_co2",
                 mapping=aes(x="co2emissions_g_km"),
-            )  # noqa E501
+            )
             + geom_histogram(bins=b, fill=fill, cmap=cmap)
         )
 
@@ -185,13 +188,9 @@ class Seaborn_Boxplot:
 
     def draw_boxplot_usa(self, hue):
         plt.figure(figsize=(15, 6), dpi=300)
-        sns.boxplot(
-            data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue
-        )  # noqa E501
+        sns.boxplot(data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue)  # noqa: E501
         plt.xticks(rotation=90)
         plt.xlabel("Car Make")
         plt.ylabel("CO2 Emissions (g/km)")
-        plt.title(
-            "CO2 Emissions (g/km) by Gas and Hybrid Run US Car Brands"
-        )  # noqa E501
+        plt.title("CO2 Emissions (g/km) by Gas and Hybrid Run US Car Brands")
         plt.show()
