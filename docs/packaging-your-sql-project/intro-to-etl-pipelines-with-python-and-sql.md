@@ -51,7 +51,7 @@ Before we dive into understanding how this script fundamentally follows an ETL p
 
 Let's now dissect `datadownload.py` and focus specifically on its functions that contribute to the ETL process.
 
-![](etl-co2-sample.jpg)
+![](etl-p.jpg)
 
 ### Extracting with Python
 
