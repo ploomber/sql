@@ -188,7 +188,9 @@ class Seaborn_Boxplot:
 
     def draw_boxplot_usa(self, hue):
         plt.figure(figsize=(15, 6), dpi=300)
-        sns.boxplot(data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue)  # noqa: E501
+        sns.boxplot(
+            data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue  # noqa: E501
+        )
         plt.xticks(rotation=90)
         plt.xlabel("Car Make")
         plt.ylabel("CO2 Emissions (g/km)")
