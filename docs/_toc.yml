@@ -46,3 +46,6 @@ parts:
   - file: deploying-your-sql-applications/deploy-your-sql-applications
   - file: deploying-your-sql-applications/automating-your-deployments
   - file: deploying-your-sql-applications/monitoring-your-deployments
+- caption: Video Content
+  chapters: 
+  - file: video-material/postgres/postgres-intro
