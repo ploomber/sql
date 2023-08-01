@@ -68,7 +68,7 @@ class Seaborn_Barplot:
             plt.ylabel("Count")
             plt.xticks(rotation=45)
             plt.title("Count of Unique Hybrid and Electric Cars by Model Year")
-            plt.legend(bbox_to_anchor=(1, 1), loc="upper right")
+            plt.legend(bbox_to_anchor=(0.75, 1), loc="upper left")
             plt.show()
 
 

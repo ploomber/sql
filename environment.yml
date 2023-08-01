@@ -20,3 +20,4 @@ dependencies:
     - jupysql-plugin
     - urllib3==1.26.6
     - voila==0.4.1
+    - itables==1.5.3
