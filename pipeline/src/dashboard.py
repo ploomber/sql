@@ -7,6 +7,26 @@ from sql.ggplot import ggplot, aes, geom_boxplot, geom_histogram
 
 
 class Seaborn_Barplot:
+    """
+    This class creates a radio button widget to select the data to be plotted.
+
+    Attributes
+    ----------
+    fuel_count : pandas.DataFrame
+        dataframe containing the count of unique fuel-only cars by model year
+    hybrid_electric_count : pandas.DataFrame
+        dataframe containing the count of unique hybrid and electric cars by model year
+
+    Methods
+    -------
+    create_radio_button()
+        Creates a radio button widget to select the data to be plotted.
+    draw_bar_year_count(data)
+        Draws a bar plot of the count of unique fuel-only cars by model year or
+        the count of unique hybrid and electric cars by model year.
+
+    """
+
     def __init__(self, fuel_count, hybrid_electric_count):
         self.fuel_count = fuel_count
         self.hybrid_electric_count = hybrid_electric_count
@@ -73,6 +93,22 @@ class Seaborn_Barplot:
 
 
 class Boxplot_ggplot:
+    """
+    This class creates a widget to select the column(s) to be plotted.
+
+    Attributes
+    ----------
+    selection_button : ipywidgets.SelectMultiple
+        Widget to select the column(s) to be plotted.
+
+    Methods
+    -------
+    create_selection_button()
+        Creates a widget to select the column(s) to be plotted.
+    fuel_co2_boxplot(columns)
+            Draws a boxplot of the fuel consumption and CO2 emissions by column(s).
+    """
+
     def __init__(self):
         self.create_selection_button()
 
@@ -103,6 +139,24 @@ class Boxplot_ggplot:
 
 
 class Seaborn_Scatter:
+    """
+    This class creates a dropdown widget to select the hue of the scatter plot.
+
+    Attributes
+    ----------
+    electric_range : pandas.DataFrame
+        dataframe containing the electric vehicle range and recharge time
+    create_dropdown : ipywidgets.Dropdown
+        Widget to select the hue of the scatter plot.
+
+    Methods
+    -------
+    create_dropdown()
+        Creates a dropdown widget to select the hue of the scatter plot.
+    draw_scatter_electric_range(hue)
+        Draws a scatter plot of the electric vehicle range and recharge time by hue.
+    """
+
     def __init__(self, electric_range):
         self.electric_range = electric_range
         self.create_dropdown()
@@ -131,6 +185,22 @@ class Seaborn_Scatter:
 
 
 class Histogram_ggplot:
+    """
+    This class creates a widget to select the column to be plotted.
+
+    Methods
+    -------
+    create_intslider()
+        Creates a widget to select the number of bins.
+    create_dropdown()
+        Creates a widget to select the colormap.
+    create_radio_button()
+        Creates a widget to select the column to be plotted.
+    co2_histogram(b, cmap, fill)
+        Draws a histogram of the CO2 emissions by column.
+
+    """
+
     def __init__(self):
         self.create_intslider()
         self.create_dropdown()
@@ -162,6 +232,18 @@ class Histogram_ggplot:
         )
 
     def co2_histogram(self, b, cmap, fill):
+        """
+        Draws a histogram of the CO2 emissions by column.
+
+        Parameters
+        ----------
+        b : int
+            Number of bins.
+        cmap : str
+            Colormap.
+        fill : str
+            Column to be plotted.
+        """
         (
             ggplot(
                 table="hist_co2",
@@ -173,6 +255,22 @@ class Histogram_ggplot:
 
 
 class Seaborn_Boxplot:
+    """
+    This class creates a dropdown widget to select the hue of the boxplot.
+
+    Attributes
+    ----------
+    co2_usa : pandas.DataFrame
+        dataframe containing the CO2 emissions by US car make, gas and hybrid run
+
+    Methods
+    -------
+    create_dropdown()
+        Creates a dropdown widget to select the hue of the boxplot.
+    draw_boxplot_usa(hue)
+        Draws a boxplot of the CO2 emissions by US car make, gas and hybrid run by hue.
+    """
+
     def __init__(self, co2_usa):
         self.co2_usa = co2_usa
         self.create_dropdown()
@@ -186,6 +284,15 @@ class Seaborn_Boxplot:
         )
 
     def draw_boxplot_usa(self, hue):
+        """
+        Draws a boxplot of the CO2 emissions by US car make, gas and hybrid run by hue.
+        
+        Parameters
+        ----------
+        hue : str
+            Column to be plotted.
+        
+        """
         plt.figure(figsize=(15, 6), dpi=100)
         sns.boxplot(
             data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue  # noqa: E501
