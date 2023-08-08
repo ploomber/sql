@@ -128,7 +128,6 @@ class Seaborn_Scatter:
         )
         plt.xlabel("Recharge Time (hrs)")
         plt.ylabel("Range (km)")
-        plt.show()
 
 
 class Histogram_ggplot:
@@ -195,4 +194,3 @@ class Seaborn_Boxplot:
         plt.xlabel("Car Make")
         plt.ylabel("CO2 Emissions (g/km)")
         plt.title("CO2 Emissions (g/km) by Gas and Hybrid Run US Car Brands")
-        plt.show()
