@@ -33,7 +33,7 @@ The installation of `ipywidgets` was covered previously [here](https://ploomber-
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade jupysql-plugin --upgrade duckdb-engine --quiet
+%pip install jupysql jupysql-plugin  duckdb-engine --quiet
 ```
 
 We continue to work with the Bank and Marketing data set.

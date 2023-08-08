@@ -28,7 +28,7 @@ Let's demonstrate how powerful subqueries are by continuing with our banking dat
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql==0.7.0 duckdb-engine pandas --quiet
+%pip install jupysql duckdb-engine pandas --quiet
 ```
 
 ## Load the data

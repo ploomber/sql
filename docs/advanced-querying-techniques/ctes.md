@@ -24,7 +24,7 @@ In this tutorial, you will learn about Common Table Expressions (CTEs) in SQL an
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql==0.7.0 jupysql-plugin --upgrade duckdb-engine --quiet
+%pip install jupysql jupysql-plugin duckdb-engine --quiet
 ```
 
 We continue to work with the Bank and Marketing data set.

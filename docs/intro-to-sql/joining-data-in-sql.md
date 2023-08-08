@@ -52,7 +52,7 @@ By using primary and foreign keys, we establish relationships between tables, en
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
+%pip install jupysql duckdb-engine pandas --quiet
 ```
 
 ## Load the data

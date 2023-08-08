@@ -64,7 +64,7 @@ The data contains the following categories:
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine --quiet
+%pip install jupysql duckdb-engine --quiet
 ```
 
 ## Load the data
