@@ -11,20 +11,24 @@ kernelspec:
   name: python3
 ---
 
-# Intro to Voila
+# Intro to Voilà
 
-In this section, we will learn how to use the [`Voila`](https://voila.readthedocs.io/en/stable/index.html) Python library to create a dashboard from our SQL queries and visualizations. Additionally, we will explore how the [ETL](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) (<b>E</b>xtract, <b>T</b>ransform, <b>L</b>oad) - [EDA](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) (<b>E</b>xploratory <b>D</b>ata <b>A</b>nalysis) pipeline, introduced in the previous module, are integrated with the dashboard, examine the dashboard's structure and deployment, and discuss interesting insights gathered from it.
+In this section, we will learn how to use the [`Voilà`](https://voila.readthedocs.io/en/stable/index.html) Python library to create a dashboard from our SQL queries and visualizations. Additionally, we will explore how the [ETL](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) (<b>E</b>xtract, <b>T</b>ransform, <b>L</b>oad) - [EDA](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) (<b>E</b>xploratory <b>D</b>ata <b>A</b>nalysis) pipeline, introduced in the previous module, are integrated with the dashboard, examine the dashboard's structure and deployment, and discuss interesting insights gathered from it.
 
-## What is Voila?
+## What is Voilà?
 
-`Voila` is a Python library that allows users to effortlessly create standalone web applications from Jupyter notebooks. `Voila` takes the output of your notebook, while hiding code cells by default, and renders it in a web browser, so that you can share your work or use it in a production setting. With the help of [`ipywidgets`](https://ipywidgets.readthedocs.io/en/stable/index.html), we can transform the rendered web application into an interactive dashboard and this module does covers it in detail!
+`Voilà` is a Python library that allows users to effortlessly create standalone web applications from Jupyter notebooks. `Voilà` takes the output of your notebook, while hiding code cells by default, and renders it in a web browser, so that you can share your work or use it in a production setting. With the help of [`ipywidgets`](https://ipywidgets.readthedocs.io/en/stable/index.html), we can transform the rendered web application into an interactive dashboard and this module does covers it in detail!
 
-Moreover, `Voila` offers several ways to [customize](https://voila.readthedocs.io/en/stable/customize.html) your dashboard, including changing themes, creating templates, and controlling cell output. This allows you to create a visually aesthetic dashboard from a Jupyter notebook with minimal additional code! `Markdown` cells are also displayed in the dashboard, allowing you to add text and images to your dashboard.
+Moreover, `Voilà` offers several ways to [customize](https://voila.readthedocs.io/en/stable/customize.html) your dashboard, including changing themes, creating templates, and controlling cell output. This allows you to create a visually aesthetic dashboard from a Jupyter notebook with minimal additional code! `Markdown` cells are also displayed in the dashboard, allowing you to add text and images to your dashboard.
 
-[Install](https://github.com/voila-dashboards/voila) `Voila` with the following command:
+[Install](https://github.com/voila-dashboards/voila) `Voilà` with the following command:
 
 ```bash
 !pip install voila
+```
+
+```{important}
+This section assumes comfort working with `ipywidgets`. To get an introduction to working with `ipywidgets`, please review [the introductory section to ipywidgets](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/introduction-to-ipywidgets.html), the section on [query parameterization](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/parameterize-sql-queries.html) as well as the section on [interactive queries with `JupySQL`](https://ploomber-sql.readthedocs.io/en/latest/interactive-queries-and-parameterization/make-your-queries-interactive.html)
 ```
 
 ## Questions to Answer in the Dashboard
@@ -37,7 +41,7 @@ The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`
 4. How are $CO_2$ emissions distributed by vehicle type (fuel-only, electric, and hybrid) and fuel type (gasoline, diesel, ethanol, natural gas, and electricty)?
 5. Which US fuel-only and hybrid car manufacturers emit the least $CO_2$ and how does this differ by transmission type?
 
-## ETL and Voila
+## ETL and Voilà
 
 Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The [Ploomber pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) executes the `datadownload.py` ETL [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) as well as the EDA Jupyter [notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/eda-pipeline.ipynb) with selected queries. It then stores the tables in an in-memory DuckDB database. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
 
@@ -57,14 +61,21 @@ The pipeline process entailed above can be better understood with the following 
 
 ## Dashboard Structure
 
+You can find the Jupyter notebook with the Voilà app [here](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/voila-app.ipynb). The dashboard also uses custom helper scripts:
+
+- [`menu.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/menu.py)
+- [`dashboard.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/dashboard.py)
+
 ### Introduction and Tables
 
 The dashboard, firstly, needs to have a relevant title and description for the user to understand what the dashboard is about. The date the fuel emissions data was last updated is also displayed because the data is updated monthly and, accordingly, the tables and visualizations may have novel insights since the last update. Next, we display the interactive table, integrated with `ipywidgets` and outputted from our ETL Pipeline, to allow the user interact with numerical and categorical columns in each table (`fuel-only`, `hybrid`, and `electric`). The user can, hence, begin the EDA process by filtering columns to find interesting patterns and relationships.
 
 Specifically, `SelectMultiple`, `Dropdown`, and `Combobox` widgets are employed to filter categorical columns, including the car's fuel type, size, model, and model year. Note that `Combobox`, which is a [String widget](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#combobox), was not introduced earlier in the course and we recommend taking a look at its documentation. The $CO_2$ ratings column (a higher rating suggesting lower $CO_2$ emissions) can also be filtered with the `IntSlider` widget. The aforementioned widgets and table are shown below:
 
+The code below is used to create the widgets and table. Press 'Show code source' to view the code.
+
 ```{code-cell} ipython3
-:tags: [hide-output, hide-input]
+:tags: [hide-input]
 
 import os
 import sys
@@ -73,11 +84,9 @@ os.chdir("../../")
 
 sys.path.append(os.path.join(os.getcwd(), "pipeline", "src"))
 
-print(sys.path)
-
 import ipywidgets as widgets
 from ipywidgets import interactive_output, interact
-from menu import init_widgets, style, setup_menu
+from menu import init_widgets, style, setup_menu, select_table, clean_electric_range
 from dashboard import (
     Seaborn_Barplot,
     Boxplot_ggplot,
@@ -89,31 +98,31 @@ from IPython.display import display, clear_output
 import pandas as pd
 import numpy as np
 from itables import init_notebook_mode, show
-```
-
-```{code-cell} ipython3
-:tags: [hide-output, hide-input]
 
 # flake8: noqa
 init_notebook_mode(all_interactive=True)
 
 
-def select_table(vehicle_type, year, vehicle_class, make, co2):
-    query = f"""SELECT model_year,
-                make_,
-                model,
-                vehicleclass_,
-                vehicle_type
-                co2_rating,
-            FROM all_vehicles
-            WHERE model_year = {year}
-            AND vehicleclass_ IN {vehicle_class}
-            AND vehicle_type = '{vehicle_type}'
-            AND make_ = '{make}'
-            AND co2_rating >= {co2}
-            """
+def select_table_electric(vehicle_type, year, vehicle_class, make, co2):
+    """
+    Select table based on vehicle type
 
+    Parameters
+    ----------
+        vehicle_type : str
+            Vehicle type (fuel-only, hybrid, or electric)
+        year : int
+            Model year
+        vehicle_class : list
+            Vehicle class (compact, midsize, etc.)
+        make : str
+            Car manufacturer
+        co2 : int
+            CO2 rating (higher rating suggests lower CO2 emissions)
+    """
     print("Performing query")
+    query = select_table(vehicle_type, year, vehicle_class, make, co2)
+
     # Use JupySQL magic %sql to execute the query
     result = %sql {{query}}
 
@@ -125,15 +134,17 @@ def select_table(vehicle_type, year, vehicle_class, make, co2):
     show(df, classes="display nowrap compact")
 ```
 
-```{code-cell} ipython3
-:tags: [hide-output, hide-input]
+The code below will help us initialize a `DuckDB` instance that the Voilà app can use to fetch data.
 
+```{code-cell} ipython3
 %load_ext sql
 
 %sql duckdb:///pipeline/data/database/car_data.duckdb
 
 %config SqlMagic.displaycon = False
 ```
+
+The code below will help us extract unique values for each column in the `all_vehicles` table. These values will be used to populate the widgets. Press 'Show code source' to view the code.
 
 ```{code-cell} ipython3
 :tags: [hide-output, hide-input]
@@ -156,6 +167,8 @@ vehicle_type = %sql select DISTINCT(vehicle_type) from all_vehicles
 vehicle_type = [v[0] for v in vehicle_type]
 ```
 
+The code below will help us initialize the widgets and the tab. Press 'Show code source' to view the code.
+
 ```{code-cell} ipython3
 :tags: [hide-input]
 
@@ -172,7 +185,7 @@ tab = setup_menu(
 )  # noqa E501
 
 output = interactive_output(
-    select_table,  # noqa f821
+    select_table_electric,  # noqa f821
     {
         "vehicle_type": widget_vehicle_type,
         "year": widget_year,
@@ -218,9 +231,9 @@ GROUP BY model_year, vehicle_type
 ORDER BY model_year;
 ```
 
-```{code-cell} ipython3
-:tags: [hide-output, hide-input]
+We will use the resulting CTE's to create `pandas` DataFrames that will be passed into our `barplot()` function. The code below shows how we can convert the CTE's into `pandas` DataFrames.
 
+```{code-cell} ipython3
 hybrid_electric_count = %sql SELECT * FROM q_1_hybrid_electric
 fuel_count = %sql SELECT * FROM q_1_fuel
 
@@ -230,21 +243,11 @@ fuel_count = pd.DataFrame(fuel_count)
 fuel_count = fuel_count.sort_values(by=["model_year"])
 ```
 
-From `ipywidgets`, the [`interact` function](https://ipywidgets.readthedocs.io/en/latest/examples/Using%20Interact.html), which takes as input the `seaborn` function and its parameter, is then called to visualize the plots with the `RadioButtons`. A basic example of the `interact` function is shown below:
-
-```{code-cell} ipython3
-def f(x):
-    return x
-
-
-interact(f, x=10);
-```
-
-A preview of the barplot and its widgets are displayed below:
+We can then use the resulting dataframes after performing queries as follows.
 
 ```{code-cell} ipython3
 barplot = Seaborn_Barplot(fuel_count, hybrid_electric_count)
-interact(barplot.draw_bar_year_count, data=barplot.radio_button)
+interact(barplot.draw_bar_year_count, data=barplot.radio_button);
 ```
 
 ##### Insights
@@ -276,7 +279,7 @@ Then, the `SelectMultiple` widget is stored in a variable `columns`, to be passe
 
 ```{code-cell} ipython3
 boxplot = Boxplot_ggplot()
-interact(boxplot.fuel_co2_boxplot, columns=boxplot.selection_button)
+interact(boxplot.fuel_co2_boxplot, columns=boxplot.selection_button);
 ```
 
 ##### Insights
@@ -300,42 +303,15 @@ FROM electric
 Like before, the `interact` function is called to visualize the scatterplot with the `Dropdown` widget, as shown below:
 
 ```{code-cell} ipython3
-:tags: [hide-output, hide-input]
-
 electric_range = %sql SELECT * FROM electric_range_charge
 
 electric_range = pd.DataFrame(electric_range)
-
-# convert model_year to int, range and recharge to float
-
-electric_range["model_year"] = electric_range["model_year"].astype(int)
-electric_range["range1_km"] = pd.to_numeric(
-    electric_range["range1_km"], errors="coerce"
-)
-electric_range["recharge_time_h"] = pd.to_numeric(
-    electric_range["recharge_time_h"], errors="coerce"
-)
-
-# group vehicle class into sedan or SUV
-
-electric_range["vehicle_size"] = np.where(
-    electric_range["vehicleclass_"].isin(
-        ["subcompact", "compact", "mid-size", "full-size", "two-seater"]
-    ),
-    "Sedan or smaller",
-    "SUV or larger",
-)
-
-# group model year into 2012-2021 and 2022-2023
-
-electric_range["model_year_grouped"] = np.where(
-    electric_range["model_year"] <= 2021, "2012-2021", "2022-2023"
-)
+clean_electric_range = clean_electric_range(electric_range)
 ```
 
 ```{code-cell} ipython3
-scatter = Seaborn_Scatter(electric_range)
-interact(scatter.draw_scatter_electric_range, hue=scatter.dropdown)
+scatter = Seaborn_Scatter(clean_electric_range)
+interact(scatter.draw_scatter_electric_range, hue=scatter.dropdown);
 ```
 
 ##### Insights
@@ -373,7 +349,7 @@ interact(
     b=histogram.intslider,
     cmap=histogram.dropdown,
     fill=histogram.radio_button,
-)
+);
 ```
 
 ##### Insights
@@ -414,7 +390,7 @@ co2_usa["co2emissions_g_km"] = pd.to_numeric(co2_usa["co2emissions_g_km"])
 
 ```{code-cell} ipython3
 boxplot = Seaborn_Boxplot(co2_usa)
-interact(boxplot.draw_boxplot_usa, hue=boxplot.dropdown)
+interact(boxplot.draw_boxplot_usa, hue=boxplot.dropdown);
 ```
 
 ##### Insights
@@ -429,7 +405,7 @@ Moreover, continuously variable transmission (CVT) cars generally have the lowes
 
 ## Launching the Dashboard Locally
 
-Whether your Jupyter Notebook is incomplete or complete, `Voila` will still be able to render it locally on the web! This will help you in prototyping your dashboard and fit it exactly to your needs. Before launching, make sure you have satisfied the following requirements:
+Whether your Jupyter Notebook is incomplete or complete, `Voilà` will still be able to render it locally on the web! This will help you in prototyping your dashboard and fit it exactly to your needs. Before launching, make sure you have satisfied the following requirements:
 
 ### Directory Structure
 
@@ -448,6 +424,7 @@ For this blog, we will assume the following directory structure:
 │   │   │   ├── car_data.duckdb
 └── README.md
 ```
+
 
 The [`voila-app.ipynb`](https://github.com/ploomber/sql/blob/main/pipeline/src/voila-app.ipynb) file in the `sql/pipeline/src` directory serves as our dashboard notebook. Additionally, all necessary files and modules, including the `menu.py` and `dashboard.py` files, are in the same directory as the notebook.
 
@@ -478,6 +455,8 @@ voila voila-app.ipynb
 ```
 
 With that, you will see your Jupyter Notebook come to life as a dashboard!
+
+![](voila_demo.gif)
 
 ## References
 

@@ -1,4 +1,6 @@
 from ipywidgets import widgets, VBox, HBox
+import pandas as pd
+import numpy as np
 
 style = {"description_width": "initial"}
 
@@ -123,3 +125,83 @@ def init_widgets(years, makes, classes, vehicle_type, style):
         widget_vehicle_class,
         widget_co2,
     )  # noqa E501
+
+
+def select_table(vehicle_type, year, vehicle_class, make, co2):
+    """
+    Select table based on vehicle type
+
+    Parameters
+    ----------
+    vehicle_type : str
+        Vehicle type (fuel-only, hybrid, or electric)
+    year : int
+        Model year
+    vehicle_class : list
+        Vehicle class (compact, midsize, etc.)
+    make : str
+        Car manufacturer
+    co2 : int
+        CO2 rating
+
+    Returns
+    -------
+    df : DataFrame
+        Filtered DataFrame
+    """
+    query = f"""SELECT model_year,
+                make_,
+                model,
+                vehicleclass_,
+                vehicle_type
+                co2_rating,
+            FROM all_vehicles
+            WHERE model_year = {year}
+            AND vehicleclass_ IN {vehicle_class}
+            AND vehicle_type = '{vehicle_type}'
+            AND make_ = '{make}'
+            AND co2_rating >= {co2}
+            """
+
+    return query
+
+
+def clean_electric_range(electric_range):
+    """
+    Cleans the electric range DataFrame.
+
+    Parameters
+    ----------
+    electric_range : pd.DataFrame
+        DataFrame containing electric range data.
+
+    Returns
+    -------
+    pd.DataFrame
+        Cleaned DataFrame.
+    """
+    # convert model_year to int, range and recharge to float
+    electric_range["model_year"] = electric_range["model_year"].astype(int)
+    electric_range["range1_km"] = pd.to_numeric(
+        electric_range["range1_km"], errors="coerce"
+    )
+    electric_range["recharge_time_h"] = pd.to_numeric(
+        electric_range["recharge_time_h"], errors="coerce"
+    )
+
+    # group vehicle class into sedan or SUV
+    electric_range["vehicle_size"] = np.where(
+        electric_range["vehicleclass_"].isin(
+            ["subcompact", "compact", "mid-size", "full-size", "two-seater"]
+        ),
+        "Sedan or smaller",
+        "SUV or larger",
+    )
+
+    # group model year into 2012-2021 and 2022-2023
+
+    electric_range["model_year_grouped"] = np.where(
+        electric_range["model_year"] <= 2021, "2012-2021", "2022-2023"
+    )
+
+    return electric_range
