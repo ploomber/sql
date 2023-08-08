@@ -22,7 +22,7 @@ class Seaborn_Barplot:
 
     def draw_bar_year_count(self, data):
         sns.set()  # Set the Seaborn style
-        plt.figure(figsize=(10, 5), dpi=300)
+        plt.figure(figsize=(10, 5), dpi=150)
 
         if data == "fuel_count":
             sns.barplot(
@@ -116,7 +116,7 @@ class Seaborn_Scatter:
         )
 
     def draw_scatter_electric_range(self, hue):
-        plt.figure(figsize=(10, 5), dpi=300)
+        plt.figure(figsize=(10, 5), dpi=150)
         sns.scatterplot(
             data=self.electric_range,
             x="recharge_time_h",
@@ -186,7 +186,7 @@ class Seaborn_Boxplot:
         )
 
     def draw_boxplot_usa(self, hue):
-        plt.figure(figsize=(15, 6), dpi=300)
+        plt.figure(figsize=(15, 6), dpi=100)
         sns.boxplot(
             data=self.co2_usa, x="make_", y="co2emissions_g_km", hue=hue  # noqa: E501
         )
