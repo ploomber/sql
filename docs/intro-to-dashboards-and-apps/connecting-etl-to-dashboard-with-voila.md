@@ -24,7 +24,7 @@ Moreover, `Voila` offers several ways to [customize](https://voila.readthedocs.i
 [Install](https://github.com/voila-dashboards/voila) `Voila` with the following command:
 
 ```bash
-pip install voila
+!pip install voila
 ```
 
 ## Questions to Answer in the Dashboard
