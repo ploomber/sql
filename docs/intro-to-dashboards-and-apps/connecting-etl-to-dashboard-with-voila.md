@@ -435,7 +435,7 @@ Whether your Jupyter Notebook is incomplete or complete, `Voila` will still be a
 
 For this blog, we will assume the following directory structure:
 
-```python
+```bash
 ├── environment.yml
 ├── pipeline
 │   ├── src
