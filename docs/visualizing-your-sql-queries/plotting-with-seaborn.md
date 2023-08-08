@@ -30,7 +30,7 @@ For more see: https://seaborn.pydata.org/
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas seaborn --quiet
+%pip install jupysql pandas seaborn --quiet
 ```
 
 Finally, we load in the libraries we will be using in this tutorial.

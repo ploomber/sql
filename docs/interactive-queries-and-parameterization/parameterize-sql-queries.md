@@ -25,7 +25,7 @@ In the last module, you learned how to use SQL within Jupyter notebooks with Jup
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql jupysql-plugin duckdb-engine --quiet
+%pip install jupysql jupysql-plugin --quiet
 ```
 
 We continue to work with the Bank and Marketing data set. 

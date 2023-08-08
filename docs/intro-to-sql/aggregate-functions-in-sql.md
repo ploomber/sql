@@ -29,7 +29,7 @@ Let's first run the installations and setup before running any queries, just lik
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql duckdb-engine --quiet
+%pip install jupysql --quiet
 ```
 
 ## Load the data

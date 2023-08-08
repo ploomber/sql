@@ -29,7 +29,7 @@ As always, let's first follow the steps of ensuring we have our necessary packag
 This code installs JupySQL, DuckDB, Pandas, and Matplotlib in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas matplotlib --quiet
+%pip install jupysql pandas matplotlib --quiet
 ```
 
 ## Load the data

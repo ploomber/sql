@@ -28,7 +28,7 @@ Let's see how we can apply plotly to our familiar bank marketing data sets.
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas plotly --quiet
+%pip install jupysql pandas plotly --quiet
 ```
 
 ## Load the data
