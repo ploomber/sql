@@ -58,7 +58,7 @@ It then stores the tables in an in-memory DuckDB database. We can connect our da
 ```python
 %load_ext sql
 
-%sql duckdb:///../data/database/car_data.duckdb
+%sql duckdb:///pipeline/data/database/car_data.duckdb
 ```
 
 The `%sql` magic command allows us to connect to the database and query the data. The `duckdb:///` prefix specifies the database type and location. The `../data/database/car_data.duckdb` path specifies the location of the database relative to the notebook. The `%sql` magic command is used in the following code cells to create CTE's for generating visualizations.
