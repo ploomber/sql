@@ -626,6 +626,16 @@ interact(plot, b=b, cmap=cmap, fill=fill, show_legend=show_legend)
 
 +++
 
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.loan;
+DROP TABLE IF EXISTS s1.account;
+DROP TABLE IF EXISTS s1.district;
+DROP SCHEMA s1;
+```
+
 ## Wrapping Up
 
 In this section, we learned about plotting boxplots and histograms with `%sqlplot` and `ggplot` API. We also employed widgets to interactively query with `ggplot` API. To summarize:

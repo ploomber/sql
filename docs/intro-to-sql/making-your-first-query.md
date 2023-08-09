@@ -241,6 +241,13 @@ WHERE housing = 'no' AND loan = 'yes'
 
 <!-- #region -->
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank
+```
+
 ### Wrapping Up
 
 To summarize this section, we first introduced our primary dataset we will be using for the next few sections. Then, we ran our first query by first installing `JupySQL` and other packages into our notebook, properly loaded our data with some `Python`, and established a connection to a DuckDB database. 

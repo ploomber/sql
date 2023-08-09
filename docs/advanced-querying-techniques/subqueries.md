@@ -487,6 +487,15 @@ WHERE amount > (
 </details>
 <!-- #endregion -->
 
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.loan;
+DROP TABLE IF EXISTS s1.account;
+DROP TABLE IF EXISTS s1.district;
+DROP SCHEMA s1;
+```
 
 ## Wrapping Up
 

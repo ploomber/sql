@@ -252,6 +252,16 @@ This brings us to a wrap of the first module: `Intro to SQL`! We hope you have e
 
 <!-- #endregion -->
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account 
+DROP TABLE s1.district
+DROP TABLE s1.card
+DROP TABLE s1.link
+DROP SCHEMA s1;
+```
 ## References
 
 Dataset citation:

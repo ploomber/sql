@@ -42,6 +42,7 @@ This section was covered in detail in the previous tutorial: [Joining Data in SQ
 ```{code-cell} ipython3
 import sys
 import plotly.express as px
+import pandas as pd
 
 sys.path.insert(0, "../../")
 import banking  # noqa: E402
@@ -118,7 +119,7 @@ Then, let's save the CTE as a Pandas DataFrame.
 
 ```{code-cell} ipython3
 query = %sql SELECT * FROM region_count
-region_count_df = query.DataFrame()
+region_count_df = pd.DataFrame(query)
 region_count_df
 ```
 
@@ -183,7 +184,7 @@ Now, convert the `average_loan_per_region` table to a Pandas DataFrame.
 
 ```{code-cell} ipython3
 average_loan_per_region = %sql SELECT * FROM average_loan_per_region
-avg_loans_df = average_loan_per_region.DataFrame()
+avg_loans_df = pd.DataFrame(average_loan_per_region)
 avg_loans_df
 ```
 
@@ -217,7 +218,7 @@ First, let's load our data into a Pandas DataFrame.
 
 ```{code-cell} ipython3
 district = %sql SELECT * FROM s1.district
-district_df = district.DataFrame()
+district_df = pd.DataFrame(district)
 ```
 
 We can now plot the Pandas DataFrame using `plotly`.
@@ -256,7 +257,7 @@ We can reuse the `average_loan_per_district` table we created with CTEs from the
 
 ```{code-cell} ipython3
 df = %sql SELECT * FROM average_loan_per_district
-avg_loans_df = df.DataFrame()
+avg_loans_df = pd.DataFrame(df)
 avg_loans_df
 ```
 
@@ -279,7 +280,7 @@ Histograms are similar to bar plots. The only difference is that the x-axis shou
 
 ```{code-cell} ipython3
 loans = %sql SELECT amount FROM s1.loan
-loans_df = loans.DataFrame()
+loans_df = pd.DataFrame(loans)
 loans_df
 ```
 
@@ -310,7 +311,7 @@ WHERE status = 'A' or status = 'D'
 
 ```{code-cell} ipython3
 loan_status_table = %sql SELECT * FROM loan_status
-loan_status_df = loan_status_table.DataFrame()
+loan_status_df = pd.DataFrame(loan_status_table)
 loan_status_df
 ```
 
@@ -335,7 +336,7 @@ When you interact with `Plotly` box plots by hovering over them, they provide a 
 
 ```{code-cell} ipython3
 loans = %sql SELECT * FROM s1.loan
-loans_df = loans.DataFrame()
+loans_df = pd.DataFrame(loans)
 
 category_order = ["A", "B", "C", "D"]
 
@@ -375,7 +376,7 @@ FROM
 
 ```{code-cell} ipython3
 loan_duration = %sql SELECT * FROM loan_duration
-loan_duration_df = loan_duration.DataFrame()
+loan_duration_df = pd.DataFrame(loan_duration)
 ```
 
 ```{code-cell} ipython3
@@ -397,6 +398,16 @@ fig.show()
 
 </details>
 <!-- #endregion -->
+
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.loan;
+DROP TABLE IF EXISTS s1.account;
+DROP TABLE IF EXISTS s1.district;
+DROP SCHEMA s1;
+```
 
 ## Wrapping Up
 

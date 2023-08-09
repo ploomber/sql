@@ -337,6 +337,15 @@ HAVING s1.district.region = 'Prague'
 </details>
 <!-- #endregion -->
 
+Deleting Tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account 
+DROP TABLE s1.district
+DROP SCHEMA s1;
+```
+
 ## Wrapping Up
 
 In this section, we learned the basic join types and how to use them when given two tables. We also learned the definiton of primary and foriegn keys along with an introduction to ERDs. To recap:

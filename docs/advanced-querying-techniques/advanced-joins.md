@@ -253,6 +253,16 @@ JOIN s1.loan l ON a.account_id = l.account_id;
 </details>
 <!-- #endregion -->
 
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account;
+DROP TABLE s1.loan;
+DROP TABLE s1.district;
+DROP SCHEMA s1;
+```
+
 ## Conclusion
 
 In this tutorial, we have explored advanced join operations in SQL, including nested-loop joins, merge joins, hash joins, internal joins, and the concept of join hints. We learned how to utilize these different join methods in SQL queries and understood the specific scenarios in which each type of join is most efficient.

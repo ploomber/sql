@@ -43,7 +43,16 @@ The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`
 
 ## ETL and Voilà
 
-Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The [Ploomber pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) executes the `datadownload.py` ETL [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) as well as the EDA Jupyter [notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/eda-pipeline.ipynb) with selected queries. It then stores the tables in an in-memory DuckDB database. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
+Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The [Ploomber pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) executes the `datadownload.py` ETL [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) as well as the EDA Jupyter [notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/eda-pipeline.ipynb) with selected queries. 
+
+To execute the pipeline, we run the following command in the terminal:
+
+```bash
+cd ../pipeline
+ploomber build
+```
+
+It then stores the tables in an in-memory DuckDB database. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
 
 ```python
 %load_ext sql

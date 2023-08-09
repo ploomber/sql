@@ -331,6 +331,13 @@ Let's check the tables in our schema:
 %sqlcmd tables
 ```
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank
+```
+
 ## Conclusion
 In this module, we have explored how to parameterize SQL queries and effectively integrate with Python for a more interactive data analysis workflow within Jupyter notebooks. This method is facilitated using JupySQL and DuckDB. We've also demonstrated how to dynamically create and use variables within SQL queries, further enhancing the flexibility and interactivity of the notebooks.
 

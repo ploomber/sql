@@ -439,6 +439,13 @@ This ends the Interactive Queries and Parameterization module. We hope you use t
 
 <!-- #endregion -->
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS bank;
+```
+
 ## References
 
 “Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Basics.html.

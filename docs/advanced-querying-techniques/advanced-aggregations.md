@@ -410,6 +410,13 @@ GROUP BY GROUPING SETS ((date, duration), (status, duration));
 </details>
 <!-- #endregion -->
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE loan;
+```
+
 ## Wrapping Up
 
 In this section, we introduced advanced aggregation functions. To summarize:

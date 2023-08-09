@@ -287,3 +287,10 @@ We have also learned other details from this section, such as how `WHERE` must a
 Next up, we will use everything we have thus far learned in joining tables.
 
 <!-- #endregion -->
+
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank
+```

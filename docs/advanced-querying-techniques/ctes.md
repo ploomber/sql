@@ -404,6 +404,15 @@ The importance of checking the data before and after the operations is to verify
 </details>
 <!-- #endregion -->
 
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.district;
+DROP TABLE IF EXISTS bank;
+DROP SCHEMA s1;
+```
+
 ## Summary
 
 In this tutorial we learned:
