@@ -320,6 +320,12 @@ We'll finish off this section by showing you how you can generate multiple table
 Your task now is to create separate tables for each job. This can easily be accomplished using a loop and variable expansion:
 
 ```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS management;
+```
+
+```{code-cell} ipython3
 jobs = ["services", "management"]
 for job in jobs:
     %sql CREATE TABLE {{job}} AS (SELECT * from bank WHERE job = '{{job}}')
@@ -336,7 +342,10 @@ Delete table
 ```{code-cell} ipython3
 %%sql
 DROP TABLE bank;
+DROP TABLE services;
+DROP TABLE management;
 ```
+
 
 ## Conclusion
 In this module, we have explored how to parameterize SQL queries and effectively integrate with Python for a more interactive data analysis workflow within Jupyter notebooks. This method is facilitated using JupySQL and DuckDB. We've also demonstrated how to dynamically create and use variables within SQL queries, further enhancing the flexibility and interactivity of the notebooks.

@@ -47,18 +47,16 @@ Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packagin
 
 To execute the pipeline, we run the following command in the terminal:
 
-```{code-cell} ipython3
-!cd pipeline/
-!ploomber build
-!cd ..
+```bash
+cd pipeline && ploomber build
 ```
 
-It then stores the tables in an in-memory DuckDB database. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
+It then stores the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
 
 ```python
 %load_ext sql
 
-%sql duckdb:///pipeline/data/database/car_data.duckdb
+%sql duckdb:///data/database/car_data.duckdb
 ```
 
 The `%sql` magic command allows us to connect to the database and query the data. The `duckdb:///` prefix specifies the database type and location. The `../data/database/car_data.duckdb` path specifies the location of the database relative to the notebook. The `%sql` magic command is used in the following code cells to create CTE's for generating visualizations.

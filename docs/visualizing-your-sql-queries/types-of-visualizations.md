@@ -214,6 +214,14 @@ plt.show()
 
 The above plot displays the counts of `job` and `education` level of our data set. Heat maps are generally easy to understand because viewers can quickly point out extremes based on darker or lighter boxes. Here, we easily see people with management jobs have a high count of having a tertiary level education in our data set. You can think of heat maps as illustrating three dimensions: the x-axis, the y-axis, and the color gradient (which is usually a numerical feature).
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank;
+```
+
+
 ## Wrapping Up
 
 In this section, we introduced some basic data visualization plots: bar plots, scatter plots, box plots, and heat maps. The sections moving forward will teach you how to implement each of these plots using the `seaborn` and `plotly` libraries using the familiar banking data sets from the previous modules.

@@ -198,3 +198,5 @@ products/*
 pipeline/products/datadownload.ipynb
 pipeline/products/eda-pipeline.ipynb
 *.metadata
+
+!docs/intro-to-dashboards-and-apps/data/database/car_data.*
