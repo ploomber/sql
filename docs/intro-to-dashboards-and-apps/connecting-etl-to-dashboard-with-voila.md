@@ -41,17 +41,69 @@ The interactive dashboard contains 4 tables and 5 plots, created using `JupySQL`
 4. How are $CO_2$ emissions distributed by vehicle type (fuel-only, electric, and hybrid) and fuel type (gasoline, diesel, ethanol, natural gas, and electricty)?
 5. Which US fuel-only and hybrid car manufacturers emit the least $CO_2$ and how does this differ by transmission type?
 
-## ETL and Voilà
+### Directory Structure
 
-Recall the [ETL Pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html) walkthrough in the previous module. The [Ploomber pipeline](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html) executes the `datadownload.py` ETL [script](https://github.com/ploomber/sql/blob/main/pipeline/src/datadownload.py) as well as the EDA Jupyter [notebook](https://github.com/ploomber/sql/blob/main/pipeline/src/eda-pipeline.ipynb) with selected queries. 
+For this blog, we will assume the following directory structure:
 
-To execute the pipeline, we run the following command in the terminal:
+```bash
+├── environment.yml
+├── pipeline
+│   ├── pipeline.yaml
+│   ├── data
+│   │   ├── database
+│   │   │   ├── car_data.duckdb
+│   ├── products
+│   ├── src
+│   │   ├── menu.py
+│   │   ├── dashboard.py
+│   │   ├── voila-app.ipynb
+│   │   ├── datadownload.py
+└── README.md
+```
+
+
+The [`voila-app.ipynb`](https://github.com/ploomber/sql/blob/main/pipeline/src/voila-app.ipynb) file in the `sql/pipeline/src` directory serves as our dashboard notebook. Additionally, all necessary files and modules, including the `menu.py` and `dashboard.py` files, are in the same directory as the notebook.
+
+### Dependencies
+
+ The `environment.yml` file in the root directory of this course contains the dependencies for the project. You can create a conda environment using that file and then activate the environment to run `voila-app.ipynb`, as shown below:
+
+```bash
+conda env create -f environment.yml
+```
+
+```bash
+conda activate sql-course
+```
+
+### Running the Pipeline
+
+If you have not already done so, you need to [build](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html), [package](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/containerizing-etl-with-docker.html) and [run](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html#defining-our-pipeline) the pipeline by following the steps outlined in the previous module.
+
+After running the pipeline, you will have the `car_data.duckdb` database, under `pipeline/data/database`, ready to be queried by the dashboard. 
+
+To execute the pipeline, we run the following command in the terminal from:
 
 ```bash
 cd pipeline && ploomber build
 ```
 
-It then stores the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. 
+This yields:
+
+```bash
+Loading pipeline...
+Executing: 100%|███████████████████████████████████████████████████████████████████████████████| 18/18 [00:10<00:00,  1.69cell/s]
+Executing:  29%|██████████████████████▊                                                         | 8/28 [00:10<00:25,  1.28s/cell]
+Building task 'eda-pipeline': 100%|████████████████████████████████████████████████████████████████| 2/2 [00:20<00:00, 10.48s/it]
+name          Ran?      Elapsed (s)    Percentage
+------------  ------  -------------  ------------
+datadownload  True          10.7184        51.168
+eda-pipeline  True          10.2291        48.832
+```
+
+## ETL and Voilà
+
+The Ploomber pipeline will store the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. 
 
 <b>Note:</b> The `../` prefix is not required if the database is in the same directory as the notebook.
 
@@ -63,8 +115,8 @@ The pipeline process entailed above can be better understood with the following 
 
 You can find the Jupyter notebook with the Voilà app [here](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/voila-app.ipynb). The dashboard also uses custom helper scripts:
 
-- [`menu.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/menu.py)
-- [`dashboard.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/dashboard.py)
+- See [`menu.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/menu.py)
+- See [`dashboard.py`](https://github.com/ploomber/sql/blob/voila_app/pipeline/src/dashboard.py)
 
 ### Introduction and Tables
 
@@ -410,44 +462,6 @@ Moreover, continuously variable transmission (CVT) cars generally have the lowes
 
 Whether your Jupyter Notebook is incomplete or complete, `Voilà` will still be able to render it locally on the web! This will help you in prototyping your dashboard and fit it exactly to your needs. Before launching, make sure you have satisfied the following requirements:
 
-### Directory Structure
-
-For this blog, we will assume the following directory structure:
-
-```bash
-├── environment.yml
-├── pipeline
-│   ├── src
-│   │   ├── menu.py
-│   │   ├── dashboard.py
-│   │   ├── voila-app.ipynb
-│   │   ├── datadownload.py
-│   ├── data
-│   │   ├── database
-│   │   │   ├── car_data.duckdb
-└── README.md
-```
-
-
-The [`voila-app.ipynb`](https://github.com/ploomber/sql/blob/main/pipeline/src/voila-app.ipynb) file in the `sql/pipeline/src` directory serves as our dashboard notebook. Additionally, all necessary files and modules, including the `menu.py` and `dashboard.py` files, are in the same directory as the notebook.
-
-### Dependencies
-
- The `environment.yml` file in the root directory of this course contains the dependencies for the project. You can create a conda environment using that file and then activate the environment to run `voila-app.ipynb`, as shown below:
-
-```bash
-conda env create -f environment.yml
-```
-
-```bash
-conda activate sql-course
-```
-
-### Running the Pipeline
-
-If you have not already done so, you need to [build](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/intro-to-etl-pipelines-with-python-and-sql.html), [package](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/containerizing-etl-with-docker.html) and [run](https://ploomber-sql.readthedocs.io/en/latest/packaging-your-sql-project/etl-eda-pipeline-with-ploomber.html#defining-our-pipeline) the pipeline by following the steps outlined in the previous module.
-
-After running the pipeline, you will have the `car_data.duckdb` database, under `sql/data/database`, ready to be queried by the dashboard. We can now launch the dashboard!
 
 ### Launching the Dashboard
 
