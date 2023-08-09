@@ -53,8 +53,6 @@ cd pipeline && ploomber build
 
 It then stores the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. 
 
-The `%sql` magic command allows us to connect to the database and query the data. The `duckdb:///` prefix specifies the database type and location. The `../data/database/car_data.duckdb` path specifies the location of the database relative to the notebook. The `%sql` magic command is used in the following code cells to create CTE's for generating visualizations.
-
 <b>Note:</b> The `../` prefix is not required if the database is in the same directory as the notebook.
 
 The pipeline process entailed above can be better understood with the following diagram:
@@ -135,6 +133,8 @@ def select_table_electric(vehicle_type, year, vehicle_class, make, co2):
 
     show(df, classes="display nowrap compact")
 ```
+
+The `%sql` magic command allows us to connect to the database and query the data. The `duckdb:///` prefix specifies the database type and location. The `pipeline/data/database/car_data.duckdb` path specifies the location of the database relative to the notebook. The `%sql` magic command is used in the following code cells to create CTE's for generating visualizations.
 
 The code below will help us initialize a `DuckDB` instance that the Voilà app can use to fetch data.
 
