@@ -134,7 +134,7 @@ def select_table_electric(vehicle_type, year, vehicle_class, make, co2):
     query = select_table(vehicle_type, year, vehicle_class, make, co2)
 
     # Use JupySQL magic %sql to execute the query
-    result = %sql {{query}}
+    result = %sql {{query}};
 
     # Convert the result to a Pandas DataFrame
     df = result.DataFrame()
@@ -159,21 +159,22 @@ The code below will help us extract unique values for each column in the `all_ve
 ```{code-cell} ipython3
 :tags: [hide-output, hide-input]
 
-years = %sql select DISTINCT(model_year) from all_vehicles
+years = %sql select DISTINCT(model_year) from all_vehicles;
 years = [model_year[0] for model_year in years]
 
-makes = %sql select DISTINCT(make_) from all_vehicles
+makes = %sql select DISTINCT(make_) from all_vehicles;
 makes = [m[0] for m in makes]
 
-classes = %sql select DISTINCT(vehicleclass_) from all_vehicles
+classes = %sql select DISTINCT(vehicleclass_) from all_vehicles;
 classes = [c[0] for c in classes]
 
-co2 = %sql select DISTINCT(co2_rating) from all_vehicles where co2_rating is not null
+co2 = %sql select DISTINCT(co2_rating) from all_vehicles where co2_rating is not null;
 co2 = [c[0] for c in co2]
+
 # convert to int
 co2 = [eval(c) for c in co2]
 
-vehicle_type = %sql select DISTINCT(vehicle_type) from all_vehicles
+vehicle_type = %sql select DISTINCT(vehicle_type) from all_vehicles;
 vehicle_type = [v[0] for v in vehicle_type]
 ```
 
