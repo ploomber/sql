@@ -245,7 +245,7 @@ Delete table
 
 ```{code-cell} ipython3
 %%sql
-DROP TABLE bank
+DROP TABLE bank;
 ```
 
 ### Wrapping Up

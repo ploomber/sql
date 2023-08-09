@@ -256,10 +256,10 @@ Delete table
 
 ```{code-cell} ipython3
 %%sql
-DROP TABLE s1.account 
-DROP TABLE s1.district
-DROP TABLE s1.card
-DROP TABLE s1.link
+DROP TABLE s1.account;
+DROP TABLE s1.district;
+DROP TABLE s1.card;
+DROP TABLE s1.link;
 DROP SCHEMA s1;
 ```
 ## References

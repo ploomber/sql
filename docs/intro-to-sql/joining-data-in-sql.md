@@ -341,8 +341,8 @@ Deleting Tables
 
 ```{code-cell} ipython3
 %%sql
-DROP TABLE s1.account 
-DROP TABLE s1.district
+DROP TABLE s1.account;
+DROP TABLE s1.district;
 DROP SCHEMA s1;
 ```
 
