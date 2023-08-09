@@ -51,13 +51,7 @@ To execute the pipeline, we run the following command in the terminal:
 cd pipeline && ploomber build
 ```
 
-It then stores the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. This is done in the following code cell:
-
-```python
-%load_ext sql
-
-%sql duckdb:///data/database/car_data.duckdb
-```
+It then stores the tables into a database file under `/pipeline/data/database` called `car_data.duckdb`. We can connect our dashboard to the DuckDB instance and generate queries for our visualizations. 
 
 The `%sql` magic command allows us to connect to the database and query the data. The `duckdb:///` prefix specifies the database type and location. The `../data/database/car_data.duckdb` path specifies the location of the database relative to the notebook. The `%sql` magic command is used in the following code cells to create CTE's for generating visualizations.
 
@@ -149,7 +143,7 @@ The code below will help us initialize a `DuckDB` instance that the Voilà app c
 
 %sql duckdb:///pipeline/data/database/car_data.duckdb
 
-%config SqlMagic.displaycon = False
+%config SqlMagic.displaycon = True
 ```
 
 The code below will help us extract unique values for each column in the `all_vehicles` table. These values will be used to populate the widgets. Press 'Show code source' to view the code.
