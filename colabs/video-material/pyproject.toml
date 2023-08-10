@@ -1,0 +1,4 @@
+["tool.jupysql.SqlMagic"]
+displaycon = false
+feedback = true
+autopolars = true
