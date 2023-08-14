@@ -28,7 +28,7 @@ Let's first run the installations and setup before running any queries, just lik
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
+%pip install jupysql duckdb-engine pandas --quiet
 ```
 
 ## Load the data
@@ -252,6 +252,16 @@ This brings us to a wrap of the first module: `Intro to SQL`! We hope you have e
 
 <!-- #endregion -->
 
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account;
+DROP TABLE s1.district;
+DROP TABLE s1.card;
+DROP TABLE s1.link;
+DROP SCHEMA s1;
+```
 ## References
 
 Dataset citation:

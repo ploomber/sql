@@ -23,7 +23,7 @@ kernelspec:
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
+%pip install jupysql pandas --quiet
 ```
 
 ## Load the data
@@ -252,6 +252,16 @@ JOIN s1.loan l ON a.account_id = l.account_id;
 
 </details>
 <!-- #endregion -->
+
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account;
+DROP TABLE s1.loan;
+DROP TABLE s1.district;
+DROP SCHEMA s1;
+```
 
 ## Conclusion
 
