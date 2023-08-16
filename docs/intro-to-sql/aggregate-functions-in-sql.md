@@ -29,7 +29,7 @@ Let's first run the installations and setup before running any queries, just lik
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine --quiet
+%pip install jupysql --quiet
 ```
 
 ## Load the data
@@ -287,3 +287,10 @@ We have also learned other details from this section, such as how `WHERE` must a
 Next up, we will use everything we have thus far learned in joining tables.
 
 <!-- #endregion -->
+
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank;
+```

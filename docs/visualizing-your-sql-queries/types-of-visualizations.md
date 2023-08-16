@@ -29,7 +29,7 @@ As always, let's first follow the steps of ensuring we have our necessary packag
 This code installs JupySQL, DuckDB, Pandas, and Matplotlib in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas matplotlib --quiet
+%pip install jupysql pandas matplotlib --quiet
 ```
 
 ## Load the data
@@ -38,6 +38,7 @@ We extract the bank marketing data by retrieving it from it's URL download link.
 ```{code-cell} ipython3
 import sys
 import matplotlib.pyplot as plt
+import pandas as pd
 
 sys.path.insert(0, "../../")
 import banking  # noqa: E402
@@ -80,7 +81,7 @@ We convert the `bank` table below as an example.
 
 ```{code-cell} ipython3
 bank = %sql SELECT * FROM bank
-bank_df = bank.DataFrame()
+bank_df = pd.DataFrame(bank)
 bank_df
 ```
 
@@ -101,7 +102,7 @@ GROUP BY job
 
 ```{code-cell} ipython3
 jobs = %sql SELECT * FROM jobs
-jobs_df = jobs.DataFrame()
+jobs_df = pd.DataFrame(jobs)
 ```
 
 Now that we have our query in a Pandas DataFrame, we can use `matplotlib` to visualize a bar plot.
@@ -137,7 +138,7 @@ Then we again convert the table as a Pandas DataFrame.
 
 ```{code-cell} ipython3
 age_balance_query = %sql SELECT * FROM age_balance
-age_balance_df = age_balance_query.DataFrame()
+age_balance_df = pd.DataFrame(age_balance_query)
 ```
 
 ```{code-cell} ipython3
@@ -161,7 +162,7 @@ FROM bank
 
 ```{code-cell} ipython3
 edu_balance_query = %sql SELECT * FROM edu_balance
-edu_df = edu_balance_query.DataFrame()
+edu_df = pd.DataFrame(edu_balance_query)
 ```
 
 ```{code-cell} ipython3
@@ -194,7 +195,7 @@ GROUP BY job, education
 
 ```{code-cell} ipython3
 job_edu_query = %sql SELECT * FROM job_education
-job_df = job_edu_query.DataFrame()
+job_df = pd.DataFrame(job_edu_query)
 ```
 
 ```{code-cell} ipython3
@@ -212,6 +213,14 @@ plt.show()
 ```
 
 The above plot displays the counts of `job` and `education` level of our data set. Heat maps are generally easy to understand because viewers can quickly point out extremes based on darker or lighter boxes. Here, we easily see people with management jobs have a high count of having a tertiary level education in our data set. You can think of heat maps as illustrating three dimensions: the x-axis, the y-axis, and the color gradient (which is usually a numerical feature).
+
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE bank;
+```
+
 
 ## Wrapping Up
 

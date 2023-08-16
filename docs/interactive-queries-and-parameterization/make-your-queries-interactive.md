@@ -33,7 +33,7 @@ The installation of `ipywidgets` was covered previously [here](https://ploomber-
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade jupysql-plugin --upgrade duckdb-engine --quiet
+%pip install jupysql jupysql-plugin --quiet
 ```
 
 We continue to work with the Bank and Marketing data set.
@@ -438,6 +438,13 @@ In this section, we learned about how to use JupySQL to create widgets with vari
 This ends the Interactive Queries and Parameterization module. We hope you use these skills to boost your productivity in creating interactive queries! In the next module, we will introduce Advanced Querying Techniques.
 
 <!-- #endregion -->
+
+Delete table
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS bank;
+```
 
 ## References
 

@@ -2,6 +2,20 @@
 
 [![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
 
+## Important links
+
+Visit the Jupyter book: https://ploomber-sql.readthedocs.io/en/latest/index.html 
+
+You can explore hands on exercises via Google colab on the `colabs` folder in this repository.
+
+To do so:
+
+1. Open [Google Colab](https://colab.research.google.com/)
+2. To open a Jupyter notebook from this repository, change to the GitHub tab, and paste https://github.com/ploomber/sql
+3. Press the search icon 🔍
+4. Select a notebook
+
+![](sql-ploomber-colab.png)
 
 ## Set up for contributors
 

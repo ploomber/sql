@@ -26,7 +26,7 @@ Before we dive into how you can use JupySQL's `ggplot` API, we will quickly go o
 This code installs JupySQL, DuckDB, Matplotlib (required dependency), and ipywidgets in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine matplotlib ipywidgets --quiet
+%pip install jupysql matplotlib ipywidgets --quiet
 ```
 
 Finally, we load in the libraries we will be using in this tutorial.
@@ -625,6 +625,16 @@ interact(plot, b=b, cmap=cmap, fill=fill, show_legend=show_legend)
 <!-- #region -->
 
 +++
+
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.loan;
+DROP TABLE IF EXISTS s1.account;
+DROP TABLE IF EXISTS s1.district;
+DROP SCHEMA s1;
+```
 
 ## Wrapping Up
 

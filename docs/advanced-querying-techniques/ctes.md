@@ -24,7 +24,7 @@ In this tutorial, you will learn about Common Table Expressions (CTEs) in SQL an
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade jupysql-plugin --upgrade duckdb-engine --quiet
+%pip install jupysql jupysql-plugin --quiet
 ```
 
 We continue to work with the Bank and Marketing data set.
@@ -403,6 +403,15 @@ The importance of checking the data before and after the operations is to verify
 
 </details>
 <!-- #endregion -->
+
+Delete tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE IF EXISTS s1.district;
+DROP TABLE IF EXISTS bank;
+DROP SCHEMA s1;
+```
 
 ## Summary
 

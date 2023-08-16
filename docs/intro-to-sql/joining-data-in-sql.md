@@ -52,7 +52,7 @@ By using primary and foreign keys, we establish relationships between tables, en
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas --quiet
+%pip install jupysql duckdb-engine pandas --quiet
 ```
 
 ## Load the data
@@ -336,6 +336,15 @@ HAVING s1.district.region = 'Prague'
 
 </details>
 <!-- #endregion -->
+
+Deleting Tables
+
+```{code-cell} ipython3
+%%sql
+DROP TABLE s1.account;
+DROP TABLE s1.district;
+DROP SCHEMA s1;
+```
 
 ## Wrapping Up
 

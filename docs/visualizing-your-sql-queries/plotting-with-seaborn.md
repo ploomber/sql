@@ -30,7 +30,7 @@ For more see: https://seaborn.pydata.org/
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
 ```{code-cell} ipython3
-%pip install jupysql --upgrade duckdb-engine pandas seaborn --quiet
+%pip install jupysql pandas seaborn --quiet
 ```
 
 Finally, we load in the libraries we will be using in this tutorial.
@@ -39,6 +39,7 @@ Finally, we load in the libraries we will be using in this tutorial.
 import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
 ```
 
 ## Load the data
@@ -76,37 +77,49 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 
 <!-- endregion -->
 
+Delete tables and schema if they already exist.
+
 ## Creating Tables
 
-Let's start off with loading three of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we will [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `s1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
+Let's start off with loading three of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we will [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `b1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
+
+Delete tables
 
 ```{code-cell} ipython3
 %%sql
-CREATE SCHEMA s1;
-CREATE TABLE s1.account AS
+DROP TABLE IF EXISTS b1.loan;
+DROP TABLE IF EXISTS b1.account;
+DROP TABLE IF EXISTS b1.district;
+DROP SCHEMA IF EXISTS b1;
+```
+
+```{code-cell} ipython3
+%%sql
+CREATE SCHEMA b1;
+CREATE TABLE b1.account AS
 FROM read_csv_auto('expanded_data/account.csv', header=True, sep=',');
-CREATE TABLE s1.district AS
+CREATE TABLE b1.district AS
 FROM read_csv_auto('expanded_data/district.csv', header=True, sep=',');
-CREATE TABLE s1.loan AS
+CREATE TABLE b1.loan AS
 FROM read_csv_auto('expanded_data/loan.csv', header=True, sep=',');
 ```
 
-The code above will create three tables in the database schema: `s1.account`, `s1.district`, `s1.loan`.
+The code above will create three tables in the database schema: `b1.account`, `b1.district`, `b1.loan`.
 
 ## Exploring the data
 
 Let's take a look at its entries.
 
 ```{code-cell} ipython3
-%sqlcmd explore --table s1.account
+%sqlcmd explore --table b1.account
 ```
 
 ```{code-cell} ipython3
-%sqlcmd explore --table s1.district
+%sqlcmd explore --table b1.district
 ```
 
 ```{code-cell} ipython3
-%sqlcmd explore --table s1.loan
+%sqlcmd explore --table b1.loan
 ```
 
 ## Matplotlib inheritance
@@ -117,12 +130,12 @@ A few examples denoting this distinction are shown below.
 
 ### Axes-level
 
-Suppose we want to identify whether gentrification increases the average salary of two regions, using the data we downloaded above. We first save our [CTE (Common Table Expression)](https://ploomber-sql.readthedocs.io/en/latest/advanced-querying-techniques/ctes) named `levels_example` that takes in the columns, `average_salary`, `ratio_of_urban_inhabitants`, and `region`, and filters for two regions, 'central Bohemia' and 'east Bohemia', from the `s1.district` table.
+Suppose we want to identify whether gentrification increases the average salary of two regions, using the data we downloaded above. We first save our [CTE (Common Table Expression)](https://ploomber-sql.readthedocs.io/en/latest/advanced-querying-techniques/ctes) named `levels_example` that takes in the columns, `average_salary`, `ratio_of_urban_inhabitants`, and `region`, and filters for two regions, 'central Bohemia' and 'east Bohemia', from the `b1.district` table.
 
 ```{code-cell} ipython3
 %%sql --save levels_example
 SELECT average_salary, ratio_of_urban_inhabitants, region
-FROM s1.district
+FROM b1.district
 WHERE region IN ('central Bohemia', 'east Bohemia');
 ```
 
@@ -130,7 +143,7 @@ The result of the CTE is saved as a pandas `DataFrame()`:
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM levels_example
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 You can determine what is returned using Python's `type()` function:
@@ -173,12 +186,12 @@ The most basic [`seaborn.barplot()`](https://seaborn.pydata.org/generated/seabor
 
 ### Example
 
-Suppose the marketing manager wants to see a visualization for the number of <b>unique</b> loan ID's associated with each status of paying off the loan. To tackle this question, we will, first, create a CTE from the `s1.loan` table and obtain the counts for each status in different columns:
+Suppose the marketing manager wants to see a visualization for the number of <b>unique</b> loan ID's associated with each status of paying off the loan. To tackle this question, we will, first, create a CTE from the `b1.loan` table and obtain the counts for each status in different columns:
 
 ```{code-cell} ipython3
 %%sql --save bar_plot_example
 SELECT DISTINCT status, COUNT(loan_id) AS count_loan_id
-FROM s1.loan
+FROM b1.loan
 GROUP BY status
 ORDER BY status;
 ```
@@ -187,7 +200,7 @@ Save the CTE as a pandas `DataFrame()`:
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM bar_plot_example
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 Finally, use `seaborn.barplot()` to produce a bar plot:
@@ -203,22 +216,22 @@ plt.show()
 
 ### Question 1 (Medium)
 
-The marketing manager now wants you to provide the same information as the example above, but with an added grouping of the frequency of issuance of statements, which corresponds to the `frequency` variable in the `s1.account` table. Create a grouped bar plot with  clear axes labels, axes tick marks, title, and legend.
+The marketing manager now wants you to provide the same information as the example above, but with an added grouping of the frequency of issuance of statements, which corresponds to the `frequency` variable in the `b1.account` table. Create a grouped bar plot with  clear axes labels, axes tick marks, title, and legend.
 
-<b>Hint</b> Since the `frequency` variable is not in `s1.loan`, think of which SQL operation you can employ to combine both tables. Moreover, the `s1.loan` is a subset of the `s1.account` so use the appropriate technique that provides all rows from `s1.account`.
+<b>Hint</b> Since the `frequency` variable is not in b1.loan`, think of which SQL operation you can employ to combine both tables. Moreover, the b1.loan` is a subset of the `b1.account` so use the appropriate technique that provides all rows from `b1.account`.
 
 <!-- #region -->
 <details>
 <summary>Answers</summary>
 
-We start off by creating a CTE from both the `s1.loan` and `s1.account` table with the help of a `LEFT JOIN` on `account_id`. The reason for choosing this join is because all `account_id`'s in `s1.loan` are present in `s1.account`, so we obtain all accounts in the database. Next, because we also want counts by `frequency`, we add it to the `GROUP BY` clause and ensure we pass `DISTINCT` in the `SELECT` clause:
+We start off by creating a CTE from both the `b1.loan` and `b1.account` table with the help of a `LEFT JOIN` on `account_id`. The reason for choosing this join is because all `account_id`'s in `b1.loan` are present in `b1.account`, so we obtain all accounts in the database. Next, because we also want counts by `frequency`, we add it to the `GROUP BY` clause and ensure we pass `DISTINCT` in the `SELECT` clause:
 
 ```{code-cell} ipython3
 %%sql --save bar_plot_question
 SELECT DISTINCT status, frequency, COUNT(loan_id) AS count_loan_id
-FROM s1.account
-LEFT JOIN s1.loan
-    ON s1.account.account_id = s1.loan.account_id
+FROM b1.account
+LEFT JOIN b1.loan
+    ON b1.account.account_id = b1.loan.account_id
 GROUP BY status, frequency
 ORDER BY status;
 ```
@@ -227,7 +240,7 @@ Save the CTE as a pandas `DataFrame()`:
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM bar_plot_question
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 Finally, use `seaborn.barplot()`, this time with the `hue` argument, to produce a <b>grouped bar plot</b>:
@@ -259,10 +272,10 @@ Instead of not only creating multiple sub-scatterplots manually but also filteri
 ```{code-cell} ipython3
 %%sql --save relplot_example
 SELECT status, duration, amount, region, unemployment_rate_96
-FROM s1.account AS a
-LEFT JOIN s1.loan AS l
+FROM b1.account AS a
+LEFT JOIN b1.loan AS l
 ON a.account_id = l.account_id
-LEFT JOIN s1.district AS d
+LEFT JOIN b1.district AS d
 ON d.district_id = a.district_id
 WHERE region IN ('north Moravia', 'south Moravia') AND
 duration <= 24 AND status IN ('A', 'C');
@@ -272,7 +285,7 @@ Like before, save the CTE as a pandas `DataFrame()`:
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM relplot_example
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 In this `sns.relplot`, we we assign the `col` argument to the variable `region` and the `row` argument to the variable `status` that creates a faceted figure with multiple subplots arranged across both rows and columns of the grid:
@@ -355,10 +368,10 @@ We first modify the `relplot_example` CTE by removing the filter for `duration`:
 ```{code-cell} ipython3
 %%sql --save relplot_question
 SELECT status, duration, amount, region, unemployment_rate_96
-FROM s1.account AS a
-LEFT JOIN s1.loan AS l
+FROM b1.account AS a
+LEFT JOIN b1.loan AS l
 ON a.account_id = l.account_id
-LEFT JOIN s1.district AS d
+LEFT JOIN b1.district AS d
 ON d.district_id = a.district_id
 WHERE region IN ('north Moravia', 'south Moravia') AND
 status IN ('A', 'C');
@@ -368,7 +381,7 @@ Save the CTE as a pandas `DataFrame()`:
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM relplot_question
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 Finally, `sns.relplot` is called and stored in a variable for customizing the x-axis label. Note that the `sizes` argument specifies magnitude of the point `size`, which is used to control the visibility of the points:
@@ -410,13 +423,13 @@ Suppose the finance manager wants a visual representation of two distributions, 
 ```{code-cell} ipython3
 %%sql --save kde_example
 SELECT amount, status, payments, duration
-FROM s1.loan
+FROM b1.loan
 ORDER BY status;
 ```
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM kde_example
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 ```{code-cell} ipython3
@@ -485,13 +498,13 @@ Let us create the CTE and turn it into a pandas `Dataframe()` first:
 ```{code-cell} ipython3
 %%sql --save boxplot_example
 SELECT date, duration, ROUND(avg_amount, 0) AS avg_amount
-FROM (SELECT date, duration, AVG(amount) OVER (ORDER BY date ROWS BETWEEN 3 PRECEDING AND 2 FOLLOWING) AS avg_amount FROM s1.loan)
+FROM (SELECT date, duration, AVG(amount) OVER (ORDER BY date ROWS BETWEEN 3 PRECEDING AND 2 FOLLOWING) AS avg_amount FROM b1.loan)
 ORDER BY date;
 ```
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM boxplot_example
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 ```{code-cell} ipython3
@@ -518,13 +531,13 @@ The additional clause in the CTE is `PARTITION BY`, which adds the additional gr
 ```{code-cell} ipython3
 %%sql --save boxplot_question
 SELECT date, duration, status, ROUND(avg_amount, 0) AS avg_amount
-FROM (SELECT date, duration, status, AVG(amount) OVER (PARTITION BY status ORDER BY date ROWS BETWEEN CURRENT ROW AND 5 FOLLOWING) AS avg_amount FROM s1.loan)
+FROM (SELECT date, duration, status, AVG(amount) OVER (PARTITION BY status ORDER BY date ROWS BETWEEN CURRENT ROW AND 5 FOLLOWING) AS avg_amount FROM b1.loan)
 ORDER BY date;
 ```
 
 ```{code-cell} ipython3
 result = %sql SELECT * FROM boxplot_question
-df = result.DataFrame()
+df = pd.DataFrame(result)
 ```
 
 Unlike the previous section in which we employed the `matplotlib.axes` functions to customize the plot, we use the simpler `matplotlib.pyplot` functions because we have not faceted the boxplot:
@@ -543,6 +556,8 @@ plt.show()
 <!-- #endregion -->
 
 +++
+
+
 
 ## Wrapping Up
 
