@@ -43,7 +43,7 @@ class Seaborn_Barplot:
 
     def draw_bar_year_count(self, data):
         sns.set()  # Set the Seaborn style
-        plt.figure(figsize=(10, 5), dpi=150)
+        plt.figure(figsize=(10, 5), dpi=120)
 
         if data == "fuel_count":
             sns.barplot(
@@ -174,7 +174,7 @@ class Seaborn_Scatter:
         )
 
     def draw_scatter_electric_range(self, hue):
-        plt.figure(figsize=(10, 5), dpi=150)
+        plt.figure(figsize=(10, 5), dpi=120)
         sns.scatterplot(
             data=self.electric_range,
             x="recharge_time_h",
