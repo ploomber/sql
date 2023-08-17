@@ -44,4 +44,4 @@ Laura works as a Developer Advocate for Ploomber. She has over three years of pr
 |-|
 |![](Jonathan.jpg)|
 
-Jonathan holds a Master’s in Data Science and is a current Data Science intern at Ploomber. His experience encompasses roles as a Data Engineer intern at startup ventures and a teaching assistant for UC Berkeley's data science courses. His interests span across applications towards statistical topics like experimentation and causal inference to engineering topics such as handling big data with distributed systems. In his free time, Jonathan enjoys playing jazz piano and creating short songs.
+Jonathan holds a Master’s in Data Science from UC Berkeley and is a current Data Science intern at Ploomber. His previous experience encompasses roles as a Data Engineer intern at startup ventures and a teaching assistant for UC Berkeley's data science courses. His interests span across applications towards statistical topics like experimentation and causal inference to engineering topics such as handling big data with distributed systems. In his free time, Jonathan enjoys playing jazz piano and creating short songs.
