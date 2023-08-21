@@ -2,6 +2,8 @@
 
 [![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
 
+Meet our [contributors](https://github.com/ploomber/sql/blob/main/docs/contributors/contributors.m)
+
 ## Important links
 
 Visit the Jupyter book: https://ploomber-sql.readthedocs.io/en/latest/index.html 
