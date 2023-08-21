@@ -69,7 +69,7 @@ def drop_existing_table(duckdb_file_path):
         conn.execute("DROP TABLE movies;")
         print("Table 'movies' dropped.")
     else:
-        print("Table 'movies' does not exist.")
+        print("Table 'movies' does not exist. Creating 'movies' now.")
 
     conn.close()
 
