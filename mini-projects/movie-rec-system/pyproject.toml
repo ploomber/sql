@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "movie-rec-system"
+version = "0.1.0"
+description = ""
+authors = ["jpjon <jonathanphan@berkeley.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+duckdb = "0.8.1"
+requests = "^2.31"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
