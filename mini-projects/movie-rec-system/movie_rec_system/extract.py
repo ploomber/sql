@@ -28,7 +28,7 @@ def init_duck_db_movies(duckdb_file_path, res):
         conn.execute(
             """
             CREATE TABLE movies (
-                genre_ids VARCHAR,
+                genre_ids INT[],
                 id INTEGER,
                 original_language VARCHAR,
                 overview VARCHAR,
