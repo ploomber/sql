@@ -33,7 +33,7 @@ def init_duck_db_movies(duckdb_file_path, res):
                 original_language VARCHAR,
                 overview VARCHAR,
                 popularity DOUBLE,
-                release_date VARCHAR,
+                release_date TIMESTAMP,
                 title VARCHAR,
                 vote_average DOUBLE,
                 vote_count INTEGER
