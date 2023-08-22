@@ -58,9 +58,10 @@ def init_duck_db_movies(duckdb_file_path, res):
 
     conn.close()
 
+
 def init_duck_db_genres(duckdb_file_path, genres_data):
     conn = duckdb.connect(duckdb_file_path, read_only=False)
-    
+
     tables = conn.execute("SHOW TABLES;").fetchall()
     if ("genres",) not in tables:
         conn.execute(
@@ -106,6 +107,7 @@ def drop_existing_movies_table(duckdb_file_path):
 
     conn.close()
 
+
 def drop_existing_genres_table(duckdb_file_path):
     """
     Drops existing genres table
@@ -126,9 +128,10 @@ def drop_existing_genres_table(duckdb_file_path):
         print("Table 'genres' dropped.")
     else:
         print("Table 'genres' does not yet exist. Creating 'genres' now.")
-    
-    conn.close()    
-    
+
+    conn.close()
+
+
 def get_movies(lang, freq, duckdb_file_path):
     """
     Inserts API call results into DuckDB
@@ -179,6 +182,7 @@ def get_movies(lang, freq, duckdb_file_path):
         page = page + 1
     return movies
 
+
 def get_genres(lang, duckdb_file_path):
     """
     Inserts API call results into DuckDB
@@ -195,15 +199,15 @@ def get_genres(lang, duckdb_file_path):
     url = "https://api.themoviedb.org/3/genre/movie/list?api_key={api_key}&with_original_language={lang}".format(  # noqa E501
         api_key=api_key, lang=lang
     )
-    
+
     drop_existing_genres_table(duckdb_file_path)
-    
+
     try:
         res = requests.get(url)
     except requests.exceptions.RequestException as e:
         print("An error occurred during the request:", e)
         return []
-    
+
     if res.status_code != 200:
         print("error")
         return []
@@ -218,6 +222,7 @@ def get_genres(lang, duckdb_file_path):
     init_duck_db_genres(duckdb_file_path, genres_data)
 
     return len(genres_data)
+
 
 for key in language_count:
     # print(key,language_count[key])
