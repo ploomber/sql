@@ -6,7 +6,7 @@ language_count = {
     "en": 500,
 }
 
-api_key = "acc065fef5f7583ed250375626d14703"
+api_key = ""
 
 
 def init_duck_db_movies(duckdb_file_path, res):
