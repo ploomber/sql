@@ -201,3 +201,7 @@ pipeline/products/eda-pipeline.ipynb
 
 !docs/intro-to-dashboards-and-apps/data/database/car_data.*
 !pipeline/data/database/car_data.*
+
+# Mini project ploomber output
+mini-projects/movie_rec_system/movie_rec_system/products/etl/eda-pipeline.ipynb
+mini-projects/movie_rec_system/movie_rec_system/products/etl/extract-pipeline.ipynb

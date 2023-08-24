@@ -25,9 +25,9 @@ poetry lock
 poetry install
 ```
 
-5. Run the app
+5. Run the as a Ploomber pipeline
 
 ```
 cd mini-projects/
-poetry run python movie_rec_system/src/extract.py
+poetry run ploomber build
 ```

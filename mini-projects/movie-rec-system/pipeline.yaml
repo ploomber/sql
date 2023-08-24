@@ -1,0 +1,9 @@
+tasks:
+  - source: movie_rec_system/etl/extract.py
+    product:
+      nb: movie_rec_system/products/extract-pipeline.ipynb
+      data: movies_data.duckdb
+  - source: movie_rec_system/etl/eda.ipynb
+    static_analysis: disable
+    product: 
+      nb: movie_rec_system/products/eda-pipeline.ipynb
