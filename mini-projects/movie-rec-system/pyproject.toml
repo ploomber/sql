@@ -11,6 +11,7 @@ duckdb = "0.8.1"
 requests = "^2.31"
 pandas = "^2.0.1"
 matplotlib = "^3.6.0"
+python-dotenv="1.0.0"
 
 [build-system]
 requires = ["poetry-core"]

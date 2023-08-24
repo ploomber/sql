@@ -1,12 +1,16 @@
 import duckdb
 import requests
+from dotenv import load_dotenv
+import os
 
 # Parameter to get 500 English movies
 language_count = {
     "en": 500,
 }
 
-api_key = ""
+# Load API key from .env file
+load_dotenv(".env")
+api_key = os.getenv("API_KEY")
 
 
 def init_duck_db_movies(duckdb_file_path, res):
