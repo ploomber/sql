@@ -1,4 +1,4 @@
 .movies_data.duckdb.metadata
 movies_data.duckdb
-movie_rec_system/eda/eda-pipeline.ipynb
-movie_rec_system/src/extract-pipeline.ipynb
+movie_rec_system/products/eda-pipeline.ipynb
+movie_rec_system/products/extract-pipeline.ipynb
