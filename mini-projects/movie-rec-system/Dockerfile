@@ -19,7 +19,4 @@ COPY . .
 # Expose the port that the app runs on
 EXPOSE 8000
 
-# Remove files ending in .metadata from the notebooks folder
-RUN find notebooks -type f -name "*.metadata" -exec rm -f {} \;
-
 RUN poetry run ploomber build
