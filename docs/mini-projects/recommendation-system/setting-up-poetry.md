@@ -122,51 +122,30 @@ poetry install
 
 ### Adding a new dependency
 
-Let's say we want to add a new dependency to our project. We can do this by running the following command:
+Let's say we want to add a new dependency to our project. We can do this by adding it to the `pyproject.toml` under `[tool.poetry.dependencies]` file. 
+
+For example, if we want to add `scikit-learn`, we would simply modify the `pyproject.toml` as 
+
+```toml
+[tool.poetry.dependencies]
+python = "^3.10"
+duckdb = "0.8.1"
+requests = "^2.31"
+pandas = "^2.0.1"
+matplotlib = "^3.6.0"
+python-dotenv="1.0.0"
+ploomber = "^0.22.4"
+jupysql = "^0.9.0"
+duckdb-engine = "0.9.2"
+scikit-learn = "^1.3.0"
+```
+
+then run 
 
 ```bash
-poetry add <package-name>
+poetry lock
+poetry install
 ```
-
-For example, if we want to add the `numpy` package, we can run:
-
-```bash 
-poetry add numpy
-```
-
-This will add the `numpy` package to our `pyproject.toml` file and install it in our virtual environment.
-
-### Updating a dependency
-
-To update a dependency, we can run the following command:
-
-```bash
-poetry update <package-name>
-```
-
-For example, if we want to update the `numpy` package, we can run:
-
-```bash 
-poetry update numpy
-```
-
-This will update the `numpy` package in our `pyproject.toml` file and install it in our virtual environment.
-
-### Removing a dependency
-
-To remove a dependency, we can run the following command:
-
-```bash
-poetry remove <package-name>
-```
-
-For example, if we want to remove the `numpy` package, we can run:
-
-```bash
-poetry remove numpy
-```
-
-This will remove the `numpy` package from our `pyproject.toml` file and uninstall it from our virtual environment.
 
 In the next section, we will learn how to set up a Ploomber pipeline to build a movie recommendation system.
 
