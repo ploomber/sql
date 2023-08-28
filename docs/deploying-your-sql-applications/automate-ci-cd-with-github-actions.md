@@ -8,7 +8,7 @@ jupyter:
       jupytext_version: 1.14.5
 ---
 
-# Monitoring your deployments
+# Introduction to GitHub actions for CI/CD
 
 
 
