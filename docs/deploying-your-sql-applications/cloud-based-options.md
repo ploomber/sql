@@ -8,7 +8,7 @@ jupyter:
       jupytext_version: 1.14.5
 ---
 
-# Automating your deployments
+# Cloud-based options for deployment of applications
 
 
 

@@ -8,7 +8,7 @@ jupyter:
       jupytext_version: 1.14.5
 ---
 
-# Deploy your SQL applications
+# Sample AWS Deployment Workflow
 
 
 

@@ -44,8 +44,12 @@ parts:
 - caption: Introduction to Dashboards and Apps
   chapters:
   - file: intro-to-dashboards-and-apps/connecting-etl-to-dashboard-with-voila
+- caption: Mini projects - Movie recommendation system
+  chapters:
+  - file: mini-projects/recommendation-system/introduction
+  - file: mini-projects/recommendation-system/setting-up-poetry
 - caption: Deploying Your SQL Applications
   chapters:
-  - file: deploying-your-sql-applications/deploy-your-sql-applications
-  - file: deploying-your-sql-applications/automating-your-deployments
-  - file: deploying-your-sql-applications/monitoring-your-deployments
+  - file: deploying-your-sql-applications/cloud-based-options
+  - file: deploying-your-sql-applications/automate-ci-cd-with-github-actions
+  - file: deploying-your-sql-applications/sample-aws-deployment-workflow

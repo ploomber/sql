@@ -2,7 +2,7 @@
 name = "movie-rec-system"
 version = "0.1.0"
 description = ""
-authors = ["jpjon <jonathanphan@berkeley.edu>"]
+authors = ["jpjon <jonathanphan@berkeley.edu>", "Laura <laura@ploomber.io>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
