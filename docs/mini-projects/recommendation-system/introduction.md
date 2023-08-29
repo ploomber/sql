@@ -45,11 +45,11 @@ Finally, to ensure we can execute our code in a consistent environment, we will 
 
 It is recommended that you have the following installed on your system:
 
-1. Python 3.8+ (3.10 recommended)
-2. Poetry setup from the previous section
-3. Miniconda or Anaconda installed. [Link here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+1. Python 3.10+ (3.10 recommended)
+2. Miniconda or Anaconda installed. [Link here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 3. An IDE and Jupyter notebooks installed. We will be working with [VSCode](https://code.visualstudio.com/docs/setup/setup-overview) and Jupyter notebooks in this tutorial.
 4. Docker Engine installed. [Link here](https://docs.docker.com/engine/install/)
+5. Poetry setup (covered in the next section)
 
 ## Get Started!
 
