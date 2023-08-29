@@ -97,7 +97,7 @@ Once we have our API key, and have stored it into a `.env` file, we can start bu
 2. Extract the data from the API response.
 3. Create a DuckDB instance and populate it with the extracted data.
 
-Let's create a Python script called `extract.py` in the `pipeline` folder.
+Let's create a Python script called `extract.py` in the `etl` folder.
 
 #### Key imports
 
