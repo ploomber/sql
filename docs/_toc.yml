@@ -48,6 +48,7 @@ parts:
   chapters:
   - file: mini-projects/recommendation-system/introduction
   - file: mini-projects/recommendation-system/setting-up-poetry
+  - file: mini-projects/recommendation-system/setting-up-etl
 - caption: Deploying Your SQL Applications
   chapters:
   - file: deploying-your-sql-applications/cloud-based-options
