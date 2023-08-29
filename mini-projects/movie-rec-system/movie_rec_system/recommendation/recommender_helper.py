@@ -42,3 +42,36 @@ def content_movie_recommender(
         "are:-\n",
         recommended_movies,
     )
+    return recommended_movies
+
+
+def get_popularity_rmse(df, sample_movie, recommendations):
+    sample_movie_popularity = df[df["title"] == sample_movie].popularity[1]
+    recommendations_popularity = df[df["title"].isin(recommendations)].popularity.values  # noqa E501
+
+    squared_diffs = (sample_movie_popularity - recommendations_popularity) ** 2
+    rmse = np.sqrt(squared_diffs.mean())
+
+    return rmse
+
+
+def get_vote_avg_rmse(df, sample_movie, recommendations):
+    sample_movie_vote_average = df[df["title"] == sample_movie].vote_average[1]
+    recommendations_vote_average = df[
+        df["title"].isin(recommendations)
+    ].vote_average.values
+
+    squared_diffs = (sample_movie_vote_average - recommendations_vote_average) ** 2  # noqa E501
+    rmse = np.sqrt(squared_diffs.mean())
+
+    return rmse
+
+
+def get_vote_count_rmse(df, sample_movie, recommendations):
+    sample_movie_popularity = df[df["title"] == sample_movie].vote_count[1]
+    recommendations_popularity = df[df["title"].isin(recommendations)].vote_count.values  # noqa E501
+
+    squared_diffs = (recommendations_popularity - sample_movie_popularity) ** 2
+    rmse = np.sqrt(squared_diffs.mean())
+
+    return rmse
