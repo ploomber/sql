@@ -13,7 +13,7 @@ kernelspec:
 
 # Data wrangling and exploratory data analysis in Jupyter
 
-In the previous tutorial, we used a Python script to call a movie database API and populate a DuckDB instance with the extracted movie data. Furthermore, we packaged the script within a Ploomber pipeline. In this tutorial, we will expand our pipeline to incorporate exploratory data analysis and data wranging with SQL using a Jupyter notebook. This step will involve extracting data, data wrangling, and creating new tables.
+In the previous tutorial, we used a Python script to call a movie database API and populate a DuckDB instance with the extracted movie data. Furthermore, we packaged the script within a Ploomber pipeline. In this tutorial, we will expand our pipeline to incorporate exploratory data analysis and data wrangling with SQL using a Jupyter notebook. This step will involve extracting data, data wrangling, and creating new tables.
 
 ```{important}
 This tutorial assumes you have completed the previous tutorial and have a DuckDB instance populated with movie data.

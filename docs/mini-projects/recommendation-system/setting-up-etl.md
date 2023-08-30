@@ -259,7 +259,7 @@ conn.close()
 
 Write a function or set of functions that will check if the `movies` and `genres` tables exist in the `DuckDB` instance. If they do, drop them. If they don't, create them.
 
-## Find a sample script
+### Find a sample script
 
 The workflow above is a good starting point for building our pipeline. However, it is not complete. We need to add a few more things to make it production-ready. For example, we need to add logging, error handling, and more. A simple starter script [can be found here](https://github.com/ploomber/sql/blob/main/mini-projects/movie-rec-system/movie_rec_system/etl/extract.py). Note there may be different ways of solving this problem, and further improving this current script. As such the script above is just a starting point.
 
