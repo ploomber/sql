@@ -48,6 +48,8 @@ parts:
   chapters:
   - file: mini-projects/recommendation-system/introduction
   - file: mini-projects/recommendation-system/setting-up-poetry
+  - file: mini-projects/recommendation-system/setting-up-etl
+  - file: mini-projects/recommendation-system/eda-with-jupyter
 - caption: Deploying Your SQL Applications
   chapters:
   - file: deploying-your-sql-applications/cloud-based-options

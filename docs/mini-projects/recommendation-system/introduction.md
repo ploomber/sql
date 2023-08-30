@@ -41,6 +41,16 @@ Finally, to ensure we can execute our code in a consistent environment, we will 
 2. **Portfolio Booster:** Showcase your ability to manage and execute a multi-faceted project.
 3. **Skill Enhancement:** Refine your skills with Python, SQL, Ploomber, FastAPI, and Docker.
 
+## Requirements
+
+It is recommended that you have the following installed on your system:
+
+1. Python 3.10+ (3.10 recommended)
+2. Miniconda or Anaconda installed. [Link here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+3. An IDE and Jupyter notebooks installed. We will be working with [VSCode](https://code.visualstudio.com/docs/setup/setup-overview) and Jupyter notebooks in this tutorial.
+4. Docker Engine installed. [Link here](https://docs.docker.com/engine/install/)
+5. Poetry setup (covered in the next section)
+
 ## Get Started!
 
 Excited? We hope so! Jump right in and follow the outlined steps to kick-start your journey. This is a fantastic way to bring together various aspects of the data science pipeline and see them in action.

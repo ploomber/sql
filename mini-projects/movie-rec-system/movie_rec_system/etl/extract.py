@@ -3,15 +3,6 @@ import requests
 from dotenv import load_dotenv
 import os
 
-# Parameter to get 500 English movies
-language_count = {
-    "en": 500,
-}
-
-# Load API key from .env file
-load_dotenv(".env")
-api_key = os.getenv("API_KEY")
-
 
 def init_duck_db_movies(duckdb_file_path, res):
     """
@@ -64,6 +55,18 @@ def init_duck_db_movies(duckdb_file_path, res):
 
 
 def init_duck_db_genres(duckdb_file_path, genres_data):
+    """
+    Create table for genres API call in DuckDB
+    If the table exists, new data is inserted
+
+    Parameters
+    ----------
+    duckdb_file_path : str
+        Path to the DuckDB database file
+    genres_data : list
+        List of genres
+
+    """
     conn = duckdb.connect(duckdb_file_path, read_only=False)
 
     tables = conn.execute("SHOW TABLES;").fetchall()
@@ -136,7 +139,7 @@ def drop_existing_genres_table(duckdb_file_path):
     conn.close()
 
 
-def get_movies(lang, freq, duckdb_file_path):
+def get_movies(lang, freq, duckdb_file_path, api_key):
     """
     Inserts API call results into DuckDB
 
@@ -148,6 +151,8 @@ def get_movies(lang, freq, duckdb_file_path):
         Amount of movies to extract
     duckdb_file_path : str
         Path to the DuckDB database file
+    api_key : str
+        API key for The Movie Database
     """
     url = "https://api.themoviedb.org/3/movie/popular?api_key={api_key}&with_original_language={lang}".format(  # noqa E501
         api_key=api_key, lang=lang
@@ -187,7 +192,7 @@ def get_movies(lang, freq, duckdb_file_path):
     return movies
 
 
-def get_genres(lang, duckdb_file_path):
+def get_genres(lang, duckdb_file_path, api_key):
     """
     Inserts API call results into DuckDB
 
@@ -199,6 +204,8 @@ def get_genres(lang, duckdb_file_path):
         Amount of movies to extract
     duckdb_file_path : str
         Path to the DuckDB database file
+    api_key : str
+        API key for The Movie Database
     """
     url = "https://api.themoviedb.org/3/genre/movie/list?api_key={api_key}&with_original_language={lang}".format(  # noqa E501
         api_key=api_key, lang=lang
@@ -228,10 +235,22 @@ def get_genres(lang, duckdb_file_path):
     return len(genres_data)
 
 
-for key in language_count:
-    # print(key,language_count[key])
-    print("Downloading", key, end=": ")
-    movies = get_movies(key, language_count[key], "movies_data.duckdb")
-    print("Total movies found:", movies)
-    genres = get_genres(key, "movies_data.duckdb")
-    print("Total genres found:", genres)
+if __name__ == "__main__":
+    # Parameter to get 500 English movies
+    language_count = {
+        "en": 500,
+    }
+
+    # Load API key from .env file
+    load_dotenv(".env")
+    api_key = os.getenv("API_KEY")
+
+    for key in language_count:
+        # print(key,language_count[key])
+        print("Downloading", key, end=": ")
+        movies = get_movies(
+            key, language_count[key], "movies_data.duckdb", api_key
+        )  # noqa E501
+        print("Total movies found:", movies)
+        genres = get_genres(key, "movies_data.duckdb", api_key)
+        print("Total genres found:", genres)
