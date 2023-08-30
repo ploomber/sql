@@ -55,14 +55,7 @@ If running the notebook in VSCode, you will need to install the [Jupyter extensi
 
 To load the data from our DuckDB instance within Jupyter, we will use [JupySQL](https://github.com/ploomber/jupysql). JupySQL allows you to run SQL and plot large datasets in Jupyter via a %sql, %%sql, and %sqlplot magics. 
 
-## Imports
-
-Let's start by importing the libraries we will need for this tutorial. As we focus on EDA, we will use SQL for data wrangling, and `pandas` dataframes and `matplotlib` for plotting.
-
-```{code-cell} ipython3
-import pandas as pd
-import matplotlib.pyplot as plt
-```
+## Loading `%sql` extension and `DuckDB` instance
 
 To set up access to the database, we will use the `%sql` extension from `jupysql`. 
 
@@ -151,3 +144,135 @@ GROUP BY
 * It groups the rows by `movie_id` (i.e., each movie will only appear once in the final output).
 * For each `movie_id`, it aggregates the genre names using `STRING_AGG`. The `STRING_AGG` function is concatenating the genre names together with a comma and space (', ') in between them. So, for each movie, you'll get a single string that lists all its genres.
 * The result will be a table where each row contains a movie's ID and a concatenated string of all its genres.
+
+### Creating a table with movie and genres
+
+We can now create a new table in the DuckDB instance that contains detailed information about movies, including a concatenated string of their genre names. We will call it `movie_genre_data`.
+
+```{code-cell} ipython3
+%%sql --no-execute
+CREATE TABLE IF NOT EXISTS movie_genre_data AS
+WITH ExpandedGenres AS (
+    SELECT 
+        m.id AS movie_id,
+        mg.movie_genre_id,
+        g.name AS genre_name
+    FROM 
+        (SELECT UNNEST(movies.genre_ids) as movie_genre_id, movies.id FROM movies) AS mg
+    JOIN 
+        movies m ON mg.id = m.id
+    JOIN 
+        genres g ON mg.movie_genre_id = g.id
+),
+genre_names AS (
+    SELECT
+    movie_id,
+    STRING_AGG(genre_name, ', ') AS genre_names
+FROM 
+    ExpandedGenres
+GROUP BY 
+    movie_id
+)
+SELECT gn.genre_names, m.id, m.original_language,
+       m.overview, m.popularity, m.release_date,
+       m.title, m.vote_average, m.vote_count
+FROM genre_names gn
+JOIN movies m
+ON gn.movie_id = m.id
+WHERE m.vote_count != 0
+```
+
+**The query is creating a new table where each row represents a movie that has received at least one vote. For each movie, the table will have the movie's details and a concatenated string of all its genres by name.**
+
+**In Depth Explanation:**
+
+1. **Table Creation:**
+
+* `CREATE TABLE IF NOT EXISTS movie_genre_data AS``: This creates a new table named movie_genre_data if it doesn't already exist.
+
+2. **Common Table Expression (CTE) - `ExpandedGenres`:**
+
+* As in the previous query, the `ExpandedGenres` CTE is responsible for "expanding" or "flattening" movies based on their genres. Each movie in the movies table has an array (or similar list-type structure) of genre IDs in `genre_ids`.
+* The result of the CTE is a table with columns: `movie_id`, `movie_genre_id`, and `genre_name`.
+
+3. **CTE - `genre_names`:**
+
+* This CTE operates on the `ExpandedGenres` CTE.
+* It groups the rows by movie_id (i.e., each movie will only appear once in the output of this CTE).
+* For each `movie_id`, it aggregates the genre names using `STRING_AGG`. This function concatenates the genre names together, separated by a comma and space.
+* The result will be a table where each row contains a movie's ID (`movie_id`) and a concatenated string of all its genres (`genre_names`).
+
+4. **Main Query:**
+
+* The main query operates on the `genre_names` CTE and the original movies table.
+* It joins the `genre_names` CTE with the movies table on the movie_id field.
+* For each movie, it selects:  Concatenated genre names (`genre_names` from `genre_names` CTE). The movie's ID, original language, overview, popularity, release date, title, average vote, and vote count.
+
+* The `WHERE m.vote_count != 0` condition ensures that only movies with at least one vote are included in the final table.
+
+```{code-cell} ipython3
+%%sql
+SELECT *
+FROM movie_genre_data
+LIMIT 2;
+```
+
+## Challenge
+
+Perform data visualization and analysis on the `movie_genre_data` table. Use the `%sqlplot` magic to plot the data. What are the most popular genres? What are the most popular movies? What are the most popular movies by genre? What are the most popular movies by year? What are the most popular movies by decade? What are the most popular movies by genre and decade?
+
+A sample notebook can be found here: [eda.ipynb](https://github.com/ploomber/sql/blob/main/mini-projects/movie-rec-system/movie_rec_system/etl/eda.ipynb)
+
+## Upgrading our pipeline
+
+Now that we have our EDA and data wrangling in a Jupyter notebook, we can upgrade our pipeline to incorporate this step. Since Ploomber supports Jupyter notebooks, we can simply add the notebook to our pipeline. We will add the notebook to the `etl` folder and call it `eda.ipynb`. We will then add the following to our `pipeline.yaml` file:
+
+```yaml
+tasks:
+  - source: movie_rec_system/etl/extract.py
+    product:
+      nb: movie_rec_system/products/extract-pipeline.ipynb
+      data: movies_data.duckdb
+  - source: movie_rec_system/etl/eda.ipynb
+    static_analysis: disable
+    product: 
+      nb: movie_rec_system/products/eda-pipeline.ipynb
+```
+
+```{important}
+Since the pipeline is being executed from the `mini-projects/movie-rec-system` folder, we need to update the paths in the `eda.ipynb` file to reflect this.
+
+```python
+%sql duckdb:///movies_data.duckdb
+```
+```
+
+Execute the pipeline again:
+
+```bash
+cd mini-projects/movie-rec-system
+ploomber build
+```
+
+This will execute the `eda.ipynb` notebook and save the output to `eda-pipeline.ipynb` in the `products` folder. We can now use this notebook to create a recommender system. We will do this in the next tutorial.
+
+```bash
+Loading pipeline...
+Notebook movie_rec_system/etl/extract.py is missing the parameters cell, adding it at the top of the file...
+Notebook movie_rec_system/etl/eda.ipynb is missing the parameters cell, adding it at the top of the file...
+Executing: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:11<00:00,  1.15s/cell]
+Executing: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 19/19 [00:10<00:00,  1.75cell/s]
+Building task 'eda': 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:22<00:00, 11.22s/it]
+name     Ran?      Elapsed (s)    Percentage
+-------  ------  -------------  ------------
+extract  True          11.5321       51.4146
+eda      True          10.8975       48.5854
+```
+
+## Challenge
+
+Explore the [SQL Pipelines](https://docs.ploomber.io/en/latest/use-cases/sql.html) example in the Ploomber documentation. In particular, take a look at [this template that uses `.sql` files](https://github.com/ploomber/projects/tree/master/templates/spec-api-sql). How would you incorporate this into your pipeline? What are the advantages and disadvantages of using `.sql` files vs. Jupyter notebooks?
+
+## Conclusion
+
+In this tutorial, we used a Jupyter notebook to perform data wrangling and exploratory data analysis. We then incorporated this notebook into our pipeline. In the next tutorial, we will set up a recommendation system with the clean data.
