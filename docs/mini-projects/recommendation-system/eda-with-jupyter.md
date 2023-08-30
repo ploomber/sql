@@ -241,10 +241,10 @@ tasks:
 
 ```{important}
 Since the pipeline is being executed from the `mini-projects/movie-rec-system` folder, we need to update the paths in the `eda.ipynb` file to reflect this.
+```
 
 ```python
 %sql duckdb:///movies_data.duckdb
-```
 ```
 
 Execute the pipeline again:
