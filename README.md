@@ -35,6 +35,11 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 
 ## Course structure
 
+<details>
+<summary>Display the topics</summary>
+
+
+
 ### Intro to SQL
 
 1. Connecting to database engines
@@ -75,10 +80,21 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 
 1. Connecting the ETL pipeline to a dashboard (Voila)
 
+### Mini project - movie recommender system
+1. Introduction
+2. Setting up your environment with `Poetry`
+3. Set up an ETL with Python, DuckDB and Ploomber
+4. Perform exploratory data analysis
+5. Set up recommender system
+6. Serving results with FastAPI and Docker
+7. Deploying your application
+
 ### Deploying your SQL application
 
-1. How to deploy your SQL applications
-2. Automating your deployments
-3. How to monitor your deployments 
+1. Cloud-based options
+2. Automating CI/CD with GitHub actions
+3. Sample AWS deployment workflow
+
+</details>
 
 
