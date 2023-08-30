@@ -42,11 +42,14 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 
 ### Intro to SQL
 
+<details>
+<summary>Display the topics</summary>
 1. Connecting to database engines
 2. Making your first query
 3. Aggregate functions in SQL
 4. Joining data in SQL
 5. Combining data from multiple tables 
+</details>
 
 ### Interactive queries and parameterization
 
