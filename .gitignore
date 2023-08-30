@@ -205,3 +205,8 @@ pipeline/products/eda-pipeline.ipynb
 # Mini project ploomber output
 mini-projects/movie_rec_system/movie_rec_system/products/etl/eda-pipeline.ipynb
 mini-projects/movie_rec_system/movie_rec_system/products/etl/extract-pipeline.ipynb
+
+# Mini project ploomber output
+!docs/mini-projects/recommendation-system/movies_data.duckdb
+mini-projects/movie-rec-system/movie_rec_system/products/eda-pipeline.ipynb
+mini-projects/movie-rec-system/movie_rec_system/products/extract-pipeline.ipynb

@@ -33,13 +33,13 @@ In this blog, we will focus on data extraction and data storage. We will be usin
 
 The first step is to extract data from the [Movie Database API](https://developer.themoviedb.org/docs/getting-started). We will be using a Python script to do this. The script will call the API and extract the data into a DuckDB database instance. 
 
-### API Structure
-
 ```{important}
 You can create a free account on the Movie Database website to get an API key. 
 [Link here](https://developer.themoviedb.org/themoviedb/v3/reference/intro/authentication#api-key-quick-start)
 If you face issues, please join the Ploomber community on [Slack](https://ploomber.io/community)
 ```
+
+### API Structure
 
 We will explore two entry points:
 
@@ -262,6 +262,93 @@ Write a function or set of functions that will check if the `movies` and `genres
 ## Find a sample script
 
 The workflow above is a good starting point for building our pipeline. However, it is not complete. We need to add a few more things to make it production-ready. For example, we need to add logging, error handling, and more. A simple starter script [can be found here](https://github.com/ploomber/sql/blob/main/mini-projects/movie-rec-system/movie_rec_system/etl/extract.py). Note there may be different ways of solving this problem, and further improving this current script. As such the script above is just a starting point.
+
+## Build a Ploomber pipeline
+
+Now that we have a script to extract data from the API and store it into a `DuckDB` instance, we can build a Ploomber pipeline. We will be using Ploomber to build our pipeline. Ploomber is a Python library that allows you to build data pipelines using Python scripts and Jupyter notebooks. It is a great tool for data scientists who want to build data pipelines without having to learn new tools or languages.
+
+Ploomber allows you to execute your pipeline from the command line. This is useful because it allows you to automate your pipeline. For example, you can set up a cron job to run your pipeline every day at a certain time. You can add steps to the pipeline through YAML files. The structure of a sample YAML file we will use in this example is:
+
+```yaml
+tasks:
+  - source: path-to-script/myscript.py
+    product:
+      nb: path-to-notebook-file/notebook-name.ipynb
+      data: path-to-data-file/data-file-name.duckdb
+```
+
+To learn about different ways to structure your pipelines, refer to the Ploomber cookbook [here](https://docs.ploomber.io/en/latest/cookbook/index.html).
+
+
+### Creating a `pipeline.yaml` file
+
+We will start by creating a `pipeline.yaml` file in the `movie-rec-system` folder. This file will contain the steps of our pipeline. We will also add a `products` folder.
+
+```bash
+mini-projects
+├──movie-rec-system
+├──├── pipeline.yaml
+├──├── pyproject.toml
+├──├── README.md
+├──├── etl
+├──│   └── extract.py
+├──├── products
+├──└── tests
+├──│       └── __init__.py
+├──└── .env
+```
+
+The `pipeline.yaml` file will be structured as follows:
+
+```yaml
+tasks:
+  - source: movie_rec_system/etl/extract.py
+    product:
+      nb: movie_rec_system/products/extract-pipeline.ipynb
+      data: movies_data.duckdb
+```
+
+To execute the pipeline, we will use the `ploomber build` command. We will execute this command from the `movie-rec-system` folder. 
+
+```bash
+cd mini-projects/movie-rec-system
+ploomber build
+```
+
+This should show
+
+```bash
+Loading pipeline...
+Notebook movie_rec_system/etl/extract.py is missing the parameters cell, adding it at the top of the file...
+Executing: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:12<00:00,  1.26s/cell]
+name     Ran?      Elapsed (s)    Percentage
+-------  ------  -------------  ------------
+extract  True          12.5755       50.9231
+```
+
+The resulting folder structure should look like this:
+
+```bash
+mini-projects
+├──movie-rec-system
+├──├── movies_data.duckdb
+├──├── movies_data.duckdb.wal
+├──├── .movies_data.duckdb.metadata
+├──├── pipeline.yaml
+├──├── pyproject.toml
+├──├── README.md
+├──├── etl
+├──│   └── extract.py
+├──│   └── eda.ipynb
+├──├── products
+├──     └── extract-pipeline.ipynb
+├──     └── .extract-pipeline.ipynb.metadata
+├──└── tests
+├──│       └── __init__.py
+├──└── .env
+```
+
+The `.metadata` files are created by Ploomber and can be ignored. The `.wal` file is a write-ahead log file created by DuckDB. It can also be ignored. Within `products`, the `extract-pipeline.ipynb` file is the Jupyter notebook that was created by Ploomber, this notebook will contain a trace back of the execution.
 
 ## Summary
 

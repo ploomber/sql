@@ -1,0 +1,5 @@
+[tool.jupysql.SqlMagic]
+displaycon = false
+feedback = true
+autopandas  = true
+named_parameters = true
