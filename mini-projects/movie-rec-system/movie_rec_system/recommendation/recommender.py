@@ -67,29 +67,38 @@ def create_combined(df: pd.DataFrame, weight=2) -> pd.DataFrame:
 
 def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     """
-    Generate movie recommendations based on content similarity and computes associated metrics.
+    Generate movie recommendations based on
+    content similarity and computes associated metrics.
 
-    This function retrieves movie data, calculates cosine similarity between movies using 
-    TF-IDF vectorization of their combined overview and genre, and returns a list of recommended 
-    movies along with certain metrics (popularity, vote average, and vote count RMSE).
+    This function retrieves movie data,
+    calculates cosine similarity between movies using
+    TF-IDF vectorization of their combined overview
+    and genre, and returns a list of recommended
+    movies along with certain metrics
+    (popularity, vote average, and vote count RMSE).
 
     Parameters
     ----------
     movie : str
-        The title of the movie for which recommendations are to be generated.
-    
+        The title of the movie for which
+        recommendations are to be generated.
+
     num_rec : int, optional
-        The number of movie recommendations to generate. Default is 10.
-    
+        The number of movie recommendations
+        to generate. Default is 10.
+
     stop_words : str, optional
-        The language of stop words to be used when vectorizing the "combined" column.
+        The language of stop words to be
+        used when vectorizing the "combined" column.
         Default is "english".
 
     Returns
     -------
     str
-        A JSON-formatted string containing the original movie, a list of recommendations, 
-        and associated metrics (popularity, vote average, and vote count RMSE).
+        A JSON-formatted string containing
+        the original movie, a list of recommendations,
+        and associated metrics
+        (popularity, vote average, and vote count RMSE).
 
     Examples
     --------
