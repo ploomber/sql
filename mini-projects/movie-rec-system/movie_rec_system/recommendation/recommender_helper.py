@@ -1,12 +1,13 @@
 import numpy as np
+import pandas as pd
 
 
 def content_movie_recommender(
-    input_movie,
-    similarity_database,
-    movie_database_list,
+    input_movie: str,
+    similarity_database: pd.DataFrame,
+    movie_database_list: list,
     top_n=10,
-):
+) -> list:
     """
     Function that uses a similarity matrix to find similar movies
 
@@ -36,17 +37,15 @@ def content_movie_recommender(
     # get recommended movie names
     recommended_movies = movie_list[sorted_movie_ids[1 : top_n + 1]]  # noqa E203
 
-    print(
-        "\n\nTop Recommended Movies for:",
-        input_movie,
-        "are:-\n",
-        recommended_movies,
-    )
-    return recommended_movies
+    return list(recommended_movies)
 
 
-def get_popularity_rmse(df, sample_movie, recommendations):
-    sample_movie_popularity = df[df["title"] == sample_movie].popularity[1]
+def get_popularity_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    sample_movie_popularity = df[df["title"] == sample_movie].popularity.iloc[
+        0
+    ]  # noqa E501
     recommendations_popularity = df[
         df["title"].isin(recommendations)
     ].popularity.values  # noqa E501
@@ -54,11 +53,17 @@ def get_popularity_rmse(df, sample_movie, recommendations):
     squared_diffs = (sample_movie_popularity - recommendations_popularity) ** 2
     rmse = np.sqrt(squared_diffs.mean())
 
-    return rmse
+    return round(float(rmse), 3)
 
 
-def get_vote_avg_rmse(df, sample_movie, recommendations):
-    sample_movie_vote_average = df[df["title"] == sample_movie].vote_average[1]
+def get_vote_avg_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    sample_movie_vote_average = df[
+        df["title"] == sample_movie
+    ].vote_average.iloc[  # noqa E501
+        0
+    ]
     recommendations_vote_average = df[
         df["title"].isin(recommendations)
     ].vote_average.values
@@ -68,11 +73,15 @@ def get_vote_avg_rmse(df, sample_movie, recommendations):
     ) ** 2  # noqa E501
     rmse = np.sqrt(squared_diffs.mean())
 
-    return rmse
+    return round(float(rmse), 3)
 
 
-def get_vote_count_rmse(df, sample_movie, recommendations):
-    sample_movie_popularity = df[df["title"] == sample_movie].vote_count[1]
+def get_vote_count_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    sample_movie_popularity = df[df["title"] == sample_movie].vote_count.iloc[
+        0
+    ]  # noqa E501
     recommendations_popularity = df[
         df["title"].isin(recommendations)
     ].vote_count.values  # noqa E501
@@ -80,4 +89,4 @@ def get_vote_count_rmse(df, sample_movie, recommendations):
     squared_diffs = (recommendations_popularity - sample_movie_popularity) ** 2
     rmse = np.sqrt(squared_diffs.mean())
 
-    return rmse
+    return round(float(rmse), 3)

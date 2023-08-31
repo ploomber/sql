@@ -11,7 +11,7 @@ from recommender_helper import (
 )
 
 
-def get_data():
+def get_data() -> pd.DataFrame:
     """
     Function that automatically connects
     to duckdb as a GET call upon launch
@@ -26,7 +26,7 @@ def get_data():
     return df
 
 
-def create_combined(df: pd.DataFrame, weight=2):
+def create_combined(df: pd.DataFrame, weight=2) -> pd.DataFrame:
     """
     Generates a "combined" column by combining the
     "overview" and "genre_names" columns.
@@ -66,6 +66,46 @@ def create_combined(df: pd.DataFrame, weight=2):
 
 
 def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
+    """
+    Generate movie recommendations based on content similarity and computes associated metrics.
+
+    This function retrieves movie data, calculates cosine similarity between movies using 
+    TF-IDF vectorization of their combined overview and genre, and returns a list of recommended 
+    movies along with certain metrics (popularity, vote average, and vote count RMSE).
+
+    Parameters
+    ----------
+    movie : str
+        The title of the movie for which recommendations are to be generated.
+    
+    num_rec : int, optional
+        The number of movie recommendations to generate. Default is 10.
+    
+    stop_words : str, optional
+        The language of stop words to be used when vectorizing the "combined" column.
+        Default is "english".
+
+    Returns
+    -------
+    str
+        A JSON-formatted string containing the original movie, a list of recommendations, 
+        and associated metrics (popularity, vote average, and vote count RMSE).
+
+    Examples
+    --------
+    >>> result = get_recommendation("Inception", num_rec=5)
+    >>> print(json.loads(result))
+    {
+        "movie": "Inception",
+        "recommendations": [...],
+        "metrics": {
+            "popularity": ...,
+            "vote_avg": ...,
+            "vote_count": ...
+        }
+    }
+
+    """
     df = get_data()
 
     # Create column with overview and genres
