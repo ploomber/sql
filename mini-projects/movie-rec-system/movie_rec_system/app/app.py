@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
-from recommender import get_recommendation
+from .recommender import get_recommendation
 
 app = FastAPI()
 

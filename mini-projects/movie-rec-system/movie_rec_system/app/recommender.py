@@ -4,7 +4,7 @@ import duckdb
 from functools import lru_cache
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from recommender_helper import (
+from .recommenderhelper import (
     content_movie_recommender,
     get_popularity_rmse,
     get_vote_avg_rmse,
@@ -19,7 +19,7 @@ def get_data() -> pd.DataFrame:
     to duckdb as a GET call upon launch
     of FastAPI
     """
-    con = duckdb.connect("../../movies_data.duckdb")
+    con = duckdb.connect("./movies_data.duckdb")
     query = "SELECT * FROM movie_genre_data"
     df = con.execute(query).fetchdf()
     con.close()
