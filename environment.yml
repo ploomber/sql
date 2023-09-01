@@ -13,6 +13,7 @@ dependencies:
   - pip
   - ipywidgets
   - pip:
+    - pandas==2.0.3
     - jupyter-book
     - pkgmt>=0.1.7
     - duckdb==0.8.1
