@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
 from .recommender import get_recommendation
+from fastapi.responses import JSONResponse
+import json 
 
 app = FastAPI()
 
@@ -42,7 +44,10 @@ def get_movie_recommendations(recommendation_request: RecommendationRequest):
         recommendation_request.num_rec,
         recommendation_request.stop_words,
     )
-    print(recommendations)
+
+    if isinstance(recommendations, str):
+        recommendations = json.loads(recommendations)
+
 
     if not recommendations:
         raise HTTPException(
@@ -50,4 +55,4 @@ def get_movie_recommendations(recommendation_request: RecommendationRequest):
             detail="Movie not found or no recommendations available",  # noqa E501
         )
 
-    return recommendations
+    return JSONResponse(content=recommendations)
