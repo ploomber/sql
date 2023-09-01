@@ -27,10 +27,12 @@ def content_movie_recommender(
         movie_sim = similarity_database[
             similarity_database.index == input_movie
         ].values[0]
-        
+
         # get movies sorted by similarity
         sorted_movie_ids = np.argsort(movie_sim)[::-1]
-        recommended_movies = movie_database_list[sorted_movie_ids[1 : top_n + 1]]
+        recommended_movies = movie_database_list[
+            sorted_movie_ids[1 : top_n + 1]  # noqa E203
+        ]  # noqa E501
         return list(recommended_movies)
     except IndexError:
         return []

@@ -124,14 +124,16 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     tfidf_matrix = tfidf.fit_transform(df["combined"])
 
     similarity = cosine_similarity(tfidf_matrix)
-    
+
     # Make sure the dataframe's columns and indices are in lowercase
     similarity_df = pd.DataFrame(
         similarity, index=df.title.values, columns=df.title.values
     )
 
     movie_list = similarity_df.columns.values
-    recommendations = content_movie_recommender(movie, similarity_df, movie_list, num_rec)
+    recommendations = content_movie_recommender(
+        movie, similarity_df, movie_list, num_rec
+    )
 
     if not recommendations:
         return None
