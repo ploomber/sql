@@ -10,7 +10,6 @@ app = FastAPI()
 class RecommendationRequest(BaseModel):
     movie: str
     num_rec: int = 10
-    stop_words: str = "english"
 
     @validator("movie", pre=True, always=True)
     def format_movie_name(cls, movie_name):
@@ -34,7 +33,6 @@ def get_movie_recommendations(recommendation_request: RecommendationRequest):
     Parameters:
     - movie: The name of the movie for which you want recommendations.
     - num_rec: The number of movie recommendations you want. Default is 10.
-    - stop_words: The language for stop words. Default is "english".
 
     Returns:
     JSON containing recommended movies and metrics.
@@ -42,7 +40,7 @@ def get_movie_recommendations(recommendation_request: RecommendationRequest):
     recommendations = get_recommendation(
         recommendation_request.movie,
         recommendation_request.num_rec,
-        recommendation_request.stop_words,
+        "english",
     )
 
     if isinstance(recommendations, str):
