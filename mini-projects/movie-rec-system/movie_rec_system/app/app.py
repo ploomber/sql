@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
 from .recommender import get_recommendation
 from fastapi.responses import JSONResponse
-import json 
+import json
 
 app = FastAPI()
 
@@ -47,7 +47,6 @@ def get_movie_recommendations(recommendation_request: RecommendationRequest):
 
     if isinstance(recommendations, str):
         recommendations = json.loads(recommendations)
-
 
     if not recommendations:
         raise HTTPException(
