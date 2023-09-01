@@ -65,6 +65,83 @@ def create_combined(df: pd.DataFrame, weight=2) -> pd.DataFrame:
     return df
 
 
+def retrieve_and_transform_data() -> pd.DataFrame:
+    """
+    Retrieve data from duckdb and transform it
+    into a format that can be used for generating
+    movie recommendations.
+
+    Returns
+    -------
+    pd.DataFrame
+        The transformed DataFrame with an additional "combined" column.
+    """
+    df = get_data()
+    df["title"] = df["title"].str.lower()
+    df = create_combined(df)
+    return df
+
+
+def compute_tfidf_vectorization(df, stop_words="english"):
+    """
+    Compute TF-IDF vectorization of the "combined" column
+    in the provided DataFrame.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "combined" column.
+
+    stop_words : str, optional
+        The language of stop words to be
+        used when vectorizing the "combined" column.
+        Default is "english".
+
+    Returns
+    -------
+    tfidf_matrix:    scipy.sparse.csr.csr_matrix
+        The TF-IDF vectorization of the "combined" column."""
+    tfidf = TfidfVectorizer(stop_words=stop_words)
+    tfidf_matrix = tfidf.fit_transform(df["combined"])
+    return tfidf_matrix
+
+
+def compute_metrics(df, movie, recommendations):
+    """
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "combined" column.
+
+    movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+
+    recommendations : list
+        A list of recommended movies.
+
+    Returns
+    -------
+    popularity_rmse : float
+        The RMSE for popularity.
+
+    vote_avg_rmse : float
+        The RMSE for vote average.
+
+        ote_count_rmse : float
+        The RMSE for vote count.
+    """
+    popularity_rmse = get_popularity_rmse(df, movie, recommendations)
+    vote_avg_rmse = get_vote_avg_rmse(df, movie, recommendations)
+    vote_count_rmse = get_vote_count_rmse(df, movie, recommendations)
+    return popularity_rmse, vote_avg_rmse, vote_count_rmse
+
+
 def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     """
     Generate movie recommendations based on
@@ -115,21 +192,15 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     }
 
     """
-    df = get_data()
-    df["title"] = df["title"].str.lower()  # Convert titles to lowercase once
-    movie = movie.lower()  # Convert input movie to lowercase
+    movie = movie.lower()
+    df = retrieve_and_transform_data()
 
-    df = create_combined(df)
-    tfidf = TfidfVectorizer(stop_words=stop_words)
-    tfidf_matrix = tfidf.fit_transform(df["combined"])
-
+    tfidf_matrix = compute_tfidf_vectorization(df, stop_words)
     similarity = cosine_similarity(tfidf_matrix)
 
-    # Make sure the dataframe's columns and indices are in lowercase
     similarity_df = pd.DataFrame(
         similarity, index=df.title.values, columns=df.title.values
     )
-
     movie_list = similarity_df.columns.values
     recommendations = content_movie_recommender(
         movie, similarity_df, movie_list, num_rec
@@ -138,9 +209,9 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     if not recommendations:
         return None
 
-    popularity_rmse = get_popularity_rmse(df, movie, recommendations)
-    vote_avg_rmse = get_vote_avg_rmse(df, movie, recommendations)
-    vote_count_rmse = get_vote_count_rmse(df, movie, recommendations)
+    popularity_rmse, vote_avg_rmse, vote_count_rmse = compute_metrics(
+        df, movie, recommendations
+    )
 
     result = {
         "movie": movie,
