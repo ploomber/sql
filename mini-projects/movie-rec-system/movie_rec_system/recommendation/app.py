@@ -1,14 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from functools import lru_cache
 
 from recommender import get_recommendation
 
 app = FastAPI()
 
-
 @app.get("/recommendations/")
-def get_movie_recommendations(
-    movie: str, num_rec: int = 10, stop_words: str = "english"
-):
+def get_movie_recommendations(movie: str, num_rec: int = 10, stop_words: str = "english"):
     """
     Get movie recommendations for a given movie.
 
@@ -20,4 +18,9 @@ def get_movie_recommendations(
     Returns:
     JSON containing recommended movies and metrics.
     """
-    return get_recommendation(movie, num_rec, stop_words)
+    recommendations = get_recommendation(movie, num_rec, stop_words)
+    
+    if not recommendations:
+        raise HTTPException(status_code=404, detail="Movie not found or no recommendations available")
+
+    return recommendations

@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import duckdb
+from functools import lru_cache
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from recommender_helper import (
@@ -11,13 +12,12 @@ from recommender_helper import (
 )
 
 
+@lru_cache(maxsize=None)
 def get_data() -> pd.DataFrame:
     """
     Function that automatically connects
     to duckdb as a GET call upon launch
     of FastAPI
-
-    Returns a connection
     """
     con = duckdb.connect("../../movies_data.duckdb")
     query = "SELECT * FROM movie_genre_data"
@@ -126,7 +126,6 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
 
     # Compute similarity
     similarity = cosine_similarity(tfidf_matrix)
-
     similarity_df = pd.DataFrame(
         similarity, index=df.title.values, columns=df.title.values
     )
@@ -138,11 +137,12 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
         movie, similarity_df, movie_list, num_rec
     )
 
+    if not recommendations:
+        return None
+
     # Compute metrics
     popularity_rmse = get_popularity_rmse(df, movie, recommendations)
-
     vote_avg_rmse = get_vote_avg_rmse(df, movie, recommendations)
-
     vote_count_rmse = get_vote_count_rmse(df, movie, recommendations)
 
     result = {
@@ -156,5 +156,4 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     }
 
     result_json = json.dumps(result)
-
     return result_json
