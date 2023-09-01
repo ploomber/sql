@@ -29,7 +29,7 @@ For more see: https://seaborn.pydata.org/
 
 This code installs JupySQL, DuckDB, and Pandas in your environment. We will be using these moving forward.
 
-```{code-cell} ipython3
+```bash
 %pip install jupysql pandas seaborn --quiet
 ```
 

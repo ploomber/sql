@@ -68,7 +68,7 @@ Play the following video to get familiar with JupySQL to execute queries on Jupy
 
 #### Install - execute this once. 
 
-```python
+```bash
 %pip install jupysql --upgrade duckdb-engine pandas --quiet
 ```
 

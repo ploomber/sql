@@ -15,7 +15,7 @@ kernelspec:
 
 In this tutorial you will learn how to connect to various databases using JupySQL.
 
-```{code-cell} ipython3
+```bash
 !pip install jupysql duckdb-engine -q
 ```
 

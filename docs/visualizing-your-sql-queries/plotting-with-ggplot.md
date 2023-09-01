@@ -25,7 +25,7 @@ Before we dive into how you can use JupySQL's `ggplot` API, we will quickly go o
 
 This code installs JupySQL, DuckDB, Matplotlib (required dependency), and ipywidgets in your environment. We will be using these moving forward.
 
-```{code-cell} ipython3
+```bash
 %pip install jupysql matplotlib ipywidgets --quiet
 ```
 

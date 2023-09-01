@@ -23,7 +23,7 @@ In this tutorial, you will learn about Common Table Expressions (CTEs) in SQL an
 
 This code installs JupySQL, and DuckDB in your environment. We will be using these moving forward.
 
-```{code-cell} ipython3
+```bash
 %pip install jupysql jupysql-plugin --quiet
 ```
 
