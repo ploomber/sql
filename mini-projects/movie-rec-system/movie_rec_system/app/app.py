@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from .recommender import get_recommendation
 from fastapi.responses import JSONResponse
 import json
@@ -11,7 +11,7 @@ class RecommendationRequest(BaseModel):
     movie: str
     num_rec: int = 10
 
-    @validator("movie", pre=True, always=True)
+    @field_validator("movie")
     def format_movie_name(cls, movie_name):
         """Ensure the movie name is formatted with the
         first letter capitalized."""
