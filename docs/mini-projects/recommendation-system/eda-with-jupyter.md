@@ -23,7 +23,7 @@ Ensure you have completed all steps up to this point and execute
 
 ```bash
 cd mini-projects/movie-rec-system
-ploomber build
+poetry run ploomber build
 ```
 
 
@@ -75,7 +75,7 @@ We need to give our notebook access to the DuckDB instance. To do this, we will 
 %sql duckdb:///movies_data.duckdb
 ```
 
-## Challenge
+## ⚡⚡ Challenge ⚡⚡
 
 Explore the tables in the `movies_data.duckdb` instance. Use the `%sql` magic to run SQL queries to explore the tables. How many tables are there? What are the columns in each table? What are the data types of each column? What are the primary keys? What are the foreign keys? What are the relationships between the tables?
 
@@ -217,7 +217,7 @@ FROM movie_genre_data
 LIMIT 2;
 ```
 
-## Challenge
+## ⚡⚡ Challenge ⚡⚡
 
 Perform data visualization and analysis on the `movie_genre_data` table. Use the `%sqlplot` magic to plot the data. What are the most popular genres? What are the most popular movies? What are the most popular movies by genre? What are the most popular movies by year? What are the most popular movies by decade? What are the most popular movies by genre and decade?
 
@@ -269,7 +269,7 @@ extract  True          11.5321       51.4146
 eda      True          10.8975       48.5854
 ```
 
-## Challenge
+## ⚡⚡ Challenge ⚡⚡
 
 Explore the [SQL Pipelines](https://docs.ploomber.io/en/latest/use-cases/sql.html) example in the Ploomber documentation. In particular, take a look at [this template that uses `.sql` files](https://github.com/ploomber/projects/tree/master/templates/spec-api-sql). How would you incorporate this into your pipeline? What are the advantages and disadvantages of using `.sql` files vs. Jupyter notebooks?
 

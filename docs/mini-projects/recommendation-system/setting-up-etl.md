@@ -152,7 +152,7 @@ except requests.exceptions.RequestException as e:
     return []
 ```
 
-#### Challenge: Extracting data from the Movies API
+#### ⚡⚡ Challenge: Extracting data from the Movies API ⚡⚡
 
 Develop a function to extract data from the Movies API for the `movie` entry point and for the `genres` entry point. The function should take the API key and language code as arguments. It should return a JSON object.
 
@@ -228,7 +228,7 @@ for movie in res["results"]:
 conn.close()
 ```
 
-#### Challenge
+#### ⚡⚡ Challenge ⚡⚡
 
 Write a function `init_duck_db_movies` that will take as input the path to the DuckDB database file, and a JSON response from the Movies API. The function should create a `DuckDB` instance and populate it with the data from the JSON response.
 
@@ -255,7 +255,7 @@ else:
 conn.close()
 ```
 
-#### Challenge
+#### ⚡⚡ Challenge ⚡⚡
 
 Write a function or set of functions that will check if the `movies` and `genres` tables exist in the `DuckDB` instance. If they do, drop them. If they don't, create them.
 
@@ -312,7 +312,7 @@ To execute the pipeline, we will use the `ploomber build` command. We will execu
 
 ```bash
 cd mini-projects/movie-rec-system
-ploomber build
+poetry run ploomber build
 ```
 
 This should show
