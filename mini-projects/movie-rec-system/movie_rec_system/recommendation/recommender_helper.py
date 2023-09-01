@@ -22,38 +22,43 @@ def content_movie_recommender(
     top_n : int
         number of similar movies to output
     """
-    # movie list
-    movie_list = movie_database_list
-
-    # get movie similarity records
-    movie_sim = similarity_database[
-        similarity_database.index == input_movie
-    ].values[  # noqa E501
-        0
-    ]
-    # get movies sorted by similarity
-    sorted_movie_ids = np.argsort(movie_sim)[::-1]
-
-    # get recommended movie names
-    recommended_movies = movie_list[sorted_movie_ids[1 : top_n + 1]]  # noqa E203
-
-    return list(recommended_movies)
+    try:
+        # get movie similarity records
+        movie_sim = similarity_database[
+            similarity_database.index == input_movie
+        ].values[0]
+        
+        # get movies sorted by similarity
+        sorted_movie_ids = np.argsort(movie_sim)[::-1]
+        recommended_movies = movie_database_list[sorted_movie_ids[1 : top_n + 1]]
+        return list(recommended_movies)
+    except IndexError:
+        return []
 
 
 def get_popularity_rmse(
     df: pd.DataFrame, sample_movie: str, recommendations: list
 ) -> float:
-    sample_movie_popularity = df[df["title"] == sample_movie].popularity.iloc[
-        0
-    ]  # noqa E501
-    recommendations_popularity = df[
-        df["title"].isin(recommendations)
-    ].popularity.values  # noqa E501
+    # Convert titles in dataframe and sample_movie to lowercase
+    df["title"] = df["title"].str.lower()
+    sample_movie = sample_movie.lower()
 
-    squared_diffs = (sample_movie_popularity - recommendations_popularity) ** 2
-    rmse = np.sqrt(squared_diffs.mean())
+    filtered_df = df[df["title"] == sample_movie]
 
-    return round(float(rmse), 3)
+    if not filtered_df.empty:
+        sample_movie_popularity = filtered_df.popularity.iloc[0]
+        recommendations_popularity = df[
+            df["title"].isin(recommendations)
+        ].popularity.values
+
+        squared_diffs = (
+            sample_movie_popularity - recommendations_popularity
+        ) ** 2  # noqa E501
+        rmse = np.sqrt(squared_diffs.mean())
+
+        return round(float(rmse), 3)
+    else:
+        return float("nan")
 
 
 def get_vote_avg_rmse(

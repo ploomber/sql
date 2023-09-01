@@ -116,31 +116,26 @@ def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
 
     """
     df = get_data()
+    df["title"] = df["title"].str.lower()  # Convert titles to lowercase once
+    movie = movie.lower()  # Convert input movie to lowercase
 
-    # Create column with overview and genres
     df = create_combined(df)
-
-    # Vectorize "combined"
     tfidf = TfidfVectorizer(stop_words=stop_words)
     tfidf_matrix = tfidf.fit_transform(df["combined"])
 
-    # Compute similarity
     similarity = cosine_similarity(tfidf_matrix)
+    
+    # Make sure the dataframe's columns and indices are in lowercase
     similarity_df = pd.DataFrame(
         similarity, index=df.title.values, columns=df.title.values
     )
 
     movie_list = similarity_df.columns.values
-
-    # Get movie recommendations
-    recommendations = content_movie_recommender(
-        movie, similarity_df, movie_list, num_rec
-    )
+    recommendations = content_movie_recommender(movie, similarity_df, movie_list, num_rec)
 
     if not recommendations:
         return None
 
-    # Compute metrics
     popularity_rmse = get_popularity_rmse(df, movie, recommendations)
     vote_avg_rmse = get_vote_avg_rmse(df, movie, recommendations)
     vote_count_rmse = get_vote_count_rmse(df, movie, recommendations)

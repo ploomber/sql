@@ -1,12 +1,31 @@
 from fastapi import FastAPI, HTTPException
-from functools import lru_cache
-
+from pydantic import BaseModel, validator
 from recommender import get_recommendation
 
 app = FastAPI()
 
-@app.get("/recommendations/")
-def get_movie_recommendations(movie: str, num_rec: int = 10, stop_words: str = "english"):
+
+class RecommendationRequest(BaseModel):
+    movie: str
+    num_rec: int = 10
+    stop_words: str = "english"
+
+    @validator("movie", pre=True, always=True)
+    def format_movie_name(cls, movie_name):
+        """Ensure the movie name is formatted with the
+        first letter capitalized."""
+        return movie_name.title()  # Convert to title case
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Welcome! You can use this API to get movie recommendations based on viewers' votes. Visit /docs for more information and to try it out!"  # noqa E501
+    }
+
+
+@app.post("/recommendations/")
+def get_movie_recommendations(recommendation_request: RecommendationRequest):
     """
     Get movie recommendations for a given movie.
 
@@ -18,9 +37,17 @@ def get_movie_recommendations(movie: str, num_rec: int = 10, stop_words: str = "
     Returns:
     JSON containing recommended movies and metrics.
     """
-    recommendations = get_recommendation(movie, num_rec, stop_words)
-    
+    recommendations = get_recommendation(
+        recommendation_request.movie,
+        recommendation_request.num_rec,
+        recommendation_request.stop_words,
+    )
+    print(recommendations)
+
     if not recommendations:
-        raise HTTPException(status_code=404, detail="Movie not found or no recommendations available")
+        raise HTTPException(
+            status_code=404,
+            detail="Movie not found or no recommendations available",  # noqa E501
+        )
 
     return recommendations
