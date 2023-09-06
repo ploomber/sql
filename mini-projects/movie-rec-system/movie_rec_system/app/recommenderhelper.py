@@ -41,6 +41,28 @@ def content_movie_recommender(
 def get_popularity_rmse(
     df: pd.DataFrame, sample_movie: str, recommendations: list
 ) -> float:
+    """
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+
+    recommendations : list
+        A list of recommended movies.
+
+    Returns
+    -------
+    popularity_rmse : float
+        The RMSE for popularity.
+    """
     # Convert titles in dataframe and sample_movie to lowercase
     df["title"] = df["title"].str.lower()
     sample_movie = sample_movie.lower()
@@ -66,6 +88,28 @@ def get_popularity_rmse(
 def get_vote_avg_rmse(
     df: pd.DataFrame, sample_movie: str, recommendations: list
 ) -> float:
+    """
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+
+    recommendations : list
+        A list of recommended movies.
+
+    Returns
+    -------
+    popularity_rmse : float
+        The RMSE for popularity.
+    """
     sample_movie_vote_average = df[
         df["title"] == sample_movie
     ].vote_average.iloc[  # noqa E501
@@ -86,6 +130,29 @@ def get_vote_avg_rmse(
 def get_vote_count_rmse(
     df: pd.DataFrame, sample_movie: str, recommendations: list
 ) -> float:
+    """
+
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+
+    recommendations : list
+        A list of recommended movies.
+
+    Returns
+    -------
+        popularity_rmse : float
+        The RMSE for popularity.
+    """
     sample_movie_popularity = df[df["title"] == sample_movie].vote_count.iloc[
         0
     ]  # noqa E501

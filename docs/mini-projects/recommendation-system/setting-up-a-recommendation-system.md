@@ -70,7 +70,61 @@ In the context of our movie recommender, after converting movie descriptions int
 
 By combining TF-IDF with cosine similarity, we can find movies that are closely related based on their descriptions. This method can be further enhanced by adding more attributes like genres, cast, and crew to the mix.
 
-## Diving into the Code
+## Setting up a Content-Based Movie Recommender
+
+Let's take a closer look at the code that powers our content-based recommendation system.
+
+### 1. The Core Recommender: `content_movie_recommender``
+
+This function is the heart of our recommendation system. Given an input movie, it uses a precomputed similarity matrix to find movies that are most similar to the input.
+
+Parameters:
+* input_movie: The movie title we want recommendations for.
+* similarity_database: A precomputed matrix that stores the similarity scores between movies.
+* movie_database_list: A list of all movie titles in our database.
+* top_n: The number of recommendations we want.
+
+The function first fetches the similarity scores of the input movie with all other movies. It then sorts these scores in descending order and fetches the top n movies.
+
+```python
+def content_movie_recommender(
+    input_movie: str,
+    similarity_database: pd.DataFrame,
+    movie_database_list: list,
+    top_n=10,
+) -> list:
+    """
+    Function that uses a similarity matrix to find similar movies
+
+    Parameters
+    ----------
+    input_movie : str
+        reference movie to find similarities
+    similarity_database : pandas.DataFrame
+        similarity matrix of movies
+    movie_database_list : numpy.ndarray
+        movies in our similarity matrix
+    top_n : int
+        number of similar movies to output
+    """
+    try:
+        # get movie similarity records
+        movie_sim = similarity_database[
+            similarity_database.index == input_movie
+        ].values[0]
+
+        # get movies sorted by similarity
+        sorted_movie_ids = np.argsort(movie_sim)[::-1]
+        recommended_movies = movie_database_list[
+            sorted_movie_ids[1 : top_n + 1]  # noqa E203
+        ]  # noqa E501
+        return list(recommended_movies)
+    except IndexError:
+        return []
+```
+
+
+### 2. Evaluating Recommendations: RMSE Functions
 
 Let's start by setting up our environment and importing necessary libraries:
 
@@ -78,11 +132,174 @@ Let's start by setting up our environment and importing necessary libraries:
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from recommender_helper import (
-    content_movie_recommender,
-    get_popularity_rmse,
-    get_vote_avg_rmse,
-    get_vote_count_rmse,
-)
+```
 
+To evaluate how good our recommendations are, we use the Root Mean Square Error (RMSE). RMSE is a standard metric used to measure the differences between predicted and observed values. In our context, we're using it to measure how similar our recommended movies are to the input movie in terms of popularity, vote average, and vote count.
+
+`get_popularity_rmse`: This function computes the RMSE between the popularity of the input movie and the popularity of the recommended movies.
+
+```python
+def get_popularity_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    """
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+    
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+        
+    recommendations : list
+        A list of recommended movies.
+        
+    Returns
+    -------
+    popularity_rmse : float
+        The RMSE for popularity.
+        """
+    # Convert titles in dataframe and sample_movie to lowercase
+    df["title"] = df["title"].str.lower()
+    sample_movie = sample_movie.lower()
+
+    filtered_df = df[df["title"] == sample_movie]
+
+    if not filtered_df.empty:
+        sample_movie_popularity = filtered_df.popularity.iloc[0]
+        recommendations_popularity = df[
+            df["title"].isin(recommendations)
+        ].popularity.values
+
+        squared_diffs = (
+            sample_movie_popularity - recommendations_popularity
+        ) ** 2  # noqa E501
+        rmse = np.sqrt(squared_diffs.mean())
+
+        return round(float(rmse), 3)
+    else:
+        return float("nan")
+```
+
+`get_vote_avg_rmse`: Similar to the above, but this function computes the RMSE for the vote average.
+
+```python
+def get_vote_avg_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    """
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+        
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+        
+    recommendations : list
+        A list of recommended movies.
+        
+    Returns
+    -------
+    popularity_rmse : float
+        The RMSE for popularity."""
+    sample_movie_vote_average = df[
+        df["title"] == sample_movie
+    ].vote_average.iloc[  # noqa E501
+        0
+    ]
+    recommendations_vote_average = df[
+        df["title"].isin(recommendations)
+    ].vote_average.values
+
+    squared_diffs = (
+        sample_movie_vote_average - recommendations_vote_average
+    ) ** 2  # noqa E501
+    rmse = np.sqrt(squared_diffs.mean())
+
+    return round(float(rmse), 3)
+```
+
+`get_vote_count_rmse`: This function calculates the RMSE for the vote count.
+
+```python
+def get_vote_count_rmse(
+    df: pd.DataFrame, sample_movie: str, recommendations: list
+) -> float:
+    """
+    
+    Compute RMSE for popularity, vote average, and vote count
+    for the provided movie and recommendations.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The input DataFrame which must contain
+        a "title" column.
+        
+    sample_movie : str
+        The title of the movie for which
+        recommendations are to be generated.
+        
+    recommendations : list
+        A list of recommended movies.
+        
+    Returns
+    -------
+        popularity_rmse : float
+        The RMSE for popularity.
+    """
+    sample_movie_popularity = df[df["title"] == sample_movie].vote_count.iloc[
+        0
+    ]  # noqa E501
+    recommendations_popularity = df[
+        df["title"].isin(recommendations)
+    ].vote_count.values  # noqa E501
+
+    squared_diffs = (recommendations_popularity - sample_movie_popularity) ** 2
+    rmse = np.sqrt(squared_diffs.mean())
+
+    return round(float(rmse), 3)
+
+```
+
+Each of these functions works similarly:
+
+1. Fetch the attribute (popularity, vote average, or vote count) of the input movie.
+2. Fetch the same attribute for all recommended movies.
+3. Compute the squared differences between the input movie's attribute and the recommended movies' attributes.
+4. Calculate the mean of these squared differences.
+5. Return the square root of this mean as the RMSE.
+
+In essence, these functions give us a numerical measure of how close our recommendations are to the input movie in terms of popularity, vote average, and vote count. The lower the RMSE, the closer the recommended movies are to the input movie in terms of these attributes.
+
+By combining a robust recommendation function with evaluation metrics, we can ensure that our system not only provides relevant recommendations but also allows us to measure and improve its performance over time.
+
+
+### Extrtacting Movie Data
+
+In previous sections, we build an ETL pipeline to extract, transform, and load movie data from an API file into a DuckDB database. We'll use the same database to fetch movie data for our recommender. By this point we have performed all data wrangling operations we need. If you need a refresher, please consult [this guide](./eda-with-jupyter.md)
+
+```python
+def get_data() -> pd.DataFrame:
+    """
+    Function that automatically connects
+    to duckdb as a GET call upon launch
+    of FastAPI
+    """
+    con = duckdb.connect("./movies_data.duckdb")
+    query = "SELECT * FROM movie_genre_data"
+    df = con.execute(query).fetchdf()
+    con.close()
+    return df
 ```
