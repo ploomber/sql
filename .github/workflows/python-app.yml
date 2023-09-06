@@ -28,7 +28,6 @@ jobs:
           cd mini-projects/movie-rec-system/
           touch .env
           echo API_KEY=${{ secrets.API_KEY }} >> .env
-          cat .env
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
