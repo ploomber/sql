@@ -30,11 +30,8 @@ jobs:
         cd mini-projects/movie-rec-system/
         poetry lock
         poetry install --no-root
-    - name: Ploomber pipeline
-      run: |
-        cd mini-projects/movie-rec-system/
-        poetry run ploomber build
     - name: Test with pytest
       run: |
         cd mini-projects/movie-rec-system/
+        poetry run ploomber build
         poetry run pytest
