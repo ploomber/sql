@@ -15,6 +15,10 @@ kernelspec:
 
 In the realm of software development, especially within Python projects, managing dependencies can be a treacherous journey. Every developer has, at some point, faced the infamous "dependency hell" – that confusing tangle of mismatched package versions, obscure conflicts, and unresolvable errors. In this mini-project, we will be working with [Poetry](https://python-poetry.org/docs/), a Python dependency management and packaging tool that allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
+![](./images/poetry.jpeg)
+
+Image source: [Medium article: "Simplify Your Python Development with Poetry’s Packaging and Dependency Management"](https://levelup.gitconnected.com/simplify-your-python-development-with-poetrys-packaging-and-dependency-management-9d8b181f926f)
+
 ## Why Is Package Management Important?
 
 Before delving into the nitty-gritty of Poetry, let's first understand the significance of package management:
@@ -146,6 +150,23 @@ then run
 poetry lock
 poetry install
 ```
+
+You can also add dependencies via the `add` option as follows:
+
+```bash
+# Allow >=2.0.5, <3.0.0 versions
+poetry add pendulum@^2.0.5
+
+# Allow >=2.0.5, <2.1.0 versions
+poetry add pendulum@~2.0.5
+
+# Allow >=2.0.5 versions, without upper bound
+poetry add "pendulum>=2.0.5"
+
+# Allow only 2.0.5 version
+poetry add pendulum==2.0.5
+```
+To learn more about managing packages with Poetry, visit https://python-poetry.org/docs/cli/. 
 
 In the next section, we will learn how to set up a Ploomber pipeline to build a movie recommendation system.
 

@@ -11,11 +11,14 @@ kernelspec:
   name: python3
 ---
 
-# Designing a Movie Recommender System
+# Designing your first movie recommendation system
 
 One of the best ways to demonstrate and solidify your understanding of a topic is by working on a hands-on project. With that in mind, we are thrilled to introduce an exciting mini-project opportunity for the Ploomber community. Not only will this give you a chance to flex your coding muscles, but upon completion, you'll have an impressive showcase for your portfolio!
 
+![](./images/etl-recom-system.jpg)
+
 ## Project Overview
+
 
 Here's a high-level summary of what the project entails:
 

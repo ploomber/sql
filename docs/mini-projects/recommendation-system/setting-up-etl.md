@@ -15,6 +15,8 @@ kernelspec:
 
 Once we have set up our folder structure and environment with the help of Poetry, we can start building our pipeline. We will be using Ploomber to build our pipeline. Ploomber is a Python library that allows you to build data pipelines using Python scripts and Jupyter notebooks. It is a great tool for data scientists who want to build data pipelines without having to learn new tools or languages. 
 
+![](./images/etl-recom-system.jpg)
+
 ## Pipeline Overview
 
 Here's a high-level summary of what the pipeline entails:
