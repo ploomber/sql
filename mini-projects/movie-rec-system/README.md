@@ -1,3 +1,10 @@
+## Set up - with Docker
+
+```
+docker build -t movierec:latest -f Dockerfile .
+docker run -it movierec:latest
+```
+
 ## Set up - one step at a time
 
 1. Create new environment
@@ -32,9 +39,3 @@ cd mini-projects/
 poetry run ploomber build
 ```
 
-## Set up - one step
-
-```
-docker build -t movierec:latest -f Dockerfile .
-docker run -it movierec:latest
-```
