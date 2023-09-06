@@ -21,7 +21,6 @@ pytest = "7.4.0"
 uvicorn = "0.23.2"
 httpx = "^0.24.1"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
