@@ -1,7 +1,8 @@
+# flake8: noqa
 import duckdb
 import requests
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 
 def init_duck_db_movies(duckdb_file_path, res):
@@ -16,42 +17,46 @@ def init_duck_db_movies(duckdb_file_path, res):
     res : requests object
         API call results
     """
-    conn = duckdb.connect(duckdb_file_path, read_only=False)
+    try:
+        conn = duckdb.connect(duckdb_file_path, read_only=False)
 
-    tables = conn.execute("SHOW TABLES;").fetchall()
-    if ("movies",) not in tables:
-        conn.execute(
+        tables = conn.execute("SHOW TABLES;").fetchall()
+        if ("movies",) not in tables:
+            conn.execute(
+                """
+                CREATE TABLE movies (
+                    genre_ids INT[],
+                    id INTEGER,
+                    original_language VARCHAR,
+                    overview VARCHAR,
+                    popularity DOUBLE,
+                    release_date TIMESTAMP,
+                    title VARCHAR,
+                    vote_average DOUBLE,
+                    vote_count INTEGER
+                );
             """
-            CREATE TABLE movies (
-                genre_ids INT[],
-                id INTEGER,
-                original_language VARCHAR,
-                overview VARCHAR,
-                popularity DOUBLE,
-                release_date TIMESTAMP,
-                title VARCHAR,
-                vote_average DOUBLE,
-                vote_count INTEGER
-            );
-        """
-        )
+            )
 
-    for movie in res["results"]:
-        genre_ids_str = ",".join(map(str, movie["genre_ids"]))
-        conn.execute(
-            f"""
-            INSERT INTO movies VALUES (ARRAY[{genre_ids_str}], {movie['id']},
-            '{movie['original_language']}',
-            '{movie['overview'].replace("'", "''")}',
-            {movie['popularity']},
-            '{movie['release_date']}',
-            '{movie['title'].replace("'", "''")}',
-            {movie['vote_average']},
-            {movie['vote_count']});
-        """
-        )
+        for movie in res["results"]:
+            genre_ids_str = ",".join(map(str, movie["genre_ids"]))
+            conn.execute(
+                f"""
+                INSERT INTO movies VALUES (ARRAY[{genre_ids_str}], {movie['id']},
+                '{movie['original_language']}',
+                '{movie['overview'].replace("'", "''")}',
+                {movie['popularity']},
+                '{movie['release_date']}',
+                '{movie['title'].replace("'", "''")}',
+                {movie['vote_average']},
+                {movie['vote_count']});
+            """
+            )
 
-    conn.close()
+        conn.close()
+
+    except Exception as e:
+        print(e)
 
 
 def init_duck_db_genres(duckdb_file_path, genres_data):
@@ -67,28 +72,32 @@ def init_duck_db_genres(duckdb_file_path, genres_data):
         List of genres
 
     """
-    conn = duckdb.connect(duckdb_file_path, read_only=False)
+    try:
+        conn = duckdb.connect(duckdb_file_path, read_only=False)
 
-    tables = conn.execute("SHOW TABLES;").fetchall()
-    if ("genres",) not in tables:
-        conn.execute(
+        tables = conn.execute("SHOW TABLES;").fetchall()
+        if ("genres",) not in tables:
+            conn.execute(
+                """
+                CREATE TABLE genres (
+                    id INTEGER,
+                    name VARCHAR
+                );
             """
-            CREATE TABLE genres (
-                id INTEGER,
-                name VARCHAR
-            );
-        """
-        )
+            )
 
-    for genre in genres_data:
-        conn.execute(
-            f"""
-            INSERT INTO genres VALUES ({genre['id']},
-            '{genre['name']}');
-        """
-        )
+        for genre in genres_data:
+            conn.execute(
+                f"""
+                INSERT INTO genres VALUES ({genre['id']},
+                '{genre['name']}');
+            """
+            )
 
-    conn.close()
+        conn.close()
+
+    except Exception as e:
+        print(e)
 
 
 def drop_existing_movies_table(duckdb_file_path):
@@ -100,19 +109,23 @@ def drop_existing_movies_table(duckdb_file_path):
     duckdb_file_path : str
         Path to the DuckDB database file
     """
-    conn = duckdb.connect(duckdb_file_path, read_only=False)
+    try:
+        conn = duckdb.connect(duckdb_file_path, read_only=False)
 
-    movies_table_exists = conn.execute(
-        "SELECT 1 FROM information_schema.tables WHERE table_name = 'movies'"
-    ).fetchone()
+        movies_table_exists = conn.execute(
+            "SELECT 1 FROM information_schema.tables WHERE table_name = 'movies'"
+        ).fetchone()
 
-    if movies_table_exists:
-        conn.execute("DROP TABLE movies;")
-        print("Table 'movies' dropped.")
-    else:
-        print("Table 'movies' does not yet exist. Creating 'movies' now.")
+        if movies_table_exists:
+            conn.execute("DROP TABLE movies;")
+            print("Table 'movies' dropped.")
+        else:
+            print("Table 'movies' does not yet exist. Creating 'movies' now.")
 
-    conn.close()
+        conn.close()
+
+    except Exception as e:
+        print(e)
 
 
 def drop_existing_genres_table(duckdb_file_path):
@@ -124,19 +137,23 @@ def drop_existing_genres_table(duckdb_file_path):
     duckdb_file_path : str
         Path to the DuckDB database file
     """
-    conn = duckdb.connect(duckdb_file_path, read_only=False)
+    try:
+        conn = duckdb.connect(duckdb_file_path, read_only=False)
 
-    genres_table_exists = conn.execute(
-        "SELECT 1 FROM information_schema.tables WHERE table_name = 'genres'"
-    ).fetchone()
+        genres_table_exists = conn.execute(
+            "SELECT 1 FROM information_schema.tables WHERE table_name = 'genres'"
+        ).fetchone()
 
-    if genres_table_exists:
-        conn.execute("DROP TABLE genres;")
-        print("Table 'genres' dropped.")
-    else:
-        print("Table 'genres' does not yet exist. Creating 'genres' now.")
+        if genres_table_exists:
+            conn.execute("DROP TABLE genres;")
+            print("Table 'genres' dropped.")
+        else:
+            print("Table 'genres' does not yet exist. Creating 'genres' now.")
 
-    conn.close()
+        conn.close()
+
+    except Exception as e:
+        print(e)
 
 
 def get_movies(lang, freq, duckdb_file_path, api_key):
@@ -238,10 +255,9 @@ def get_genres(lang, duckdb_file_path, api_key):
 if __name__ == "__main__":
     # Parameter to get 500 English movies
     language_count = {
-        "en": 500,
+        "en": 1000,
     }
 
-    # Load API key from .env file
     load_dotenv(".env")
     api_key = os.getenv("API_KEY")
 
