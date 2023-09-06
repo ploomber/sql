@@ -29,6 +29,10 @@ jobs:
         pip install poetry pytest
         cd mini-projects/movie-rec-system/
         poetry install --no-root
+    - name: Ploomber pipeline
+      run: |
+        cd mini-projects/movie-rec-system/
+        poetry run ploomber build
     - name: Test with pytest
       run: |
         cd mini-projects/movie-rec-system/
