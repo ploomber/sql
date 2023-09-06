@@ -20,4 +20,5 @@ COPY . .
 # Expose the port that the app runs on
 EXPOSE 8000
 
+# pipeline 
 RUN poetry run ploomber build
