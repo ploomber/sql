@@ -74,6 +74,14 @@ By combining TF-IDF with cosine similarity, we can find movies that are closely 
 
 Let's take a closer look at the code that powers our content-based recommendation system.
 
+Let's start by setting up our environment and importing necessary libraries:
+
+```python
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+```
+
 ### 1. The Core Recommender: `content_movie_recommender``
 
 This function is the heart of our recommendation system. Given an input movie, it uses a precomputed similarity matrix to find movies that are most similar to the input.
@@ -126,13 +134,7 @@ def content_movie_recommender(
 
 ### 2. Evaluating Recommendations: RMSE Functions
 
-Let's start by setting up our environment and importing necessary libraries:
 
-```python
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-```
 
 To evaluate how good our recommendations are, we use the Root Mean Square Error (RMSE). RMSE is a standard metric used to measure the differences between predicted and observed values. In our context, we're using it to measure how similar our recommended movies are to the input movie in terms of popularity, vote average, and vote count.
 

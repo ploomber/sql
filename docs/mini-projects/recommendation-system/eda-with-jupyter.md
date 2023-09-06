@@ -64,7 +64,7 @@ To set up access to the database, we will use the `%sql` extension from `jupysql
 ```
 
 ```{important}
-Did you know you can configure the default behavior of the `%sql` magic? The configuration above will transform SQL query results into `pandas` format automatically. Learn more in the video below ⬇️⬇️⬇️ [![JupySQL 0.9 release](1.jpg)](https://www.youtube.com/watch?v=dJl-MMNoMXk).
+Did you know you can configure the default behavior of the `%sql` magic? The configuration above will transform SQL query results into `pandas` format automatically. Learn more in the video below ⬇️⬇️⬇️ [![JupySQL 0.9 release](./images/1.jpg)](https://www.youtube.com/watch?v=dJl-MMNoMXk).
 ```
 
 We can then form a connection string to our DuckDB instance. We will use the `%%sql` magic to run SQL queries in our notebook. Notice that when creating and executing this notebook, we are using the same environment as our pipeline. This ensures that we are using the same dependencies and versions as our pipeline.

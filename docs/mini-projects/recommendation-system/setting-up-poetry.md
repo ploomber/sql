@@ -15,6 +15,10 @@ kernelspec:
 
 In the realm of software development, especially within Python projects, managing dependencies can be a treacherous journey. Every developer has, at some point, faced the infamous "dependency hell" – that confusing tangle of mismatched package versions, obscure conflicts, and unresolvable errors. In this mini-project, we will be working with [Poetry](https://python-poetry.org/docs/), a Python dependency management and packaging tool that allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
+![](./images/poetry.jpeg)
+
+Image source: [Medium article: "Simplify Your Python Development with Poetry’s Packaging and Dependency Management"](https://levelup.gitconnected.com/simplify-your-python-development-with-poetrys-packaging-and-dependency-management-9d8b181f926f)
+
 ## Why Is Package Management Important?
 
 Before delving into the nitty-gritty of Poetry, let's first understand the significance of package management:
