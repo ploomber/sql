@@ -11,7 +11,11 @@ COPY pyproject.toml poetry.lock /app/
 RUN pip install poetry
 
 # Install project dependencies
+RUN poetry lock
 RUN poetry install
+
+# Copy the .env file
+COPY .env .env
 
 # Copy the rest of the application code
 COPY . .
@@ -19,4 +23,5 @@ COPY . .
 # Expose the port that the app runs on
 EXPOSE 8000
 
+# pipeline 
 RUN poetry run ploomber build
