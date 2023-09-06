@@ -166,6 +166,7 @@ poetry add "pendulum>=2.0.5"
 # Allow only 2.0.5 version
 poetry add pendulum==2.0.5
 ```
+To learn more about managing packages with Poetry, visit https://python-poetry.org/docs/cli/. 
 
 In the next section, we will learn how to set up a Ploomber pipeline to build a movie recommendation system.
 

@@ -47,6 +47,7 @@ parts:
 - caption: Mini projects - Movie recommendation system
   chapters:
   - file: mini-projects/recommendation-system/introduction
+  - file: mini-projects/recommendation-system/intro-to-rec-systems
   - file: mini-projects/recommendation-system/setting-up-poetry
   - file: mini-projects/recommendation-system/setting-up-etl
   - file: mini-projects/recommendation-system/eda-with-jupyter
