@@ -6,7 +6,7 @@ authors = ["jpjon <jonathanphan@berkeley.edu>", "Laura <laura@ploomber.io>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10"
+python = "^3.10"
 duckdb = "0.8.1"
 requests = "^2.31"
 pandas = "2.1.0"
