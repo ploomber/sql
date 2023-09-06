@@ -4,6 +4,7 @@ import duckdb
 from functools import lru_cache
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+
 def content_movie_recommender(
     input_movie: str,
     similarity_database: pd.DataFrame,
@@ -166,6 +167,7 @@ def get_vote_count_rmse(
     rmse = np.sqrt(squared_diffs.mean())
 
     return round(float(rmse), 3)
+
 
 @lru_cache(maxsize=None)
 def get_data() -> pd.DataFrame:

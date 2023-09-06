@@ -9,8 +9,6 @@ from .recommenderhelper import (
 )
 
 
-
-
 def get_recommendation(movie: str, num_rec: int = 10, stop_words="english"):
     """
     Generate movie recommendations based on
