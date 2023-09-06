@@ -28,7 +28,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry pytest
         cd mini-projects/movie-rec-system/
-        if [ -f pyproject.toml ]; then poetry lock poetry install; fi
+        poetry lock 
+        poetry install
     - name: Test with pytest
       run: |
         pytest
