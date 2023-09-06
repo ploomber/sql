@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up credentials
+      run: |
+          cd mini-projects/movie-rec-system/
+          touch .env
+          echo API_KEY=${{ secrets.API_KEY }} >> .env
+          cat .env
+    - name: Build Docker image
+      run: |
+          cd mini-projects/movie-rec-system/
+          docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Run Docker container
+      run: |
+          cd mini-projects/movie-rec-system/
+          docker run -p 8000:8000 my-image-name:$(date +%s)
