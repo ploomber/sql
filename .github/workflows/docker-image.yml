@@ -25,7 +25,3 @@ jobs:
           cd mini-projects/movie-rec-system/
           docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-    - name: Run Docker container
-      run: |
-          cd mini-projects/movie-rec-system/
-          docker run -p 8000:8000 my-image-name:$(date +%s)
