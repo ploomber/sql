@@ -151,6 +151,22 @@ poetry lock
 poetry install
 ```
 
+You can also add dependencies via the `add` option as follows:
+
+```bash
+# Allow >=2.0.5, <3.0.0 versions
+poetry add pendulum@^2.0.5
+
+# Allow >=2.0.5, <2.1.0 versions
+poetry add pendulum@~2.0.5
+
+# Allow >=2.0.5 versions, without upper bound
+poetry add "pendulum>=2.0.5"
+
+# Allow only 2.0.5 version
+poetry add pendulum==2.0.5
+```
+
 In the next section, we will learn how to set up a Ploomber pipeline to build a movie recommendation system.
 
 
