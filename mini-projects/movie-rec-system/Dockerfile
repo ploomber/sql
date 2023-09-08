@@ -20,8 +20,11 @@ COPY .env .env
 # Copy the rest of the application code
 COPY . .
 
+# Extract data for app
+RUN poetry run ploomber build
+
 # Expose the port that the app runs on
 EXPOSE 8000
 
-# pipeline 
-RUN poetry run ploomber build
+# Execute the script when the container starts
+CMD ["poetry", "run", "uvicorn", "movie_rec_system.app.app:app", "--host", "0.0.0.0", "--port", "8000"]
