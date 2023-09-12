@@ -46,7 +46,6 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 4. Joining data in SQL
 5. Combining data from multiple tables 
 
-
 ### Interactive queries and parameterization
 
 1. Introduction to `ipywidgets`
@@ -66,7 +65,6 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 3. Plotting with `seaborn`
 4. Plotting with `plotly`
 5. SQL query visualization with `ggplot`
-
 
 ### Packaging your SQL project
 
