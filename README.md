@@ -38,8 +38,6 @@ Make sure your working directory is at `/sql`, which is the top level of the clo
 <details>
 <summary>Display the topics</summary>
 
-
-
 ### Intro to SQL
 
 1. Connecting to database engines
