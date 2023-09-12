@@ -52,6 +52,7 @@ parts:
   - file: mini-projects/recommendation-system/setting-up-etl
   - file: mini-projects/recommendation-system/eda-with-jupyter
   - file: mini-projects/recommendation-system/setting-up-a-recommendation-system
+  - file: mini-projects/recommendation-system/setting-up-fastapi
 - caption: Deploying Your SQL Applications
   chapters:
   - file: deploying-your-sql-applications/cloud-based-options
