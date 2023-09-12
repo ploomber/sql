@@ -15,7 +15,7 @@ kernelspec:
 
 We've so far extracted data from an API, performed EDA on said data, and created a recommender system. Let's put everything into action by serving our recommender system using an easy to use tool called FastAPI.
 
-[FastAPI](https://fastapi.tiangolo.com/) is **fast**. Serving our recommender system using this tool can be done in just one `.py` script. Let's first go through a brief overview of FastAPI before implementing it into our project. If you're already familiar with FastAPI, feel free to skip to the [Creating the Recommender App](#creating-the-recommender-app) section.
+[FastAPI](https://fastapi.tiangolo.com/) is **fast**. Serving our recommender system using this tool can be done in just one `.py` script. Let's first go through a brief overview of FastAPI before implementing it into our project. If you're already familiar with FastAPI, feel free to skip to the "Creating the Recommender App" section.
 
 ## What is FastAPI?
 
