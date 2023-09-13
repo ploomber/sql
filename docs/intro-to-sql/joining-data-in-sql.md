@@ -67,7 +67,10 @@ sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
 
-_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
+_ = banking.MarketData(
+    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
+    "expanded_data",
+)
 _.extract_asc_to_csv()
 ```
 
