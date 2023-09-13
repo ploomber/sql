@@ -285,7 +285,7 @@ In essence, these functions give us a numerical measure of how close our recomme
 By combining a robust recommendation function with evaluation metrics, we can ensure that our system not only provides relevant recommendations but also allows us to measure and improve its performance over time.
 
 
-### 3. Extrtacting Movie Data
+### 3. Extracting Movie Data
 
 In previous sections, we build an ETL pipeline to extract, transform, and load movie data from an API file into a DuckDB database. We'll use the same database to fetch movie data for our recommender. By this point we have performed all data wrangling operations we need. If you need a refresher, please consult [this guide](./eda-with-jupyter.md)
 
