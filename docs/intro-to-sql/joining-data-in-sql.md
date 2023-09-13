@@ -67,11 +67,9 @@ sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
 
-_ = banking.MarketData(
-    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
-    "expanded_data",
-)
-_.extract_asc_to_csv()
+_ = MarketData("https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip", data_dir) # noqa E501
+
+_.convert_asc_to_csv(district_column_names)
 ```
 
 <!-- #endregion -->

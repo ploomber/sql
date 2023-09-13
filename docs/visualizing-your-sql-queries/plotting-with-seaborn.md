@@ -54,11 +54,9 @@ This section was covered in detail in the previous tutorial: [Joining Data in SQ
 sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
-_ = banking.MarketData(
-    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
-    "expanded_data",
-)
-_.extract_asc_to_csv()
+_ = MarketData("https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip", data_dir) # noqa E501
+
+_.convert_asc_to_csv(district_column_names)
 ```
 
 If you run the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.

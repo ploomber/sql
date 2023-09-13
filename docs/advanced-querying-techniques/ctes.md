@@ -196,11 +196,9 @@ Without a unique identifier for each row in your table, performing UPDATE or DEL
 It's generally not recommended to use UPDATE or DELETE without a unique identifier or precise condition to pinpoint exactly which rows you want to affect. We're going to load data from the [Joining Data in SQL tutorial](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#load-the-data) as this data has tables with unique ID's.
 
 ```{code-cell} ipython3
-_ = banking.MarketData(
-    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
-    "expanded_data",
-)
-_.extract_asc_to_csv()
+_ = MarketData("https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip", data_dir) # noqa E501
+
+_.convert_asc_to_csv(district_column_names)
 ```
 
 Let's work on a separate DuckDB instance
