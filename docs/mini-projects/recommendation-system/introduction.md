@@ -25,10 +25,11 @@ Here's a high-level summary of what the project entails:
 1. **Data Extraction:** Utilize a Python script to call a movie database API.
 2. **Data Storage**: Populate a DuckDB instance with the extracted movie data.
 3. **Exploratory Data Analysis (EDA):** Dive deep into the data with SQL-based analysis in a Jupyter notebook. This step will involve extracting data, data wrangling, and creating new tables.
-4. **Build a Recommender System:** Use another Jupyter notebook to create a movie recommendation system based on the data you've wrangled.
+4. **Build a Recommender System:** Develop modularized scripts that take as input a movie title and return recommended movies in JSON format.
 5. **Packaging:** Package your entire workflow, including notebooks, using Ploomber/Ploomber-engine.
 6. **API Deployment:** Serve your recommender system's results as an API using FastAPI.
 7. **Dockerization:** Containerize your application using Docker for easy deployment and scaling.
+8. **Setting up automated testing with GitHub actions:** Execute the Ploomber pipeline and test that the API is working as expected through GitHub actions.
 
 ## Ensuring Code Reproducibility
 
