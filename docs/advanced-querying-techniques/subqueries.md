@@ -45,8 +45,12 @@ import sys
 sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
-_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
-_.extract_asc_to_csv()
+_ = banking.MarketData(
+    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
+    "expanded_data",
+)
+
+_.convert_asc_to_csv(banking.district_column_names)
 ```
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
@@ -71,7 +75,6 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 ## Creating Tables
 
 Let's start off with loading three of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we will [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `s1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
-
 
 ```{code-cell} ipython3
 %%sql
@@ -164,6 +167,7 @@ INNER JOIN s1.district AS d
   ON inner_query.district_id = d.district_id
 GROUP BY d.district_name
 ```
+
 This query demonstrates how to have a subquery act as another table when performing an `INNER JOIN` in the outer query. There is also an `INNER JOIN` in the inner query that creates a joined table between the `s1.account` and `s1.loan` tables. This subquery then gives us the necessary information to join with our `s1.district` table.
 
 The query shown above can be easily implemented using JupySQL's `--save` feature. This feature essentially allows us to save a query and use it for future use. We implement the `--save` feature below by recreating the previous query.
@@ -305,7 +309,6 @@ Find all `account_id`'s that have a loan alongside with their loan status, their
 <summary>Answers</summary>
 
 The difficult part of this question lies in the second `INNER JOIN`. This second `INNER JOIN` uses a subquery to have the average amount of each 'status'. This information is used when calling the last `INNER JOIN` on the outer query's 'status' variable.
-
 
 ```{code-cell} ipython3
 %%sql
@@ -467,7 +470,7 @@ Output the `COUNT()` of of each unique 'status' variable under `s1.loan` that ar
 <details>
 <summary>Answers</summary>
 
-For each `SELECT` argument, we are finding the count of each status using `CASE WHEN` to have a "1" count when aggregating the 'status' values. This allows our query to have the correct counts for each value given that the loan amount is less than the average 'A' loan amount. 
+For each `SELECT` argument, we are finding the count of each status using `CASE WHEN` to have a "1" count when aggregating the 'status' values. This allows our query to have the correct counts for each value given that the loan amount is less than the average 'A' loan amount.
 
 ```{code-cell} ipython3
 %%sql 
@@ -482,8 +485,8 @@ WHERE amount > (
         FROM s1.loan
         WHERE status = 'A'
     )
-
 ```
+
 </details>
 <!-- #endregion -->
 

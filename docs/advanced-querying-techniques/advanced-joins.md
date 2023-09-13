@@ -41,8 +41,12 @@ sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
 
-_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
-_.extract_asc_to_csv()
+_ = banking.MarketData(
+    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
+    "expanded_data",
+)
+
+_.convert_asc_to_csv(banking.district_column_names)
 ```
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
@@ -67,7 +71,6 @@ We now load in our SQL extension that allows us to execute SQL queries in Jupyte
 ## Creating Tables
 
 Let's start off with loading three of the eight `.csv` files from the `expanded_data` folder in the current directory to our newly created DuckDB database. Like in the previous tutorial, we will [create a schema](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#creating-a-schema) `s1` in which we will store the tables. Here we use the `CREATE TABLE` syntax in DuckDB to ingest four of the eight `.csv` files. The `read_csv_auto` is a function that helps SQL understand our local `.csv` file for creation into our database.
-
 
 ```{code-cell} ipython3
 %%sql
@@ -105,7 +108,6 @@ A nested loop join compares each row from the first table with each row from the
 ### When to use
 
 This strategy is generally used when one of the tables in the join is significantly smaller than the other. The small table (or sometimes just a subset of it) can be kept in memory while the larger table is scanned, allowing for efficient access to the smaller table.
-
 
 ```{code-cell} ipython3
 %%sql
@@ -203,7 +205,6 @@ JOIN s1.loan l ON a.account_id = l.account_id
 WHERE a.account_id = 1787;
 ```
 
-
 </details>
 <!-- #endregion -->
 
@@ -226,7 +227,6 @@ JOIN s1.district d ON a.district_id = d.district_id
 WHERE d.district_id BETWEEN 10 AND 20;
 ```
 
-
 </details>
 <!-- #endregion -->
 
@@ -239,7 +239,7 @@ Retrieve all account, loan and district information.
 
 <summary>Answers</summary>
 
-We can use a Hash Join on `s1.account` as `a` and `s1.district` as `d` where the `district_id` matches in each table. We can then join this to the `s1.loan` table as `l` where the `account_id` in `a` and `l` match. 
+We can use a Hash Join on `s1.account` as `a` and `s1.district` as `d` where the `district_id` matches in each table. We can then join this to the `s1.loan` table as `l` where the `account_id` in `a` and `l` match.
 
 ```{code-cell} ipython3
 %%sql 
@@ -248,7 +248,6 @@ FROM s1.account a
 JOIN s1.district d ON a.district_id = d.district_id
 JOIN s1.loan l ON a.account_id = l.account_id;
 ```
-
 
 </details>
 <!-- #endregion -->
@@ -268,4 +267,3 @@ DROP SCHEMA s1;
 In this tutorial, we have explored advanced join operations in SQL, including nested-loop joins, merge joins, hash joins, internal joins, and the concept of join hints. We learned how to utilize these different join methods in SQL queries and understood the specific scenarios in which each type of join is most efficient.
 
 We used DuckDB as our SQL engine and the banking dataset for our exercises. DuckDB is an excellent tool for SQL queries because of its ease of use and integration with the Jupyter notebook environment. However, it's important to note that DuckDB's query optimizer chooses the join method based on the table statistics and query specifics. So while the SQL examples in this tutorial illustrate the syntax and usage of different types of joins, the actual join type chosen by DuckDB might differ.
-

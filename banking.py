@@ -7,6 +7,25 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 import pandas as pd
 
+district_column_names = [
+    "district_id",
+    "district_name",
+    "region",
+    "no_of_inhabitants",
+    "no_of_municipalities_lt_499",
+    "no_of_municipalities_500_1999",
+    "no_of_municipalities_2000_9999",
+    "no_of_municipalities_gt_10000",
+    "no_of_cities",
+    "ratio_of_urban_inhabitants",
+    "average_salary",
+    "unemployment_rate_95",
+    "unemployment_rate_96",
+    "no_of_entrepreneurs_per_1000_inhabitants",
+    "no_of_committed_crimes_95",
+    "no_of_committed_crimes_96",
+]
+
 
 class BankingData:
     def __init__(self, url, data_name):
@@ -40,7 +59,7 @@ class MarketData:
         """
         This function extracts the banking data provided from PKDD.
         It downloads the ZIP file from the "url".
-        
+
         Args:
             url (str): the URL containing the public data
         """
@@ -48,8 +67,7 @@ class MarketData:
             response = requests.get(self.url, stream=True)
             zip_file_path, _ = urllib.request.urlretrieve(self.url)
 
-
-            with open(zip_file_path, 'wb') as out_file:
+            with open(zip_file_path, "wb") as out_file:
                 for chunk in response.iter_content(chunk_size=8192):
                     out_file.write(chunk)
 
@@ -60,7 +78,7 @@ class MarketData:
             return zip_ref
         except Exception as e:
             print(f"Error, could not download data: {e}")
-    
+
     def convert_asc_to_csv(self, district_column_names):
         """
         This function converts the .asc files to the .csv format.

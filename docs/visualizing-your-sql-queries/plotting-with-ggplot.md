@@ -56,9 +56,12 @@ sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
 
-_ = MarketData("https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip", data_dir) # noqa E501
+_ = banking.MarketData(
+    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
+    "expanded_data",
+)
 
-_.convert_asc_to_csv(district_column_names)
+_.convert_asc_to_csv(banking.district_column_names)
 ```
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. In this tutorial, we will be focusing on three of these files: `loan.csv`, `account.csv`, `district.csv`.
@@ -652,4 +655,3 @@ This ends the Visualizing Your Queries module, we hope the skills imbibed in thi
 “Simple Widget Introduction#.” Simple Widget Introduction - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget Basics.html.
 
 “Widget List#.” Widget List - Jupyter Widgets 8.0.5 documentation, n.d. https://ipywidgets.readthedocs.io/en/stable/examples/Widget List.html.
-

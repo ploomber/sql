@@ -46,8 +46,12 @@ sys.path.insert(0, "../../")
 import banking  # noqa: E402
 
 
-_ = banking.MarketData("https://tinyurl.com/jb-bank-m", "expanded_data")
-_.extract_asc_to_csv()
+_ = banking.MarketData(
+    "https://web.archive.org/web/20070214120527/http://lisp.vse.cz/pkdd99/DATA/data_berka.zip",  # noqa E501
+    "expanded_data",
+)
+
+_.convert_asc_to_csv(banking.district_column_names)
 ```
 
 If you ran the above cell, you should have a folder `expanded_data` in your current directory that contains the `.csv` files we will be using. However, in this tutorial, we will focus on four out of the eight `.csv` files.
@@ -262,6 +266,7 @@ DROP TABLE s1.card;
 DROP TABLE s1.link;
 DROP SCHEMA s1;
 ```
+
 ## References
 
 Dataset citation:
