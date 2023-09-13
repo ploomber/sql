@@ -418,8 +418,8 @@ Delete table
 
 ```{code-cell} ipython3
 %%sql
-DROP TABLE loan;
-DROP SCHEMA s1;
+DROP TABLE IF EXISTS loan;
+DROP SCHEMA IF EXISTS s1;
 ```
 
 ## Wrapping Up
