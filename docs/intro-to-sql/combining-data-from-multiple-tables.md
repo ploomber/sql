@@ -37,6 +37,11 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 <b>Note:</b> If you are following these lessons locally and <b>not</b> on Google Colab, then there is no need to load the data again. 
 ```
 
+## Helper script
+
+We developed a `banking.py` script to help you extract the data from the URL and load it into a DuckDB database. This script is located [here](https://github.com/ploomber/sql/blob/main/banking.py)
+
+
 This section was covered in detail in the previous tutorial: [Joining Data in SQL](https://ploomber-sql.readthedocs.io/en/latest/intro-to-sql/joining-data-in-sql.html#load-the-data). We will be using the same data in this tutorial as well.
 
 ```{code-cell} ipython3

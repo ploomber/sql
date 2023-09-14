@@ -58,7 +58,11 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 ## Load the data
 We extract the financial data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file and convert the .asc files to .csv files. Finally, we save converted data into a folder.
 
-The script we call can be found under `sql/course-material/intro-to-sql/banking_data_script.py`. This script downloads and stores the necessary data into a folder within the current directory. Please reference the script for more information.
+## Helper script
+
+We developed a `banking.py` script to help you extract the data from the URL and load it into a DuckDB database. This script is located [here](https://github.com/ploomber/sql/blob/main/banking.py)
+
+This script downloads and stores the necessary data into a folder within the current directory. Please reference the script for more information.
 
 ```{code-cell} ipython3
 import sys

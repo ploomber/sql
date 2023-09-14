@@ -39,9 +39,14 @@ The data is downloaded from https://archive-beta.ics.uci.edu/dataset/222/bank+ma
 
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.  
 
+
 Dataset citation:
  
 Moro,S., Rita,P., and Cortez,P.. (2012). Bank Marketing. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306.
+
+## Helper script
+
+We developed a `banking.py` script to help you extract the data from the URL and load it into a DuckDB database. This script is located [here](https://github.com/ploomber/sql/blob/main/banking.py)
 
 ```{code-cell} ipython3
 import sys

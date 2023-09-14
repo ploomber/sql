@@ -67,6 +67,10 @@ This code installs JupySQL, DuckDB, and Pandas in your environment. We will be u
 %pip install jupysql duckdb-engine --quiet
 ```
 
+## Helper script
+
+We developed a `banking.py` script to help you extract the data from the URL and load it into a DuckDB database. This script is located [here](https://github.com/ploomber/sql/blob/main/banking.py)
+
 ## Load the data
 We extract the bank marketing data by retrieving it from it's URL download link. The link may be a zip file (which it is in this case), so we extract the zip file, read the file containing the data within the zip file, and clean the data. Finally, we save this cleaned data to it's own seperate file called `bank_cleaned.csv`.
 
