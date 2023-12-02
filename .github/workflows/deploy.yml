@@ -1,0 +1,40 @@
+name: Ploomber cloud deploy,en
+
+on:
+  schedule:
+    - cron: '0 0 * * *' 
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up credentials
+      run: |
+          cd mini-projects/end-to-end/
+          touch .env
+          echo RapidAPI=${{ secrets.RapidAPI }} >> .env
+          cat .env
+    - name: Install dependencies
+      run: |
+          cd mini-projects/end-to-end/
+          pip install -r requirements.txt
+    - name: Execute data download
+      run: |
+          cd mini-projects/end-to-end/
+          python dataextraction.py
+    - name: Add data to repo
+      run: |
+          cd mini-projects/end-to-end/
+          git config --global user.email ""
+          git config --global user.name "Ploomber"
+          git add weather.csv 
+          git commit -m "Update data"
+          git push
+    - name: Deploy to Ploomber cloud
+      run: |
+          cd mini-projects/end-to-end/
+          ploomber-cloud deploy

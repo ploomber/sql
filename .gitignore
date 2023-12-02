@@ -210,3 +210,5 @@ mini-projects/movie_rec_system/movie_rec_system/products/etl/extract-pipeline.ip
 !docs/mini-projects/recommendation-system/movies_data.duckdb
 mini-projects/movie-rec-system/movie_rec_system/products/eda-pipeline.ipynb
 mini-projects/movie-rec-system/movie_rec_system/products/extract-pipeline.ipynb
+
+!mini-projects/end-to-end/weather.csv
