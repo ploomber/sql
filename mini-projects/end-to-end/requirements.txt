@@ -1,0 +1,6 @@
+voila==0.5.1
+pandas==2.0.3
+requests
+plotly
+python-dotenv
+ploomber-cloud==0.1.1
