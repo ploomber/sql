@@ -57,6 +57,6 @@ parts:
   - file: mini-projects/recommendation-system/packaging-with-docker
 - caption: Deploying Your SQL Applications
   chapters:
-  - file: deploying-your-sql-applications/cloud-based-options
   - file: deploying-your-sql-applications/automate-ci-cd-with-github-actions
-  - file: deploying-your-sql-applications/sample-aws-deployment-workflow
+  - file: deploying-your-sql-applications/deploying-with-ploomber-cloud
+  - file: deploying-your-sql-applications/sample-deployment-pc

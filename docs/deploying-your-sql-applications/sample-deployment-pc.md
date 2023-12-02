@@ -8,8 +8,7 @@ jupyter:
       jupytext_version: 1.14.5
 ---
 
-# Cloud-based options for deployment of applications
-
+# Sample Ploomber Cloud Deployment
 
 
 
