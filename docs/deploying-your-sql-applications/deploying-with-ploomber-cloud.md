@@ -17,15 +17,19 @@ Deploying artificial intelligence and machine learning applications can be a dau
 ## Getting Started with Ploomber Cloud
 
 1. Sign Up
+
 First, head to the [Ploomber Cloud sign-up page](https://platform.ploomber.io/register) and create a free account using your email and a password.
 
 2. Confirm Your Email
+
 After signing up, check your inbox (and spam folder, just in case) for a confirmation email. Click the provided link to activate your account.
 
 3. Sign In
+
 Now, return to Ploomber Cloud and sign in with your credentials.
 
 4. Deploy Your First App
+
 Congratulations, you're all set! Next, explore how to deploy your first application.
 
 ## Acquiring an API Key
