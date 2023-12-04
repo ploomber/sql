@@ -138,6 +138,19 @@ if __name__ == "__main__":
 
 ```
 
+The script above uses the [RapidAPI](https://rapidapi.com/weatherapi/api/weatherapi-com/) to extract weather data. You can sign up for a free account to get an API key. The script also uses the [dotenv](https://pypi.org/project/python-dotenv/) package to load the API key from an environment variable. To download weather data for different locations, you can replace the latitude and longitude coordinates in the script. The following locations were used in the sample script using the coordinates corresponding to the cities listed below:
+
+|Continent | Cities |
+| --- | --- | 
+| North America | New York City,  Los Angeles , Toronto | 
+| South America | São Paulo ,Buenos Aires, Bogotá |
+| Europe | London, Paris,  Berlin |
+| Asia | Tokyo , Beijing,Mumbai  |
+| Africa | Cairo ,Lagos, Johannesburg  |
+| Australia | Sydney ,  Melbourne , Brisbane  |
+
+Once you have created the script, you can run it to extract the data. You can also schedule its execution with GitHub Actions. 
+
 ## Visualize the data
 
 Let's visualize the data to see what it looks like. We will use the Plotly package.
@@ -162,6 +175,8 @@ fig = px.scatter_geo(
 
 fig.show()
 ```
+
+The code above creates an interactive map that shows the wind forecast for the next 5 days for the cities in the world. Press the Play > button to see the animation. Let's save this into a notebook called `app.ipynb`.
 
 ## Create a GitHub repository and initializing Ploomber Cloud deployment
 

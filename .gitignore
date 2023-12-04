@@ -212,4 +212,5 @@ mini-projects/movie-rec-system/movie_rec_system/products/eda-pipeline.ipynb
 mini-projects/movie-rec-system/movie_rec_system/products/extract-pipeline.ipynb
 
 !mini-projects/end-to-end/weather.csv
+!docs/deploying-your-sql-applications/weather.csv
 !mini-projects/end-to-end/requirements.txt
