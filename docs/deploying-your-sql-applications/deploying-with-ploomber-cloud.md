@@ -60,8 +60,7 @@ This will create a `ploomber-cloud.json` file in the directory where you ran the
 }
 ```
 
-Where your `APP_ID` is a unique identifier for your project and `APP_TYPE` is the type of application you're deploying. Currently, Ploomber Cloud supports the following types of applications:
-
+Where your `APP_ID` is a unique identifier created when you run the  `init` command and `APP_TYPE` is the type of application you're deploying (docker, streamlit, etc.)
 
 
 After initialization, deploy your app using:
@@ -80,28 +79,43 @@ Configure GitHub Actions:
 
 Add a YAML file in ``.github/workflows/ploomber-cloud.yaml`` to your repository. This file will contain the workflow configuration.
 
-Sample Workflow Configuration
+Sample Workflow Configuration (assumes you have set up a GitHub secret variable for GitHub actions called `ploomber-cloud-key` with your Ploomber API key):
 
 ```yaml
-name: Ploomber Cloud
+name: Ploomber cloud deploy,en
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0 * * *' 
 
 jobs:
-  deploy:
+
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Deploy to Ploomber Cloud
-        uses: ploomber/actions/deploy@v0.1.0
-        with:
-          api-key: ${{ secrets.PLOOMBER_CLOUD_API_KEY }}
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+          cd mini-projects/end-to-end/
+          pip install ploomber-cloud
+    - name: Set up credentials
+      run: |
+          ploomber-cloud key ${{ secrets.ploomber-cloud-key }}
+    - name: Deploy to Ploomber cloud
+      run: |
+          ploomber-cloud deploy
 ```
+
+The workflow configuration above will deploy your project every day at midnight. You can customize the schedule to suit your needs.
+
+## Conclusion
+
+Ploomber Cloud simplifies the deployment of AI/ML applications, eliminating the need for complex infrastructure management. With its easy setup, API key access, and seamless integration with GitHub Actions, deploying and updating your applications has never been easier. To get a hands-on experience, check out a complete sample project in the next blog. 
+
+

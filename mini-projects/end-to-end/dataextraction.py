@@ -7,11 +7,11 @@ import os
 def extract_weather_by_lat_lon(api_key, lat, lon):
     """
     Extracts weather data from RapidAPI
-    
+
     Parameters
     ----------
     api_key : str
-        API key for RapidAPI    
+        API key for RapidAPI
     lat : float
         Latitude
     lon : float
