@@ -15,25 +15,44 @@ kernelspec:
 
 In this blog we will explore how we can deploy Python applications with Ploomber Cloud and GitHub actions. We will use a sample project to demonstrate the process. Imagine you need to extract weather data from an API periodically and store it for analysis. You can achieve this by creating a Python script and scheduling its execution with GitHub Actions. 
 
-## Initialize data extraction script
+```{important}
+<b>Note:</b> Please ensure you have reviewed the [deployment with Ploomber Cloud](./deploying-with-ploomber-cloud.md) and [GitHub Actions](./automate-ci-cd-with-github-actions.md) tutorials before proceeding.
+```
 
-This script defines functions to extract weather data, transform it into a DataFrame, and save it as a CSV file. You can replace the latitude and longitude coordinates with locations of your choice.
+## Initialize data extraction and data loading script
+
+This script defines functions to extract weather data, transform it into a DataFrame, and populates a Motherduck instance. To review how to initialize a MotherDuck instance, visit the [MotherDuck documentation](https://motherduck.com/docs/getting-started/connect-query-from-python/installation-authentication). You will need to create an account and generate a token. 
+
+The executable script takes as input a list of coordinates and extracts weather data for each coordinate. The script then concatenates all the dataframes and saves the result into a CSV file. The CSV file is then uploaded to a Motherduck instance.
+
+You can create a Python script called `dataextraction.py` with the following code. The code has four functions: `extract_weather_by_lat_lon`, `transform_json_to_dataframe`, `extraction_df_lat_lon`, and `save_to_motherduck`. 
+
+* The `extract_weather_by_lat_lon` function extracts weather data from the RapidAPI. 
+
+* The `transform_json_to_dataframe` function transforms the JSON response to a DataFrame. 
+
+* The `extraction_df_lat_lon` function extracts weather data from the RapidAPI and transforms it to a DataFrame. 
+
+* The `save_to_motherduck` function saves the DataFrame to a Motherduck instance.
+
+The main function of the script is the `__main__` function. It loads the API key from an environment variable, extracts weather data for a list of coordinates, concatenates the dataframes, and saves the result to a CSV file. The CSV file is then uploaded to a Motherduck instance. 
 
 ```python
+:tags: [hide-input]
 import requests
 import pandas as pd
 from dotenv import load_dotenv
 import os
-
+import duckdb
 
 def extract_weather_by_lat_lon(api_key, lat, lon):
     """
     Extracts weather data from RapidAPI
-    
+
     Parameters
     ----------
     api_key : str
-        API key for RapidAPI    
+        API key for RapidAPI
     lat : float
         Latitude
     lon : float
@@ -110,21 +129,81 @@ def extraction_df_lat_lon(api_key, lat, lon):
     response = extract_weather_by_lat_lon(api_key, lat, lon)
     return transform_json_to_dataframe(response)
 
+
+def save_to_motherduck(df, motherduck):
+    """
+    Saves dataframe to MotherDuck
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Dataframe to save
+    motherduck : str
+        MotherDuck service token
+    """
+    try:
+        # Save to csv
+        df.to_csv("weather_data.csv", index=False)
+
+        # initiate the MotherDuck connection through a service token through
+        con = duckdb.connect(f'md:?motherduck_token={motherduck}') 
+
+        # Delete table weatherdata if exists
+        con.execute("DROP TABLE IF EXISTS weatherdata");
+
+        # Create table weatherdata
+        con.sql("CREATE TABLE weatherdata AS SELECT * FROM 'weather_data.csv'")
+    
+    except Exception as e:
+        print("Error:", e)
+
 if __name__ == "__main__":
     # Load api key
     load_dotenv()
     api_key = os.getenv("RapidAPI")
-
+    motherduck = os.getenv("motherduck")
+    
+   
     # Extract data
     latitudes = [
         40.7128,
         34.0522,
-        43.6532
+        43.6532,
+        -23.5505,
+        -34.6037,
+        4.7110,
+        51.5074,
+        48.8566,
+        52.5200,
+        35.6762,
+        39.9042,
+        19.0760,
+        30.0444,
+        6.5244,
+        -26.2041,
+        -33.8688,
+        -37.8136,
+        -27.4698,
     ]
     longitudes = [
         -74.0060,
         -118.2437,
-        -79.3832
+        -79.3832,
+        -46.6333,
+        -58.3816,
+        -74.0721,
+        -0.1278,
+        2.3522,
+        13.4050,
+        139.6503,
+        116.4074,
+        72.8777,
+        31.2357,
+        3.3792,
+        28.0473,
+        151.2093,
+        144.9631,
+        153.0251,
     ]
     master_list = []
     for lat, lon in zip(latitudes, longitudes):
@@ -133,12 +212,12 @@ if __name__ == "__main__":
     # Concatenate all dataframes
     df = pd.concat(master_list)
 
-    # Save to csv
-    df.to_csv("weather.csv", index=False)
+    # Save to MotherDuck
+    save_to_motherduck(df, motherduck)
 
 ```
 
-The script above uses the [RapidAPI](https://rapidapi.com/weatherapi/api/weatherapi-com/) to extract weather data. You can sign up for a free account to get an API key. The script also uses the [dotenv](https://pypi.org/project/python-dotenv/) package to load the API key from an environment variable. To download weather data for different locations, you can replace the latitude and longitude coordinates in the script. The following locations were used in the sample script using the coordinates corresponding to the cities listed below:
+To download weather data for different locations, you can replace the latitude and longitude coordinates in the script. The following locations were used in the sample script using the coordinates corresponding to the cities listed below:
 
 |Continent | Cities |
 | --- | --- | 
@@ -155,14 +234,23 @@ Once you have created the script, you can run it to extract the data. You can al
 
 Let's visualize the data to see what it looks like. We will use the Plotly package.
 
-```{code-cell} ipython3
+```python
 import pandas as pd
 import plotly.express as px
+import duckdb
+import os
+from dotenv import load_dotenv
 
-df = pd.read_csv("weather.csv")
+load_dotenv()
+motherduck = os.getenv("motherduck")
+    
+# initiate the MotherDuck connection through a service token through
+con = duckdb.connect(f'md:?motherduck_token={motherduck}') 
+
+df = con.sql("SELECT * FROM weatherdata").df()
 
 fig = px.scatter_geo(
-    df[df["time"] > "2023-12-02"],
+    df,
     lat="lat",
     lon="lon",
     color="region",
@@ -186,4 +274,35 @@ Next, create a Ploomber Cloud account and initialize the deployment. You can do 
 
 ```bash
 ploomber cloud init
+```
+
+This will generate a `ploomber-cloud.json` file. This file contains the configuration for your deployment. You can edit this file to add more information about your deployment. We will create a Dockerfile for our application. 
+
+```python
+{
+    "id": "generated-id",
+    "type": "docker"
+}
+```
+
+Let's take a look at the Dockerfile. For our deployment we will assume that we are using a Python 3.11 image. We will copy the Jupyter notebook and the `.env` file containing our RapidAPI and MotherDuck tokens to the image. We will install the dependencies and configure the entrypoint.
+
+```dockerfile
+FROM python:3.11
+
+# Copy all files 
+COPY app.ipynb app.ipynb
+COPY .env .env
+
+# install dependencies
+RUN pip install voila==0.5.1 pandas==2.0.3 plotly python-dotenv requests duckdb==v0.9.2
+
+# this configuration is needed for your app to work, do not change it
+ENTRYPOINT ["voila", "app.ipynb","--port 5000:80"]
+```
+
+To deploy this from the terminal, we simply run
+
+```bash
+ploomber cloud deploy
 ```
