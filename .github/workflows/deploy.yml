@@ -30,14 +30,6 @@ jobs:
       run: |
           cd mini-projects/end-to-end/
           python dataextraction.py
-    - name: Add data to repo
-      run: |
-          cd mini-projects/end-to-end/
-          git config --global user.email ""
-          git config --global user.name "Ploomber"
-          git add weather.csv 
-          git commit -m "Update data"
-          git push
     - name: Deploy to Ploomber cloud
       run: |
           cd mini-projects/end-to-end/
