@@ -5,6 +5,18 @@ import os
 
 
 def extract_weather_by_lat_lon(api_key, lat, lon):
+    """
+    Extracts weather data from RapidAPI
+    
+    Parameters
+    ----------
+    api_key : str
+        API key for RapidAPI    
+    lat : float
+        Latitude
+    lon : float
+        Longitude
+    """
     try:
         # Perform call
         url = "https://weatherapi-com.p.rapidapi.com/forecast.json"
@@ -25,6 +37,14 @@ def extract_weather_by_lat_lon(api_key, lat, lon):
 
 
 def transform_json_to_dataframe(response):
+    """
+    Transforms JSON response to dataframe
+
+    Parameters
+    ----------
+    response : dict
+        Response from API call
+    """
     try:
         unnested_df = pd.json_normalize(
             response,
@@ -49,6 +69,22 @@ def transform_json_to_dataframe(response):
 
 
 def extraction_df_lat_lon(api_key, lat, lon):
+    """
+    Extracts weather data from RapidAPI and transforms it to a dataframe
+
+    Parameters
+    ----------
+    api_key : str
+        API key for RapidAPI
+    lat : float
+    lon : float
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        Weather data
+
+    """
     response = extract_weather_by_lat_lon(api_key, lat, lon)
     return transform_json_to_dataframe(response)
 
