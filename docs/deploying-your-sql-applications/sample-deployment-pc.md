@@ -37,7 +37,7 @@ You can create a Python script called `dataextraction.py` with the following cod
 
 The main function of the script is the `__main__` function. It loads the API key from an environment variable, extracts weather data for a list of coordinates, concatenates the dataframes, and saves the result to a CSV file. The CSV file is then uploaded to a Motherduck instance. 
 
-```python
+```{code-cell} ipython3
 :tags: [hide-input]
 import requests
 import pandas as pd
@@ -156,7 +156,20 @@ def save_to_motherduck(df, motherduck):
     
     except Exception as e:
         print("Error:", e)
+```
 
+To download weather data for different locations, you can replace the latitude and longitude coordinates in the script. The following locations were used in the sample script using the coordinates corresponding to the cities listed below:
+
+|Continent | Cities |
+| --- | --- | 
+| North America | New York City,  Los Angeles , Toronto | 
+| South America | São Paulo ,Buenos Aires, Bogotá |
+| Europe | London, Paris,  Berlin |
+| Asia | Tokyo , Beijing,Mumbai  |
+| Africa | Cairo ,Lagos, Johannesburg  |
+| Australia | Sydney ,  Melbourne , Brisbane  |
+
+```python
 if __name__ == "__main__":
     # Load api key
     load_dotenv()
@@ -217,37 +230,18 @@ if __name__ == "__main__":
 
 ```
 
-To download weather data for different locations, you can replace the latitude and longitude coordinates in the script. The following locations were used in the sample script using the coordinates corresponding to the cities listed below:
-
-|Continent | Cities |
-| --- | --- | 
-| North America | New York City,  Los Angeles , Toronto | 
-| South America | São Paulo ,Buenos Aires, Bogotá |
-| Europe | London, Paris,  Berlin |
-| Asia | Tokyo , Beijing,Mumbai  |
-| Africa | Cairo ,Lagos, Johannesburg  |
-| Australia | Sydney ,  Melbourne , Brisbane  |
-
 Once you have created the script, you can run it to extract the data. You can also schedule its execution with GitHub Actions. 
 
 ## Visualize the data
 
-Let's visualize the data to see what it looks like. We will use the Plotly package.
+Let's visualize the data to see what it looks like. We will use the Plotly package. For the purpose of the blog, we read the CSV file, to see what loading the data directly from MotherDuck, please review [this notebook](https://github.com/ploomber/sql/blob/main/mini-projects/end-to-end/app.ipynb).
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 import plotly.express as px
-import duckdb
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-motherduck = os.getenv("motherduck")
-    
-# initiate the MotherDuck connection through a service token through
-con = duckdb.connect(f'md:?motherduck_token={motherduck}') 
 
-df = con.sql("SELECT * FROM weatherdata").df()
+df = pd.read_csv("weather.csv")
 
 fig = px.scatter_geo(
     df,
@@ -267,6 +261,7 @@ fig.show()
 The code above creates an interactive map that shows the wind forecast for the next 5 days for the cities in the world. Press the Play > button to see the animation. Let's save this into a notebook called `app.ipynb`.
 
 ## Create a GitHub repository and initializing Ploomber Cloud deployment
+
 
 Create a GitHub repository and add the Python script and Jupyter notebook to it. You can also add a README file to describe your project. 
 
@@ -306,3 +301,54 @@ To deploy this from the terminal, we simply run
 ```bash
 ploomber cloud deploy
 ```
+
+This will build the image and push it to the Ploomber Cloud registry. You can see the status of your deployment in the Ploomber Cloud dashboard.
+
+## Create a GitHub workflow
+
+The following action is triggered every day at midnight. It runs the Python script to extract the data and deploys the application to Ploomber Cloud. It assumes we have stored our RapidAPI and MotherDuck tokens as GitHub secrets.
+
+```yaml
+name: Ploomber cloud deploy,en
+
+on:
+  schedule:
+    - cron: '0 0 * * *' 
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Set up credentials
+      run: |
+          cd mini-projects/end-to-end/
+          touch .env
+          echo RapidAPI=${{ secrets.RapidAPI }} >> .env
+          echo motherduck=${{ secrets.motherduck }} >> .env
+    - name: Install dependencies
+      run: |
+          cd mini-projects/end-to-end/
+          pip install -r requirements.txt
+    - name: Execute data download
+      run: |
+          cd mini-projects/end-to-end/
+          python dataextraction.py
+    - name: Deploy to Ploomber cloud
+      run: |
+          cd mini-projects/end-to-end/
+          ploomber-cloud deploy
+```
+
+## Conclusion
+
+In this blog we explored how to deploy Python applications with Ploomber Cloud and GitHub actions. We used a sample project to demonstrate the process. We created a Python script to extract weather data from an API and load it into a Motherduck instance. We then created a Jupyter notebook to visualize the data. We created a GitHub repository and initialized the deployment with Ploomber Cloud. We created a GitHub workflow to run the Python script and deploy the application to Ploomber Cloud. 
+
+
