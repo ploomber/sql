@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from dotenv import load_dotenv
 import os
-
+import duckdb
 
 def extract_weather_by_lat_lon(api_key, lat, lon):
     """
@@ -89,11 +89,40 @@ def extraction_df_lat_lon(api_key, lat, lon):
     return transform_json_to_dataframe(response)
 
 
+def save_to_motherduck(df, motherduck):
+    """
+    Saves dataframe to MotherDuck
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Dataframe to save
+    motherduck : str
+        MotherDuck service token
+    """
+    try:
+        # Save to csv
+        df.to_csv("weather_data.csv", index=False)
+
+        # initiate the MotherDuck connection through a service token through
+        con = duckdb.connect(f'md:?motherduck_token={motherduck}') 
+
+        # Delete table weatherdata if exists
+        con.execute("DROP TABLE IF EXISTS weatherdata");
+
+        # Create table weatherdata
+        con.sql("CREATE TABLE weatherdata AS SELECT * FROM 'weather_data.csv'")
+    
+    except Exception as e:
+        print("Error:", e)
+
 if __name__ == "__main__":
     # Load api key
     load_dotenv()
     api_key = os.getenv("RapidAPI")
-
+    motherduck = os.getenv("motherduck")
+    
+   
     # Extract data
     latitudes = [
         40.7128,
@@ -142,5 +171,7 @@ if __name__ == "__main__":
     # Concatenate all dataframes
     df = pd.concat(master_list)
 
-    # Save to csv
-    df.to_csv("weather.csv", index=False)
+    # Save to MotherDuck
+    save_to_motherduck(df, motherduck)
+
+ 
