@@ -266,7 +266,7 @@ fig.show()
 
 The code above creates an interactive map that shows the wind forecast for the next 5 days for the cities in the world. Press the Play > button to see the animation. Let's save this into a notebook called `app.ipynb`.
 
-## Create a GitHub repository and initializing Ploomber Cloud deployment
+## Create a GitHub repository and initialize Ploomber Cloud deployment
 
 
 Create a GitHub repository and add the Python script and Jupyter notebook to it. You can also add a README file to describe your project. 
