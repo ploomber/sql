@@ -23,7 +23,7 @@ In this blog we will explore how we can deploy Python applications with Ploomber
 
 This script defines functions to extract weather data, transform it into a DataFrame, and populates a Motherduck instance. To review how to initialize a MotherDuck instance, visit the [MotherDuck documentation](https://motherduck.com/docs/getting-started/connect-query-from-python/installation-authentication). You will need to create an account and generate a token. 
 
-The executable script takes as input a list of coordinates and extracts weather data for each coordinate. The script then concatenates all the dataframes and saves the result into a CSV file. The CSV file is then uploaded to a Motherduck instance.
+The executable script takes as input a list of coordinates and extracts weather data for each coordinate. The script then concatenates all the data frames and saves the result into a CSV file. The CSV file is then uploaded to a Motherduck instance.
 
 You can create a Python script called `dataextraction.py` with the following code. The code has four functions: `extract_weather_by_lat_lon`, `transform_json_to_dataframe`, `extraction_df_lat_lon`, and `save_to_motherduck`. 
 
@@ -222,7 +222,7 @@ if __name__ == "__main__":
     for lat, lon in zip(latitudes, longitudes):
         master_list.append(extraction_df_lat_lon(api_key, lat, lon))
 
-    # Concatenate all dataframes
+    # Concatenate all data frames
     df = pd.concat(master_list)
 
     # Save to MotherDuck
