@@ -35,15 +35,14 @@ You can create a Python script called `dataextraction.py` with the following cod
 
 * The `save_to_motherduck` function saves the DataFrame to a Motherduck instance.
 
-The main function of the script is the `__main__` function. It loads the API key from an environment variable, extracts weather data for a list of coordinates, concatenates the dataframes, and saves the result to a CSV file. The CSV file is then uploaded to a Motherduck instance. 
+The main function of the script is the `__main__` function. It loads the API key from an environment variable, extracts weather data for a list of coordinates, concatenates the dataframes, and saves the result to a CSV file. The CSV file is then uploaded to a Motherduck instance.
 
-```{code-cell} ipython3
-:tags: [hide-input]
+```python
+
 import requests
 import pandas as pd
-from dotenv import load_dotenv
-import os
 import duckdb
+
 
 def extract_weather_by_lat_lon(api_key, lat, lon):
     """
@@ -146,14 +145,14 @@ def save_to_motherduck(df, motherduck):
         df.to_csv("weather_data.csv", index=False)
 
         # initiate the MotherDuck connection through a service token through
-        con = duckdb.connect(f'md:?motherduck_token={motherduck}') 
+        con = duckdb.connect(f"md:?motherduck_token={motherduck}")
 
         # Delete table weatherdata if exists
-        con.execute("DROP TABLE IF EXISTS weatherdata");
+        con.execute("DROP TABLE IF EXISTS weatherdata")
 
         # Create table weatherdata
         con.sql("CREATE TABLE weatherdata AS SELECT * FROM 'weather_data.csv'")
-    
+
     except Exception as e:
         print("Error:", e)
 ```
@@ -170,6 +169,12 @@ To download weather data for different locations, you can replace the latitude a
 | Australia | Sydney ,  Melbourne , Brisbane  |
 
 ```python
+import os 
+from dotenv import load_dotenv 
+import pandas as pd 
+from dataextraction import extraction_df_lat_lon, save_to_motherduck 
+import duckdb 
+
 if __name__ == "__main__":
     # Load api key
     load_dotenv()
@@ -237,8 +242,8 @@ Once you have created the script, you can run it to extract the data. You can al
 Let's visualize the data to see what it looks like. We will use the Plotly package. For the purpose of the blog, we read the CSV file, to see what loading the data directly from MotherDuck, please review [this notebook](https://github.com/ploomber/sql/blob/main/mini-projects/end-to-end/app.ipynb).
 
 ```{code-cell} ipython3
-import pandas as pd
-import plotly.express as px
+import pandas as pd  # noqa E402
+import plotly.express as px  # noqa E402
 
 
 df = pd.read_csv("weather.csv")
@@ -349,6 +354,4 @@ jobs:
 
 ## Conclusion
 
-In this blog we explored how to deploy Python applications with Ploomber Cloud and GitHub actions. We used a sample project to demonstrate the process. We created a Python script to extract weather data from an API and load it into a Motherduck instance. We then created a Jupyter notebook to visualize the data. We created a GitHub repository and initialized the deployment with Ploomber Cloud. We created a GitHub workflow to run the Python script and deploy the application to Ploomber Cloud. 
-
-
+In this blog we explored how to deploy Python applications with Ploomber Cloud and GitHub actions. We used a sample project to demonstrate the process. We created a Python script to extract weather data from an API and load it into a Motherduck instance. We then created a Jupyter notebook to visualize the data. We created a GitHub repository and initialized the deployment with Ploomber Cloud. We created a GitHub workflow to run the Python script and deploy the application to Ploomber Cloud.
