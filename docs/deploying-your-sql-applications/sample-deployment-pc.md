@@ -37,7 +37,8 @@ You can create a Python script called `dataextraction.py` with the following cod
 
 The main function of the script is the `__main__` function. It loads the API key from an environment variable, extracts weather data for a list of coordinates, concatenates the dataframes, and saves the result to a CSV file. The CSV file is then uploaded to a Motherduck instance.
 
-```python
+```{code-cell} ipython3
+:tags: [hide-input]
 
 import requests
 import pandas as pd
