@@ -1,5 +1,8 @@
 # From zero to hero: end to end data applications with SQL and Jupyter
 
+> [!TIP]
+> Deploy AI apps for free on [Ploomber Cloud!](https://ploomber.io/?utm_medium=github&utm_source=sql)
+
 [![Documentation Status](https://readthedocs.org/projects/ploomber-sql/badge/?version=latest)](https://ploomber-sql.readthedocs.io/en/latest/?badge=latest)
 
 Meet our [contributors](https://github.com/ploomber/sql/blob/main/docs/contributors/contributors.md)
